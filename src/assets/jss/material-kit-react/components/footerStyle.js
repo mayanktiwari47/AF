@@ -10,7 +10,7 @@ const footerStyle = {
     borderRadius: "3px",
     textDecoration: "none",
     position: "relative",
-    display: "block"
+    display: "block",
   },
   left: {
     float: "left!important",
