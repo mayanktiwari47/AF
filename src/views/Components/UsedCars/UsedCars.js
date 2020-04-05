@@ -45,6 +45,7 @@ export default function UsedCars(props) {
     start:0,
     end:1000000
   };
+
   return (
     <div>
       <Header
