@@ -9,6 +9,12 @@ var CarDetailsSchema = new Schema({
     type: String, 
     required: true 
   },
+
+  city:{ 
+    type: String, 
+    required: true 
+  },
+
   maker: {
     type: String,
     required: true,
