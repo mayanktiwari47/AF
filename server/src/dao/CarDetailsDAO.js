@@ -1,3 +1,4 @@
+var fs = require('fs');
 var moment = require('moment');
 var util = require('util');
 
@@ -111,7 +112,11 @@ module.exports = function (app) {
       return res.send(response);
     }
 
-    var carDetails = request.carDetails
+    var carDetails = request.carDetails;
+
+    var photoPath = './src/dao/abc.png';
+    carDetails.thumbnail.data = fs.readFileSync(photoPath);
+    carDetails.thumbnail.contentType = 'image/png';
 
     // console.log("CarDetailsDAO - insertCarDetails - carDetails - " + JSON.stringify(carDetails));
 
@@ -120,7 +125,7 @@ module.exports = function (app) {
       .save()
       .then(carObj => {
         response = { reqbody: request, message: "Car details inserted successfully" };
-        console.log("carDetailsDAO - insertCarDetails - Data inserted successfully in class. Server final response - " + JSON.stringify(response));
+        console.log("carDetailsDAO - insertCarDetails - Data inserted successfully in class. Server final response - " + JSON.stringify(carObj));
         return res.send(response);
       })
       .catch(err => {

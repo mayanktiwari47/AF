@@ -5,14 +5,14 @@ connection = mongoose.createConnection('mongodb://localhost:27017/AFDB', { useNe
 
 var CarDetailsSchema = new Schema({
 
-  id: { 
-    type: String, 
-    required: true 
+  id: {
+    type: String,
+    required: true
   },
 
-  city:{ 
-    type: String, 
-    required: true 
+  city: {
+    type: String,
+    required: true
   },
 
   maker: {
@@ -43,7 +43,7 @@ var CarDetailsSchema = new Schema({
     type: Number,
     required: true,
   },
-  gearbox: {
+  transmission: {
     type: String,
     required: true,
   },
@@ -70,6 +70,22 @@ var CarDetailsSchema = new Schema({
   driveType: {
     type: String,
     required: true,
+  },
+  city: {
+    type: String,
+    required: true,
+  },
+  status: {
+    type: String,
+    required: true,
+  },
+  category: {
+    type: String,
+    required: true,
+  },
+  thumbnail: {
+    data: Buffer,
+    contentType: String,
   },
   weightAndDimension: {
     length: {
@@ -128,10 +144,6 @@ var CarDetailsSchema = new Schema({
   },
   warrantyExpiryDate: {
     type: Date,
-    required: true,
-  },
-  imageAvailable: {
-    type: Boolean,
     required: true,
   },
   performance: {
