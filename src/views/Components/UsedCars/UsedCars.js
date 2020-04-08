@@ -290,7 +290,7 @@ checked:false,
          // {...rest}
         />
   
-        <div className={classNames(this.classes.main)}>
+        <div >
           <SectionDownload />
           {/* <h3> Hi </h3> */}
   

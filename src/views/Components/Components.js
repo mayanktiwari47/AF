@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 // nodejs library that concatenates classes
 import classNames from "classnames";
 // react components for routing our app without refresh
@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 // @material-ui/icons
 // core components
+import axios from "axios";
 import Header from "components/Header/Header.js";
 import Footer from "components/Footer/Footer.js";
 import GridContainer from "components/Grid/GridContainer.js";
@@ -30,21 +31,270 @@ import SectionExamples from "./Sections/SectionExamples.js";
 import SectionDownload from "./Sections/SectionDownload.js";
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import styles from "assets/jss/material-kit-react/views/components.js";
+import MAKER_MODEL from "assets/enums/MAKER_MODEL.js";
+import CITY from "assets/enums/CITY.js";
 import ProductSection from "./Sections/ProductSection.js";
+import { withStyles } from "@material-ui/core/styles";
 
-const useStyles = makeStyles(styles);
 
-const top100Films = [
-  { title: 'The Shawshank Redemption', year: 1994 },
-  { title: 'The Godfather', year: 1972 },
-  { title: 'The Godfather: Part II', year: 1974 },
-];
-export default function Components(props) {
-  const classes = useStyles();
+
+
+
+class Components extends Component {
   
-  const { ...rest } = props;
-  return (
-    <div>
+  constructor(props) {
+    super(props);
+    this.populateDropDowns();
+    this.state = {
+      city:[],
+      maker:[],
+checked:false,
+//isMounted:false,
+      impSuccess: false,
+      errors: null,
+      importErrors: null,
+      visible: true,
+      modalSuccess: true,
+      file: null,
+      noFile: false,
+      corruptFile: false,
+      filename: null,
+      loader: false,
+      zipFile: null,
+      noZipFile: false,
+      corruptZipFile: false,
+      zipFilename: null,
+      showErrors: false,
+      disableButton: false
+    };
+    
+    this.fileHandler = this.fileHandler.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.reset = this.reset.bind(this);
+    this.populateDropDowns= this.populateDropDowns.bind(this);
+       
+
+
+  }
+
+populateDropDowns ()
+
+{console.log("Enum: "+ JSON.stringify(MAKER_MODEL))
+
+var maker = [];
+var city = [];
+   for(var k in MAKER_MODEL) maker.push({"label":k.charAt(0).toUpperCase()+k.slice(1),
+   "value": k})
+
+
+   for(var k in CITY) city.push({"label":k.charAt(0).toUpperCase()+k.slice(1),
+   "value": k})
+   //if (this.state.isMounted)
+             this.setState({
+             city:city,
+             maker:maker
+ 
+           });
+
+
+}
+
+
+
+  // { ...rest } = props;
+  componentDidMount() {
+    this.setState({isMounted:true})  ;
+}
+
+componentWillUnmount () {
+  this.setState({isMounted:false})  ;
+}
+  
+
+  handleChange = (event) => {
+    console.log("handleCheckChange")
+
+    if(event.target.checked)
+    this.setState({ checked: true });
+    else
+    this.setState({ checked: false });
+  };
+
+  
+  reset = e => {
+    document.getElementById("zipfile").value = null;
+    document.getElementById("file").value = null;
+    this.setState({
+      userdata: null,
+
+      impSuccess: false,
+      errors: null,
+      importErrors: null,
+      visible: true,
+      modalSuccess: true,
+      file: null,
+      noFile: false,
+      corruptFile: false,
+      filename: null,
+      loader: false,
+      zipFile: null,
+      noZipFile: false,
+      corruptZipFile: false,
+      zipFilename: null,
+      showErrors: false,
+
+      disableButton: false
+    });
+  };
+
+  toggleSuccess() {
+    this.setState({
+      modalSuccess: !this.state.modalSuccess
+    });
+  }
+
+  /**
+   * @description Dismisses the alert
+   * @param {*} e
+   */
+  onDismiss() {
+    this.setState({ visible: !this.state.visible });
+  }
+
+  fileHandler = e => {
+    e.preventDefault(); // Stop form submit
+    const excel = new FormData();
+    const zip = new FormData();
+    var submit = true;
+    console.log("file" + this.state.filename);
+    this.setState({
+      loader: false,
+      importErrors: null,
+      showErrors: false,
+      disableButton: false,
+      impSuccess: false
+    },()=>{if (!this.state.file) {
+      submit = false;
+      this.setState({
+        noFile: true,
+        modalSuccess: true,
+        corruptFile: false,
+        impSuccess: false,
+        loader: false,
+        disableButton: false
+      });
+    }
+    if (!this.state.zipFile) {
+      submit = false;
+      this.setState({
+        noZipFile: true,
+        modalSuccess: true,
+        corruptZipFile: false,
+        impSuccess: false,
+        loader: false,
+        disableButton: false
+      });
+    }});
+
+
+    if (submit) {
+      console.log("in Zip");
+
+      zip.append("file", this.state.zipFile, this.state.zipFilename);
+
+      console.log("ZIP details " + JSON.stringify(this.state.zipFilename));
+
+      axios
+        .post("http://localhost:8001/api/photoZipUploading", zip)
+        .then(res => {
+          console.log("in Zip Res " + JSON.stringify(res.data));
+          if (res.data.error_code === 1) {
+            this.setState({
+              corruptZipFile: true,
+              modalSuccess: true,
+              noZipFile: false,
+              loader: false,
+              disableButton: false,
+              impSuccess: false
+            });
+          }
+          if (res.data.success === true) {
+            this.setState(
+              {
+                corruptZipFile: false,
+                modalSuccess: true,
+
+                noZipFile: false,
+                loader: true
+              },
+              () => {
+                excel.append("file", this.state.file, this.state.filename);
+                //excel.append('zipfilename', this.state.zipFilename.replace(/\.[^/.]+$/, ""));
+                axios
+                  .post("http://localhost:8001/api/importExcel", excel)
+                  .then(res => {
+                    console.log("in Import Res " + JSON.stringify(res.data));
+                    if (res.data.error_code === 1) {
+                      //document.getElementById("zipfile").value = "";
+                      this.setState({
+                        corruptFile: true,
+                        modalSuccess: true,
+                        noFile: false,
+                        loader: false,
+                        disableButton: false,
+                        impSuccess: false
+                      });
+                    } else if (res.data.msg === "Imported Successfully") {
+                      //console.log("in sucess: "+res.data);
+                      this.reset();
+                      return this.setState({
+                        importErrors: null,
+                        impSuccess: true,
+                        modalSuccess: true,
+                        noFile: false,
+                        corruptFile: false,
+                        file: null,
+                        filename: res.data.excelfilename,
+                        loader: false,
+                        disableButton: false
+                      });
+                    } else if (res.data.errors) {
+                      console.log("in import errors");
+                      document.getElementById("zipfile").value = null;
+                      document.getElementById("file").value = null;
+                      this.setState(
+                        {
+                          importErrors: res.data.errors,
+                          file: null,
+                          zipFile: null,
+                          impSuccess: false,
+                          corruptFile: false,
+                          loader: false,
+                          disableButton: false
+                        },
+                        () => {
+                          console.log(
+                            "errors length: " +
+                              Object.keys(this.state.importErrors).length
+                          );
+                        }
+                      );
+                    }
+                  });
+              }
+            );
+          }
+        });
+    }
+  };
+
+
+
+  render() {
+
+    const  { classes }  = this.props;
+    return (
+      <div>
       <Header
         //  brand="Auto Faktory"
         rightLinks={<HeaderLinks />}
@@ -54,7 +304,7 @@ export default function Components(props) {
           height: 400,
           color: "white"
         }}
-        {...rest}
+       // {...rest}
       />
       <Parallax image={require("assets/img/homeBKD.jpg")}>
         <div className={classes.container}>
@@ -78,22 +328,30 @@ export default function Components(props) {
 
             <div className={classes.dropdown} >
             
+            <Autocomplete
+      id="city"
+      options={this.state.city}
+      getOptionLabel={(option) => option.label}
+      style={{ width: 300,  backgroundColor: "white", }}
+      renderInput={(params) => <TextField {...params} label="Select City" variant="outlined" />}
+    />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               <Autocomplete
       id="selectMaker"
-      options={top100Films}
-      getOptionLabel={(option) => option.title}
+      options={this.state.maker}
+      getOptionLabel={(option) => option.label}
       style={{ width: 300,  backgroundColor: "white", }}
       renderInput={(params) => <TextField {...params} label="Select Maker" variant="outlined" />}
-    /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    />  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <Autocomplete
       id="selectModel"
-      options={top100Films}
+      options={MAKER_MODEL}
       getOptionLabel={(option) => option.title}
       style={{ width: 300,  backgroundColor: "white", }}
       renderInput={(params) => <TextField {...params} label="Select Model" variant="outlined" />}
     />
-     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <Button
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <Button size="lg"
       id="searchCars"
      
       style={{ width: 300,  backgroundColor: "Red", }}
@@ -148,5 +406,10 @@ export default function Components(props) {
       </div>
       <Footer />
     </div>
-  );
+  
+    
+    );
+  }
 }
+export default withStyles(styles)(Components)
+

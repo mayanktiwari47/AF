@@ -113,14 +113,14 @@ module.exports = function (app) {
     }
 
     var carDetails = request.carDetails;
-
+    var carObj = new CarDetails(carDetails);
     var photoPath = './src/dao/abc.png';
-    carDetails.thumbnail.data = fs.readFileSync(photoPath);
-    carDetails.thumbnail.contentType = 'image/png';
+    carObj.thumbnail.data = fs.readFileSync(photoPath);
+    carObj.thumbnail.contentType = 'image/png';
 
     // console.log("CarDetailsDAO - insertCarDetails - carDetails - " + JSON.stringify(carDetails));
 
-    var carObj = new CarDetails(carDetails);
+    
     carObj
       .save()
       .then(carObj => {
