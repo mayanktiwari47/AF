@@ -36,6 +36,7 @@ import CITY from "assets/enums/CITY.js";
 import ProductSection from "./Sections/ProductSection.js";
 import { withStyles } from "@material-ui/core/styles";
 
+import Input from '@material-ui/core/Input';
 
 
 
@@ -43,29 +44,22 @@ import { withStyles } from "@material-ui/core/styles";
 class Components extends Component {
   
   constructor(props) {
+    
     super(props);
-    this.populateDropDowns();
+    //this.populateDropDowns();
     this.state = {
-      city:[],
-      maker:[],
-checked:false,
-//isMounted:false,
-      impSuccess: false,
+      city:null,
+      maker:null,
+      model:null,
+      selectedMaker:null,
+      selectedModel:null,
+      selectedCity:null,
+
+isModelDisabled:true,
+
+      
       errors: null,
-      importErrors: null,
-      visible: true,
-      modalSuccess: true,
-      file: null,
-      noFile: false,
-      corruptFile: false,
-      filename: null,
-      loader: false,
-      zipFile: null,
-      noZipFile: false,
-      corruptZipFile: false,
-      zipFilename: null,
-      showErrors: false,
-      disableButton: false
+     
     };
     
     this.fileHandler = this.fileHandler.bind(this);
@@ -79,22 +73,19 @@ checked:false,
 
 populateDropDowns ()
 
-{console.log("Enum: "+ JSON.stringify(MAKER_MODEL))
+{//console.log("Enum: "+ JSON.stringify(MAKER_MODEL))
 
 var maker = [];
 var city = [];
-   for(var k in MAKER_MODEL) maker.push({"label":k.charAt(0).toUpperCase()+k.slice(1),
-   "value": k})
+   for(var k in MAKER_MODEL) maker.push({"label":k.charAt(0)+k.slice(1).toLowerCase(),
+   "value": k.toLowerCase()})
 
 
-   for(var k in CITY) city.push({"label":k.charAt(0).toUpperCase()+k.slice(1),
-   "value": k})
-   //if (this.state.isMounted)
+   for(var k in CITY) city.push({"label":CITY[k],"value": CITY[k].toLowerCase()})
              this.setState({
              city:city,
              maker:maker
- 
-           });
+            });
 
 
 }
@@ -103,12 +94,20 @@ var city = [];
 
   // { ...rest } = props;
   componentDidMount() {
-    this.setState({isMounted:true})  ;
-}
+    this.populateDropDowns();
+  }
+  componentWillUnmount() {
+    this.setState({
+      city:null,
+      maker:null,
+      model:null,
+      selectedMaker:null,
+      seletedModel:null,
+      selectedCity:null,
 
-componentWillUnmount () {
-  this.setState({isMounted:false})  ;
-}
+     });
+
+  }
   
 
   handleChange = (event) => {
@@ -331,24 +330,69 @@ componentWillUnmount () {
             <Autocomplete
       id="city"
       options={this.state.city}
+      clearOnEscape={true}
       getOptionLabel={(option) => option.label}
+      openOnFocus={true}
+      value={this.state.selectedCity}
       style={{ width: 300,  backgroundColor: "white", }}
       renderInput={(params) => <TextField {...params} label="Select City" variant="outlined" />}
+      onChange={(e,value) => {  console.log(JSON.stringify(value));
+        this.setState({selectedCity:value})
+
+        }}
     />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <Autocomplete
+            
+            
+      <Autocomplete
       id="selectMaker"
+      openOnFocus={true}
       options={this.state.maker}
+      clearOnEscape={true}
       getOptionLabel={(option) => option.label}
+      value={this.state.selectedMaker}
       style={{ width: 300,  backgroundColor: "white", }}
-      renderInput={(params) => <TextField {...params} label="Select Maker" variant="outlined" />}
+      renderInput={(params) => <TextField {...params} label="Select Maker" variant="outlined"/>}
+
+      onChange={(e,value) => { 
+       
+        if (value){ 
+        this.setState({isModelDisabled:false,selectedMaker:value,selectedModel:null, selectedCity:null }
+          ,()=>{
+
+            //console.log("selectedMaker: "+JSON.stringify( this.state.selectedMaker));
+
+         let temp=[]
+         
+        for(var k in MAKER_MODEL[value.label.toUpperCase()])
+        temp.push({"label":MAKER_MODEL[value.label.toUpperCase()][k],
+        "value": k.toLowerCase()})
+        
+        this.setState({model:temp})
+
+        })
+
+   } }}
+
     />  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        
+        
           <Autocomplete
       id="selectModel"
-      options={MAKER_MODEL}
-      getOptionLabel={(option) => option.title}
+      openOnFocus={true}
+      clearOnEscape={true}
+      disabled={this.state.isModelDisabled}
+      options={this.state.model}
+      value={this.state.selectedModel}
+      getOptionLabel={(option) => option.label}
       style={{ width: 300,  backgroundColor: "white", }}
-      renderInput={(params) => <TextField {...params} label="Select Model" variant="outlined" />}
+      renderInput={(params) => <TextField {...params} label="Select Model" variant="outlined"
+       />}
+       onChange={(e,value) => {
+        this.setState({selectedModel:value},()=>{
+         })
+
+        }}
     />
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <Button size="lg"
@@ -357,7 +401,7 @@ componentWillUnmount () {
       style={{ width: 300,  backgroundColor: "Red", }}
      
     >
-      Search</Button>
+      Search Cars</Button>
      
               
               
@@ -382,7 +426,7 @@ componentWillUnmount () {
 
 
 
-
+{/* 
       <div className={classNames(classes.main)}>
         <SectionBasics />
         <SectionNavbars />
@@ -403,7 +447,7 @@ componentWillUnmount () {
         </GridItem>
         <SectionExamples />
         <SectionDownload />
-      </div>
+      </div> */}
       <Footer />
     </div>
   

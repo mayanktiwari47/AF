@@ -1,6 +1,6 @@
  const CITY = {
-    DELHI: "Delhi",
-    MUMBAI: "Mumbai",
+    "DELHI": "Delhi",
+    "MUMBAI": "Mumbai",
    
 }
 export default CITY;
