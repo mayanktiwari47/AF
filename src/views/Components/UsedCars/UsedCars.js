@@ -18,6 +18,8 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import ReactCircleColorPicker from 'react-circle-color-picker';
 import Grid from '@material-ui/core/Grid';
 import axios from "axios";
+import MAKER_MODEL from "assets/enums/MAKER_MODEL.js";
+import CITY from "assets/enums/CITY.js";
 import {
   ReactiveBase,
   DataSearch,
@@ -40,39 +42,25 @@ class UsedCars extends Component {
   
   }));
   classes = makeStyles(styles);
-
-  
     // const [checked, setChecked] = React.useState(false);
-  
- 
-  
-  
-
-  
-    //const { ...rest } = this.props;
+      //const { ...rest } = this.props;
 
 
   constructor(props) {
     super(props);
+    this.test();
     this.state = {
-      userdata: null,
-checked:false,
-      impSuccess: false,
+      city:null,
+      maker:null,
+      model:null,
+      selectedMaker:null,
+      selectedModel:null,
+      selectedCity:null,
+
+isModelDisabled:true,
+
+      
       errors: null,
-      importErrors: null,
-      visible: true,
-      modalSuccess: true,
-      file: null,
-      noFile: false,
-      corruptFile: false,
-      filename: null,
-      loader: false,
-      zipFile: null,
-      noZipFile: false,
-      corruptZipFile: false,
-      zipFilename: null,
-      showErrors: false,
-      disableButton: false
     };
 
     this.onDismiss = this.onDismiss.bind(this);
@@ -81,17 +69,66 @@ checked:false,
     this.fileHandler = this.fileHandler.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.reset = this.reset.bind(this);
-   
-   
-   
-
-
-  }
+    this.test = this.test.bind(this);
+     }
 
 
 
   // { ...rest } = props;
 
+test()
+{console.log("in teST: " + JSON.stringify(this.props.location))}
+
+
+
+populateDropDowns ()
+
+{//console.log("Enum: "+ JSON.stringify(MAKER_MODEL))
+
+var maker = [];
+var city = [];
+   for(var k in MAKER_MODEL) maker.push({"label":k.charAt(0)+k.slice(1).toLowerCase(),
+   "value": k.toLowerCase()})
+
+
+   for(var k in CITY) city.push({"label":CITY[k],"value": CITY[k].toLowerCase()})
+             this.setState({
+             city:city,
+             maker:maker,
+                       
+            });
+
+            if(this.props.location.model&&this.props.location.selectedCity&&this.props.location.selectedMaker&&this.props.location.selectedModel)
+            this.setState({
+             
+             
+              selectedCity:this.props.location.selectedCity,
+              selectedMaker:this.props.location.selectedMaker,
+              selectedModel:this.props.location.selectedModel,
+             
+             });
+
+
+}
+
+
+
+  // { ...rest } = props;
+  componentDidMount() {
+    this.populateDropDowns();
+  }
+  componentWillUnmount() {
+    this.setState({
+      city:null,
+      maker:null,
+      model:null,
+      selectedMaker:null,
+      seletedModel:null,
+      selectedCity:null,
+
+     });
+
+  }
 
   handleChange = (event) => {
     console.log("handleCheckChange")
@@ -323,7 +360,8 @@ checked:false,
   
                 </div>
   
-                <ExpansionPanel>
+                <ExpansionPanel 
+                expanded={true}>
           <ExpansionPanelSummary
             expandIcon={<ExpandMoreIcon />}
             aria-controls="panel1a-content"
@@ -336,68 +374,27 @@ checked:false,
           <div className = {"filters-child"}>
             
   
-  
-            <FormControlLabel
-              control={    <Checkbox
-          
-                color="primary"
-             checked={this.state.checked}
-             onChange={this.handleChange}
-             inputProps={{ 'aria-label': 'primary checkbox' }}
-           />}
-              label="Delhi"
-            />
-    
-               <FormControlLabel
-              control={    <Checkbox 
-                color="primary"
-                  
-                       checked={this.state.checked}
-                       onChange={this.handleChange}
-                       inputProps={{ 'aria-label': 'primary checkbox' }}
-                     />}
-                     label="Gurgaon" 
-            />
-   <FormControlLabel
-              control={    <Checkbox 
-                color="primary"
-                  
-                       checked={this.state.checked}
-                       onChange={this.handleChange}
-                       inputProps={{ 'aria-label': 'primary checkbox' }}
-                     />}
-                     label="Noida" 
-            />
-            
-            <FormControlLabel
-              control={    <Checkbox 
-                color="primary"
-                  
-                       checked={this.state.checked}
-                       onChange={this.handleChange}
-                       inputProps={{ 'aria-label': 'primary checkbox' }}
-                     />}
-                     label="Mumbai" 
-            />
-           
-           <FormControlLabel
-              control={    <Checkbox 
-                color="primary"
-                  
-                       checked={this.state.checked}
-                       onChange={this.handleChange}
-                       inputProps={{ 'aria-label': 'primary checkbox' }}
-                     />}
-                     label="Banglore" 
-            />
+  <br/>
+          <Autocomplete
+                        id="selectCity"
+                        options={this.state.city}
+                        getOptionLabel={(option) => option.label}
+                        value={this.state.selectedCity}
+                        style={{ width: 200, backgroundColor: "white", }}
+                        renderInput={(params) => <TextField {...params} label="City" variant="outlined" />}
+                        onChange={(e,value) => {
+                          this.setState({selectedCity:value})                 
+                          }}
+                      />
+                      <br />
               </div>
-              </ExpansionPanelDetails>
-            
-        </ExpansionPanel>
+              </ExpansionPanelDetails >
+             
+        </ExpansionPanel  >
   
   
   
-                <ExpansionPanel>
+                <ExpansionPanel expanded={true}>
                   <ExpansionPanelSummary
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel1a-content"
@@ -411,26 +408,42 @@ checked:false,
                       <br />
                       <Autocomplete
                         id="selectMaker"
-                        options={[
-                          { title: 'The Shawshank Redemption', year: 1994 },
-                          { title: 'The Godfather', year: 1972 },
-                          { title: 'The Godfather: Part II', year: 1974 },
-                        ]}
-                        getOptionLabel={(option) => option.title}
+                        options={this.state.maker}
+                        getOptionLabel={(option) => option.label}
+                        value={this.state.selectedMaker}
                         style={{ width: 200, backgroundColor: "white", }}
-                        renderInput={(params) => <TextField {...params} label="Make" variant="outlined" />}
+                        renderInput={(params) => <TextField {...params} label="Maker" variant="outlined" />}
+                        onChange={(e,value) => { 
+       
+                          if (value){ 
+                          this.setState({isModelDisabled:false,selectedMaker:value,selectedModel:null }
+                            ,()=>{
+                  
+                              //console.log("selectedMaker: "+JSON.stringify( this.state.selectedMaker));
+                  
+                           let temp=[]
+                           
+                          for(var k in MAKER_MODEL[value.label.toUpperCase()])
+                          temp.push({"label":MAKER_MODEL[value.label.toUpperCase()][k],
+                          "value": k.toLowerCase()})
+                          
+                          this.setState({model:temp})
+                  
+                          })
+                  
+                     } }}
                       />
                       <br />
                       <Autocomplete
                         id="selectModel"
-                        options={[
-                          { title: 'The Shawshank Redemption', year: 1994 },
-                          { title: 'The Godfather', year: 1972 },
-                          { title: 'The Godfather: Part II', year: 1974 },
-                        ]}
-                        getOptionLabel={(option) => option.title}
+                        options={this.state.model}
+                        getOptionLabel={(option) => option.label}
+                        value={this.state.selectedModel}
                         style={{ width: 200, backgroundColor: "white", }}
                         renderInput={(params) => <TextField {...params} label="Model" variant="outlined" />}
+                        onChange={(e,value) => {
+                          this.setState({selectedModel:value})                 
+                          }}
                       />
   
   
@@ -470,7 +483,7 @@ checked:false,
                       <br />
                       <Autocomplete
                         id="priceTo"
-                        options={[
+                        options={[ 
                           { title: 'The Shawshank Redemption', year: 1994 },
                           { title: 'The Godfather', year: 1972 },
                           { title: 'The Godfather: Part II', year: 1974 },
@@ -550,6 +563,9 @@ checked:false,
                         getOptionLabel={(option) => option.title}
                         style={{ width: 200, backgroundColor: "white", }}
                         renderInput={(params) => <TextField {...params} label="From" variant="outlined" />}
+                        onChange={(e,value) => {
+                          this.setState({selected:value})                 
+                          }}
                       />
                       <br />
                       <Autocomplete

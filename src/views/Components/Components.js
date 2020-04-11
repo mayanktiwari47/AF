@@ -357,7 +357,7 @@ var city = [];
       onChange={(e,value) => { 
        
         if (value){ 
-        this.setState({isModelDisabled:false,selectedMaker:value,selectedModel:null, selectedCity:null }
+        this.setState({isModelDisabled:false,selectedMaker:value,selectedModel:null }
           ,()=>{
 
             //console.log("selectedMaker: "+JSON.stringify( this.state.selectedMaker));
@@ -389,21 +389,33 @@ var city = [];
       renderInput={(params) => <TextField {...params} label="Select Model" variant="outlined"
        />}
        onChange={(e,value) => {
-        this.setState({selectedModel:value},()=>{
-         })
+        this.setState({selectedModel:value})
 
         }}
     />
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <Link to={{
+            pathname: '/used-cars',
+            selectedCity: this.state.selectedCity,
+            selectedMaker:this.state.selectedMaker,
+            selectedModel:this.state.selectedModel,
+            city:this.state.city,
+            maker: this.state.maker,
+            model:this.state.model|null
+
+        }}
+        disabled={true}
+        
+        className={classes.link}>
           <Button size="lg"
       id="searchCars"
-     
+     ononClick={this.getStudentByRollNo}
       style={{ width: 300,  backgroundColor: "Red", }}
      
     >
-      Search Cars</Button>
+      Search Cars</Button></Link>
      
-              
+    
               
               </div>
             
