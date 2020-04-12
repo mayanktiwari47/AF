@@ -20,6 +20,14 @@ import Grid from '@material-ui/core/Grid';
 import axios from "axios";
 import MAKER_MODEL from "assets/enums/MAKER_MODEL.js";
 import CITY from "assets/enums/CITY.js";
+import FILTERS from "assets/enums/FILTERS.js";
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import { withStyles } from "@material-ui/core/styles";
+
+
 import {
   ReactiveBase,
   DataSearch,
@@ -48,7 +56,6 @@ class UsedCars extends Component {
 
   constructor(props) {
     super(props);
-    this.test();
     this.state = {
       city:null,
       maker:null,
@@ -56,6 +63,19 @@ class UsedCars extends Component {
       selectedMaker:null,
       selectedModel:null,
       selectedCity:null,
+      selectedPriceFrom:null,
+      selectedPriceTo:null,
+      selectedYear:null,
+      selectedDistance:null,
+      selectedEngineSize:null,
+      priceFrom:null,
+      priceTo:null,
+      year:null,
+      distance:null,
+      engineSize:null,
+      transAutoChecked:false,
+      transManChecked:false,
+      color:null,
 
 isModelDisabled:true,
 
@@ -69,44 +89,69 @@ isModelDisabled:true,
     this.fileHandler = this.fileHandler.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.reset = this.reset.bind(this);
-    this.test = this.test.bind(this);
      }
 
 
 
   // { ...rest } = props;
 
-test()
-{console.log("in teST: " + JSON.stringify(this.props.location))}
-
 
 
 populateDropDowns ()
 
-{//console.log("Enum: "+ JSON.stringify(MAKER_MODEL))
+{//console.log("Values Passed : "+ JSON.stringify(FILTERS['YEAR']));
+var priceFrom=[], priceTo=[], maker=[], city=[], year =[], distance=[], engineSize=[];
 
-var maker = [];
-var city = [];
-   for(var k in MAKER_MODEL) maker.push({"label":k.charAt(0)+k.slice(1).toLowerCase(),
+for(var i in FILTERS['PRICEFROM'] )
+priceFrom.push({"label":i,"value": FILTERS['PRICEFROM'][i]})
+
+for( var j in FILTERS['PRICETO'])
+priceTo.push({"label":j,"value": FILTERS['PRICETO'][j]})
+
+for( var j in FILTERS['YEAR'])
+year.push({"label":j,"value": FILTERS['YEAR'][j]})
+
+for( var j in FILTERS['DISTANCECOVERED'])
+distance.push({"label":j,"value": FILTERS['DISTANCECOVERED'][j]})
+
+for( var j in FILTERS['ENGINESIZE'])
+engineSize.push({"label":j,"value": FILTERS['ENGINESIZE'][j]})
+
+
+
+for(var k in MAKER_MODEL) maker.push({"label":k.charAt(0)+k.slice(1).toLowerCase(),
    "value": k.toLowerCase()})
 
 
-   for(var k in CITY) city.push({"label":CITY[k],"value": CITY[k].toLowerCase()})
+for(var k in CITY) city.push({"label":CITY[k],"value": CITY[k].toLowerCase()})
              this.setState({
-             city:city,
-             maker:maker,
+             city,
+             maker,
+             priceFrom,
+             priceTo,
+             year,
+             distance,
+             engineSize
+             
                        
             });
 
-            if(this.props.location.model&&this.props.location.selectedCity&&this.props.location.selectedMaker&&this.props.location.selectedModel)
+            if(this.props.location.selectedCity)
             this.setState({
-             
-             
+                        
               selectedCity:this.props.location.selectedCity,
-              selectedMaker:this.props.location.selectedMaker,
-              selectedModel:this.props.location.selectedModel,
-             
+                      
              });
+             if(this.props.location.selectedMaker)
+             this.setState({
+               selectedMaker:this.props.location.selectedMaker,
+              
+              });
+              if(this.props.location.selectedModel||this.props.location.model)
+              this.setState({ isModelDisabled:false, model:this.props.location.model,
+                selectedModel:this.props.location.selectedModel,
+               
+               });
 
 
 }
@@ -311,7 +356,7 @@ var city = [];
 
   render() {
 
- 
+    const { classes } = this.props;
 
     return (
         <div>
@@ -375,17 +420,38 @@ var city = [];
             
   
   <br/>
-          <Autocomplete
-                        id="selectCity"
-                        options={this.state.city}
-                        getOptionLabel={(option) => option.label}
-                        value={this.state.selectedCity}
-                        style={{ width: 200, backgroundColor: "white", }}
-                        renderInput={(params) => <TextField {...params} label="City" variant="outlined" />}
-                        onChange={(e,value) => {
-                          this.setState({selectedCity:value})                 
-                          }}
-                      />
+  <FormControl variant="outlined" className={classes.formControl}>
+                  <InputLabel id="demo-simple-select-outlined-label">City</InputLabel>
+                  <Select
+                    id="city"
+                   // clearOnEscape={true}
+                    //openOnFocus={true}
+                    value= {this.state.selectedCity|| ""}
+                    style={{ width  : 200, backgroundColor: "white", }}
+                    onChange={(event) => {  //console.log(JSON.stringify(value));
+                      this.setState({ selectedCity: event.target.value })
+
+                    }}
+
+
+
+                    label="City"
+                  >
+                    <MenuItem value="All">
+                      All
+          </MenuItem>
+                    {this.state.city && this.state.city.map((element, i) => { //console.log("meanu Item : "+element.value)
+                      return (<MenuItem key={i} value={element.value}>
+                        {element.label}</MenuItem>);
+                    }
+                    )}
+
+
+
+
+                  </Select>
+                </FormControl>
+      
                       <br />
               </div>
               </ExpansionPanelDetails >
@@ -406,45 +472,88 @@ var city = [];
   
                     <div className={"filters-child"}>
                       <br />
-                      <Autocomplete
-                        id="selectMaker"
-                        options={this.state.maker}
-                        getOptionLabel={(option) => option.label}
-                        value={this.state.selectedMaker}
-                        style={{ width: 200, backgroundColor: "white", }}
-                        renderInput={(params) => <TextField {...params} label="Maker" variant="outlined" />}
-                        onChange={(e,value) => { 
-       
-                          if (value){ 
-                          this.setState({isModelDisabled:false,selectedMaker:value,selectedModel:null }
-                            ,()=>{
-                  
-                              //console.log("selectedMaker: "+JSON.stringify( this.state.selectedMaker));
-                  
-                           let temp=[]
-                           
-                          for(var k in MAKER_MODEL[value.label.toUpperCase()])
-                          temp.push({"label":MAKER_MODEL[value.label.toUpperCase()][k],
-                          "value": k.toLowerCase()})
-                          
-                          this.setState({model:temp})
-                  
+                      <FormControl variant="outlined" className={classes.formControl}>
+                  <InputLabel id="demo-simple-select-outlined-label">Select Maker</InputLabel>
+                  <Select
+                    id="selectMaker"
+                    openOnFocus={true}
+
+                    clearOnEscape={true}
+
+                    value={this.state.selectedMaker|| ""}
+                    style={{ width: 200, backgroundColor: "white", }}
+                    onChange={(e) => {
+
+                      if (e.target.value) { //console.log("event: "+JSON.stringify( e.target.value));
+                        this.setState({ isModelDisabled: false, selectedMaker: e.target.value, selectedModel: null }
+                          , () => {
+                            
+                            let temp = []
+                            if(e.target.value=="All")
+                              for(var i in MAKER_MODEL )
+                                for(var j in MAKER_MODEL[i])
+                             {//console.log("i[j]  "+JSON.stringify(MAKER_MODEL[i]))
+                               temp.push({ "label": MAKER_MODEL[i][j],
+                                "value": MAKER_MODEL[i][j].toLowerCase()});
+                          }
+                            else
+                            for (var k in MAKER_MODEL[e.target.value.toUpperCase()])
+                              temp.push({
+                                "label": MAKER_MODEL[e.target.value.toUpperCase()][k],
+                                "value": k.toLowerCase()
+                              })
+
+                            this.setState({ model: temp })
                           })
-                  
-                     } }}
-                      />
-                      <br />
-                      <Autocomplete
-                        id="selectModel"
-                        options={this.state.model}
-                        getOptionLabel={(option) => option.label}
-                        value={this.state.selectedModel}
-                        style={{ width: 200, backgroundColor: "white", }}
-                        renderInput={(params) => <TextField {...params} label="Model" variant="outlined" />}
-                        onChange={(e,value) => {
-                          this.setState({selectedModel:value})                 
-                          }}
-                      />
+                      }
+                    }}
+                    label="Select Maker"
+                  >
+                    <MenuItem value="All">
+                      All
+          </MenuItem>
+                    {this.state.maker && this.state.maker.map((element, i) => {// console.log("meanu Item : "+element.value)
+                      return (<MenuItem key={i} value={element.value}>
+                        {element.label}</MenuItem>);
+                    }
+                    )}
+
+                  </Select>
+                </FormControl>
+
+                      <br /><br/><br/>
+                      <FormControl variant="outlined" className={classes.formControl}>
+                  <InputLabel id="demo-simple-select-outlined-label">Model</InputLabel>
+                  <Select
+                    id="model"
+
+                    clearOnEscape={true}
+                    disabled={this.state.isModelDisabled}
+                    openOnFocus={true}
+                    value={this.state.selectedModel|| ""}
+                    style={{ width: 200, backgroundColor: "white", }}
+                    onChange={(event) => {  //console.log(JSON.stringify(value));
+                      this.setState({ selectedModel: event.target.value })
+
+                    }}
+
+                    label="Model"
+                  >
+                    <MenuItem value="All">
+                      All
+          </MenuItem>
+                    {this.state.model && this.state.model.map((element, i) => { //console.log("meanu Item : "+element.value)
+                      return (<MenuItem key={i} value={element.value}>
+                        {element.label}</MenuItem>);
+                    }
+                    )}
+
+
+
+
+                  </Select>
+                </FormControl>
+
   
   
                     </div>
@@ -463,35 +572,73 @@ var city = [];
                     aria-controls="panel1a-content"
                     id="panel1a-header"
                   >
-                    <Typography className={this.classes.heading}>Price(in Lakhs)</Typography>
+                    <Typography className={this.classes.heading}>Price</Typography>
                   </ExpansionPanelSummary>
                   <ExpansionPanelDetails>
   
                     <div className={"filters-child"}>
                       <br />
-                      <Autocomplete
-                        id="priceFrom"
-                        options={[
-                          { title: 'The Shawshank Redemption', year: 1994 },
-                          { title: 'The Godfather', year: 1972 },
-                          { title: 'The Godfather: Part II', year: 1974 },
-                        ]}
-                        getOptionLabel={(option) => option.title}
-                        style={{ width: 200, backgroundColor: "white", }}
-                        renderInput={(params) => <TextField {...params} label="From" variant="outlined" />}
-                      />
-                      <br />
-                      <Autocomplete
-                        id="priceTo"
-                        options={[ 
-                          { title: 'The Shawshank Redemption', year: 1994 },
-                          { title: 'The Godfather', year: 1972 },
-                          { title: 'The Godfather: Part II', year: 1974 },
-                        ]}
-                        getOptionLabel={(option) => option.title}
-                        style={{ width: 200, backgroundColor: "white", }}
-                        renderInput={(params) => <TextField {...params} label="To" variant="outlined" />}
-                      />
+                      <FormControl variant="outlined" className={classes.formControl}>
+                  <InputLabel id="demo-simple-select-outlined-label">Price From</InputLabel>
+                  <Select
+                    id="priceFrom"
+                   // clearOnEscape={true}
+                    //openOnFocus={true}
+                    value= {this.state.selectedPriceFrom|| ""}
+                    style={{ width  : 200, backgroundColor: "white", }}
+                    onChange={(event) => {  //console.log(JSON.stringify(value));
+                      this.setState({ selectedPriceFrom: event.target.value })
+
+                    }}
+
+
+
+                    label="Price From"
+                  >
+                  
+               {   this.state.priceFrom&&    this.state.priceFrom.map(element => { //console.log("meanu Item : "+element.value)
+                      return (<MenuItem key={element.label} value={element.value}>
+                        {element.label}</MenuItem>);
+                    }
+                    )
+ }
+
+
+
+                  </Select>
+                </FormControl>
+      
+
+                      <br /><br/>
+                      <FormControl variant="outlined" className={classes.formControl}>
+                  <InputLabel id="demo-simple-select-outlined-label">Price To</InputLabel>
+                  <Select
+                    id="priceTo"
+                   // clearOnEscape={true}
+                    //openOnFocus={true}
+                    value= {this.state.selectedPriceTo|| ""}
+                    style={{ width  : 200, backgroundColor: "white", }}
+                    onChange={(event) => {  //console.log(JSON.stringify(value));
+                      this.setState({ selectedPriceto: event.target.value })
+
+                    }}
+
+
+
+                    label="Price To"
+                  >
+                   
+               {   this.state.priceTo&&    this.state.priceTo.map(element => { //console.log("meanu Item : "+element.value)
+                      return (<MenuItem key={element.label} value={element.value}>
+                        {element.label}</MenuItem>);
+                    }
+                    )
+ }
+
+
+
+                  </Select>
+                </FormControl>
   
                       <br />
                     </div>
@@ -511,29 +658,40 @@ var city = [];
   
                     <div className={"filters-child"}>
                       <br />
-                      <Autocomplete
-                        id="yearFrom"
-                        options={[
-                          { title: 'The Shawshank Redemption', year: 1994 },
-                          { title: 'The Godfather', year: 1972 },
-                          { title: 'The Godfather: Part II', year: 1974 },
-                        ]}
-                        getOptionLabel={(option) => option.title}
-                        style={{ width: 200, backgroundColor: "white", }}
-                        renderInput={(params) => <TextField {...params} label="From" variant="outlined" />}
-                      />
+                  
+                    
+
+
                       <br />
-                      <Autocomplete
-                        id="yearTo"
-                        options={[
-                          { title: 'The Shawshank Redemption', year: 1994 },
-                          { title: 'The Godfather', year: 1972 },
-                          { title: 'The Godfather: Part II', year: 1974 },
-                        ]}
-                        getOptionLabel={(option) => option.title}
-                        style={{ width: 200, backgroundColor: "white", }}
-                        renderInput={(params) => <TextField {...params} label="To" variant="outlined" />}
-                      />
+                      <FormControl variant="outlined" className={classes.formControl}>
+                  <InputLabel id="demo-simple-select-outlined-label">Year</InputLabel>
+                  <Select
+                    id="year"
+                   // clearOnEscape={true}
+                    //openOnFocus={true}
+                    value= {this.state.selectedYear|| ""}
+                    style={{ width  : 200, backgroundColor: "white", }}
+                    onChange={(event) => {  //console.log(JSON.stringify(value));
+                      this.setState({ selectedYear: event.target.value })
+
+                    }}
+
+
+
+                    label="Year"
+                  >
+                   
+               {   this.state.year&&    this.state.year.map(element => { //console.log("meanu Item : "+element.value)
+                      return (<MenuItem key={element.label} value={element.value}>
+                        {element.label}</MenuItem>);
+                    }
+                    )
+ }
+
+
+
+                  </Select>
+                </FormControl>
   
                       <br />
                     </div>
@@ -547,38 +705,41 @@ var city = [];
                     aria-controls="panel1a-content"
                     id="panel1a-header"
                   >
-                    <Typography className={this.classes.heading}>Mileage</Typography>
+                    <Typography className={this.classes.heading}>Distance Covered</Typography>
                   </ExpansionPanelSummary>
                   <ExpansionPanelDetails>
   
                     <div className={"filters-child"}>
                       <br />
-                      <Autocomplete
-                        id="mileageFrom"
-                        options={[
-                          { title: 'The Shawshank Redemption', year: 1994 },
-                          { title: 'The Godfather', year: 1972 },
-                          { title: 'The Godfather: Part II', year: 1974 },
-                        ]}
-                        getOptionLabel={(option) => option.title}
-                        style={{ width: 200, backgroundColor: "white", }}
-                        renderInput={(params) => <TextField {...params} label="From" variant="outlined" />}
-                        onChange={(e,value) => {
-                          this.setState({selected:value})                 
-                          }}
-                      />
-                      <br />
-                      <Autocomplete
-                        id="mileageTo"
-                        options={[
-                          { title: 'The Shawshank Redemption', year: 1994 },
-                          { title: 'The Godfather', year: 1972 },
-                          { title: 'The Godfather: Part II', year: 1974 },
-                        ]}
-                        getOptionLabel={(option) => option.title}
-                        style={{ width: 200, backgroundColor: "white", }}
-                        renderInput={(params) => <TextField {...params} label="To" variant="outlined" />}
-                      />
+                      <FormControl variant="outlined" className={classes.formControl}>
+                  <InputLabel id="demo-simple-select-outlined-label">Distance Covered</InputLabel>
+                  <Select
+                    id="distanceCovered"
+                   // clearOnEscape={true}
+                    //openOnFocus={true}
+                    value= {this.state.selectedDistance|| ""}
+                    style={{ width  : 200, backgroundColor: "white", }}
+                    onChange={(event) => {  //console.log(JSON.stringify(value));
+                      this.setState({ selectedDistance: event.target.value })
+
+                    }}
+
+
+
+                    label="Distance Covered"
+                  >
+                   
+               {   this.state.distance&&    this.state.distance.map(element => { //console.log("meanu Item : "+element.value)
+                      return (<MenuItem key={element.label} value={element.value}>
+                        {element.label}</MenuItem>);
+                    }
+                    )
+ }
+
+
+
+                  </Select>
+                </FormControl>
   
                       <br />
                     </div>
@@ -606,8 +767,10 @@ var city = [];
                         control={<Checkbox
   
                           color="primary"
-                          checked={this.state.checked}
-                          onChange={this.handleChange}
+                          checked={this.state.transManChecked}
+                          onChange={(event) => {  //console.log(JSON.stringify(value));
+                            this.setState({ transManChecked: !this.state.transManChecked })}}
+      
                           inputProps={{ 'aria-label': 'primary checkbox' }}
                         />}
                         label="Manual"
@@ -617,8 +780,9 @@ var city = [];
                         control={<Checkbox
                           color="primary"
   
-                          checked={this.state.checked}
-                          onChange={this.handleChange}
+                          checked={this.state.transAutoChecked}
+                          onChange={(event) => {  //console.log(JSON.stringify(value));
+                            this.setState({ transAutoChecked: !this.state.transAutoChecked })}}
                           inputProps={{ 'aria-label': 'primary checkbox' }}
                         />}
                         label="Automatic"
@@ -631,29 +795,35 @@ var city = [];
                     <div className={"filters-child"}>
                       <h5>Engine Size</h5>
   
-                      <Autocomplete
-                        id="engSizeFrom"
-                        options={[
-                          { title: 'The Shawshank Redemption', year: 1994 },
-                          { title: 'The Godfather', year: 1972 },
-                          { title: 'The Godfather: Part II', year: 1974 },
-                        ]}
-                        getOptionLabel={(option) => option.title}
-                        style={{ width: 200, backgroundColor: "white", }}
-                        renderInput={(params) => <TextField {...params} label="From" variant="outlined" />}
-                      />
-                      <br />
-                      <Autocomplete
-                        id="engSizeTo"
-                        options={[
-                          { title: 'The Shawshank Redemption', year: 1994 },
-                          { title: 'The Godfather', year: 1972 },
-                          { title: 'The Godfather: Part II', year: 1974 },
-                        ]}
-                        getOptionLabel={(option) => option.title}
-                        style={{ width: 200, backgroundColor: "white", }}
-                        renderInput={(params) => <TextField {...params} label="To" variant="outlined" />}
-                      />
+                      <FormControl variant="outlined" className={classes.formControl}>
+                  <InputLabel id="demo-simple-select-outlined-label">Engine Size</InputLabel>
+                  <Select
+                    id="engineSize"
+                   // clearOnEscape={true}
+                    //openOnFocus={true}
+                    value= {this.state.selectedEngineSize|| ""}
+                    style={{ width  : 200, backgroundColor: "white", }}
+                    onChange={(event) => {  //console.log(JSON.stringify(value));
+                      this.setState({ selectedEngineSize: event.target.value })
+
+                    }}
+
+
+
+                    label="Engine Size"
+                  >
+                   
+               {   this.state.engineSize&&    this.state.engineSize.map(element => { //console.log("meanu Item : "+element.value)
+                      return (<MenuItem key={element.label} value={element.value}>
+                        {element.label}</MenuItem>);
+                    }
+                    )
+ }
+
+
+
+                  </Select>
+                </FormControl>
   
                       <br />
                     </div>
@@ -680,7 +850,8 @@ var city = [];
                         <Grid container item xs={12} spacing={3}>
                           <React.Fragment>
                             <Grid item xs={4}>
-                              <ReactCircleColorPicker colors={[{ hex: '#FFFFFF' }]} />
+                              <ReactCircleColorPicker colors={[{ hex: '#FFFFFF' }]}
+                               />
                               <h6>White</h6>
                             </Grid>
                             <Grid item xs={4}>
@@ -924,4 +1095,4 @@ var city = [];
   }
 }
 
-export default UsedCars;
+export default  withStyles(styles)(UsedCars);

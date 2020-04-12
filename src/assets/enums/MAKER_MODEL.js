@@ -1,6 +1,6 @@
  const MAKER_MODEL = {
     "MARUTI":{
-        "Swift":"Swift",
+        "SWIFT":"Swift",
         "Swift Dzire":"Swift Dzire"},
     "HONDA":{
         "WRV":"WRV",

@@ -30,6 +30,11 @@ import SectionLogin from "./Sections/SectionLogin.js";
 import SectionExamples from "./Sections/SectionExamples.js";
 import SectionDownload from "./Sections/SectionDownload.js";
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+
 import styles from "assets/jss/material-kit-react/views/components.js";
 import MAKER_MODEL from "assets/enums/MAKER_MODEL.js";
 import CITY from "assets/enums/CITY.js";
@@ -42,53 +47,53 @@ import Input from '@material-ui/core/Input';
 
 
 class Components extends Component {
-  
+
   constructor(props) {
-    
+
     super(props);
     //this.populateDropDowns();
     this.state = {
-      city:null,
-      maker:null,
-      model:null,
-      selectedMaker:null,
-      selectedModel:null,
-      selectedCity:null,
+      city: null,
+      maker: null,
+      model: null,
+      selectedMaker: null,
+      selectedModel: null,
+      selectedCity: null,
 
-isModelDisabled:true,
+      isModelDisabled: true,
 
-      
+
       errors: null,
-     
+
     };
-    
+
     this.fileHandler = this.fileHandler.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.reset = this.reset.bind(this);
-    this.populateDropDowns= this.populateDropDowns.bind(this);
-       
+    this.populateDropDowns = this.populateDropDowns.bind(this);
+
 
 
   }
 
-populateDropDowns ()
+  populateDropDowns() {//console.log("Enum: "+ JSON.stringify(MAKER_MODEL))
 
-{//console.log("Enum: "+ JSON.stringify(MAKER_MODEL))
-
-var maker = [];
-var city = [];
-   for(var k in MAKER_MODEL) maker.push({"label":k.charAt(0)+k.slice(1).toLowerCase(),
-   "value": k.toLowerCase()})
-
-
-   for(var k in CITY) city.push({"label":CITY[k],"value": CITY[k].toLowerCase()})
-             this.setState({
-             city:city,
-             maker:maker
-            });
+    var maker = [];
+    var city = [];
+    for (var k in MAKER_MODEL) maker.push({
+      "label": k.charAt(0) + k.slice(1).toLowerCase(),
+      "value": k.toLowerCase()
+    })
 
 
-}
+    for (var k in CITY) city.push({ "label": CITY[k], "value": CITY[k].toLowerCase() })
+    this.setState({
+      city: city,
+      maker: maker
+    });
+
+
+  }
 
 
 
@@ -98,28 +103,28 @@ var city = [];
   }
   componentWillUnmount() {
     this.setState({
-      city:null,
-      maker:null,
-      model:null,
-      selectedMaker:null,
-      seletedModel:null,
-      selectedCity:null,
+      city: null,
+      maker: null,
+      model: null,
+      selectedMaker: null,
+      seletedModel: null,
+      selectedCity: null,
 
-     });
+    });
 
   }
-  
+
 
   handleChange = (event) => {
     console.log("handleCheckChange")
 
-    if(event.target.checked)
-    this.setState({ checked: true });
+    if (event.target.checked)
+      this.setState({ checked: true });
     else
-    this.setState({ checked: false });
+      this.setState({ checked: false });
   };
 
-  
+
   reset = e => {
     document.getElementById("zipfile").value = null;
     document.getElementById("file").value = null;
@@ -172,28 +177,30 @@ var city = [];
       showErrors: false,
       disableButton: false,
       impSuccess: false
-    },()=>{if (!this.state.file) {
-      submit = false;
-      this.setState({
-        noFile: true,
-        modalSuccess: true,
-        corruptFile: false,
-        impSuccess: false,
-        loader: false,
-        disableButton: false
-      });
-    }
-    if (!this.state.zipFile) {
-      submit = false;
-      this.setState({
-        noZipFile: true,
-        modalSuccess: true,
-        corruptZipFile: false,
-        impSuccess: false,
-        loader: false,
-        disableButton: false
-      });
-    }});
+    }, () => {
+      if (!this.state.file) {
+        submit = false;
+        this.setState({
+          noFile: true,
+          modalSuccess: true,
+          corruptFile: false,
+          impSuccess: false,
+          loader: false,
+          disableButton: false
+        });
+      }
+      if (!this.state.zipFile) {
+        submit = false;
+        this.setState({
+          noZipFile: true,
+          modalSuccess: true,
+          corruptZipFile: false,
+          impSuccess: false,
+          loader: false,
+          disableButton: false
+        });
+      }
+    });
 
 
     if (submit) {
@@ -274,7 +281,7 @@ var city = [];
                         () => {
                           console.log(
                             "errors length: " +
-                              Object.keys(this.state.importErrors).length
+                            Object.keys(this.state.importErrors).length
                           );
                         }
                       );
@@ -291,154 +298,205 @@ var city = [];
 
   render() {
 
-    const  { classes }  = this.props;
+    const { classes } = this.props;
     return (
       <div>
-      <Header
-        //  brand="Auto Faktory"
-        rightLinks={<HeaderLinks />}
-        fixed
-        color="white"
-        changeColorOnScroll={{
-          height: 400,
-          color: "white"
-        }}
-       // {...rest}
-      />
-      <Parallax image={require("assets/img/homeBKD.jpg")}>
-        <div className={classes.container}>
-       
-           <GridContainer>
-            <GridItem> <div>
-          
-               <div className={classes.brand}>
-                {/* <h1 className={classes.title}>A Brand New Feeling!</h1> */}
-                <h3 className={classes.subtitle}>
-                Buy or finance Car online. We’ll deliver it. Love it or we’ll collect it.
-                </h3>
-              </div> 
+        <Header
+          //  brand="Auto Faktory"
+          rightLinks={<HeaderLinks />}
+          fixed
+          color="white"
+          changeColorOnScroll={{
+            height: 400,
+            color: "white"
+          }}
+        // {...rest}
+        />
+        <Parallax image={require("assets/img/homeBKD.jpg")}>
+          <div className={classes.container}>
 
-              
+            <GridContainer>
+              <GridItem> <div>
+
+                <div className={classes.brand}>
+                  {/* <h1 className={classes.title}>A Brand New Feeling!</h1> */}
+                  <h3 className={classes.subtitle}>
+                    Buy or finance Car online. We’ll deliver it. Love it or we’ll collect it.
+                </h3>
+                </div>
+
+
               </div>
 
 
-              
-            </GridItem>
 
-            <div className={classes.dropdown} >
-            
-            <Autocomplete
-      id="city"
-      options={this.state.city}
-      clearOnEscape={true}
-      getOptionLabel={(option) => option.label}
-      openOnFocus={true}
-      value={this.state.selectedCity}
-      style={{ width: 300,  backgroundColor: "white", }}
-      renderInput={(params) => <TextField {...params} label="Select City" variant="outlined" />}
-      onChange={(e,value) => {  console.log(JSON.stringify(value));
-        this.setState({selectedCity:value})
+              </GridItem>
 
-        }}
-    />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            
-            
-      <Autocomplete
-      id="selectMaker"
-      openOnFocus={true}
-      options={this.state.maker}
-      clearOnEscape={true}
-      getOptionLabel={(option) => option.label}
-      value={this.state.selectedMaker}
-      style={{ width: 300,  backgroundColor: "white", }}
-      renderInput={(params) => <TextField {...params} label="Select Maker" variant="outlined"/>}
+              <div className={classes.dropdown} >
 
-      onChange={(e,value) => { 
-       
-        if (value){ 
-        this.setState({isModelDisabled:false,selectedMaker:value,selectedModel:null }
-          ,()=>{
+                <FormControl variant="outlined" className={classes.formControl}>
+                  <InputLabel id="demo-simple-select-outlined-label">City</InputLabel>
+                  <Select
+                    id="city"
+                    clearOnEscape={true}
+                    openOnFocus={true}
+                    value={this.state.selectedCity}
+                    style={{ width: 300, backgroundColor: "white", }}
+                    onChange={(event) => {  //console.log(JSON.stringify(value));
+                      this.setState({ selectedCity: event.target.value })
 
-            //console.log("selectedMaker: "+JSON.stringify( this.state.selectedMaker));
+                    }}
 
-         let temp=[]
-         
-        for(var k in MAKER_MODEL[value.label.toUpperCase()])
-        temp.push({"label":MAKER_MODEL[value.label.toUpperCase()][k],
-        "value": k.toLowerCase()})
-        
-        this.setState({model:temp})
 
-        })
 
-   } }}
+                    label="City"
+                  >
+                    <MenuItem value="All">
+                      All
+          </MenuItem>
+                    {this.state.city && this.state.city.map((element, i) => { //console.log("meanu Item : "+element.value)
+                      return (<MenuItem key={i} value={element.value}>
+                        {element.label}</MenuItem>);
+                    }
+                    )}
 
-    />  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        
-        
-          <Autocomplete
-      id="selectModel"
-      openOnFocus={true}
-      clearOnEscape={true}
-      disabled={this.state.isModelDisabled}
-      options={this.state.model}
-      value={this.state.selectedModel}
-      getOptionLabel={(option) => option.label}
-      style={{ width: 300,  backgroundColor: "white", }}
-      renderInput={(params) => <TextField {...params} label="Select Model" variant="outlined"
-       />}
-       onChange={(e,value) => {
-        this.setState({selectedModel:value})
 
-        }}
-    />
+
+
+                  </Select>
+                </FormControl>
+      
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+      <FormControl variant="outlined" className={classes.formControl}>
+                  <InputLabel id="demo-simple-select-outlined-label">Select Maker</InputLabel>
+                  <Select
+                    id="selectMaker"
+                    openOnFocus={true}
+
+                    clearOnEscape={true}
+
+                    value={this.state.selectedMaker}
+                    style={{ width: 300, backgroundColor: "white", }}
+                    onChange={(e) => {
+
+                      if (e.target.value) { //console.log("event: "+JSON.stringify( e.target.value));
+                        this.setState({ isModelDisabled: false, selectedMaker: e.target.value, selectedModel: null }
+                          , () => {
+                            
+                            let temp = []
+                            if(e.target.value=="All")
+                              for(var i in MAKER_MODEL )
+                                for(var j in MAKER_MODEL[i])
+                             {//console.log("i[j]  "+JSON.stringify(MAKER_MODEL[i]))
+                               temp.push({ "label": MAKER_MODEL[i][j],
+                                "value": MAKER_MODEL[i][j].toLowerCase()});
+                          }
+                            else
+                            for (var k in MAKER_MODEL[e.target.value.toUpperCase()])
+                              temp.push({
+                                "label": MAKER_MODEL[e.target.value.toUpperCase()][k],
+                                "value": k.toLowerCase()
+                              })
+
+                            this.setState({ model: temp })
+                          })
+                      }
+                    }}
+                    label="Select Maker"
+                  >
+                    <MenuItem value="All">
+                      All
+          </MenuItem>
+                    {this.state.maker && this.state.maker.map((element, i) => {// console.log("meanu Item : "+element.value)
+                      return (<MenuItem key={i} value={element.value}>
+                        {element.label}</MenuItem>);
+                    }
+                    )}
+
+                  </Select>
+                </FormControl>
+
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+ <FormControl variant="outlined" className={classes.formControl}>
+                  <InputLabel id="demo-simple-select-outlined-label">Select Model</InputLabel>
+                  <Select
+                    id="model"
+
+                    clearOnEscape={true}
+                    disabled={this.state.isModelDisabled}
+                    openOnFocus={true}
+                    value={this.state.selectedModel}
+                    style={{ width: 300, backgroundColor: "white", }}
+                    onChange={(event) => {  //console.log(JSON.stringify(value));
+                      this.setState({ selectedModel: event.target.value })
+
+                    }}
+
+                    label="Model"
+                  >
+                    <MenuItem value="All">
+                      All
+          </MenuItem>
+                    {this.state.model && this.state.model.map((element, i) => { //console.log("meanu Item : "+element.value)
+                      return (<MenuItem key={i} value={element.value}>
+                        {element.label}</MenuItem>);
+                    }
+                    )}
+
+
+
+
+                  </Select>
+                </FormControl>
+
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <Link to={{
-            pathname: '/used-cars',
-            selectedCity: this.state.selectedCity,
-            selectedMaker:this.state.selectedMaker,
-            selectedModel:this.state.selectedModel,
-            city:this.state.city,
-            maker: this.state.maker,
-            model:this.state.model|null
+                  pathname: '/used-cars',
+                  selectedCity: this.state.selectedCity,
+                  selectedMaker: this.state.selectedMaker,
+                  selectedModel: this.state.selectedModel||null,
+                  city: this.state.city,
+                  maker: this.state.maker,
+                  model: this.state.model || null
 
-        }}
-        disabled={true}
-        
-        className={classes.link}>
-          <Button size="lg"
-      id="searchCars"
-     ononClick={this.getStudentByRollNo}
-      style={{ width: 300,  backgroundColor: "Red", }}
-     
-    >
-      Search Cars</Button></Link>
-     
-    
-              
+                }}
+                  disabled={true}
+
+                  className={classes.link}>
+                  <Button size="lg"
+                    id="searchCars"
+                    ononClick={this.getStudentByRollNo}
+                    style={{ width: 300, backgroundColor: "Red", }}
+
+                  >
+                    Search Cars</Button></Link>
+
+
+
               </div>
-            
-          </GridContainer> 
 
-     
-          
-       
+            </GridContainer>
+
+
+
+
+          </div>
+        </Parallax>
+
+        <div className={classNames(classes.main)}>
+          <div className={classes.container}>
+            <ProductSection />
+
+          </div>
         </div>
-      </Parallax>
-
-      <div className={classNames(classes.main)}>
-        <div className={classes.container}>
-          <ProductSection />
-         
-        </div>
-      </div>
 
 
 
 
 
-{/* 
+        {/* 
       <div className={classNames(classes.main)}>
         <SectionBasics />
         <SectionNavbars />
@@ -460,10 +518,10 @@ var city = [];
         <SectionExamples />
         <SectionDownload />
       </div> */}
-      <Footer />
-    </div>
-  
-    
+        <Footer />
+      </div>
+
+
     );
   }
 }
