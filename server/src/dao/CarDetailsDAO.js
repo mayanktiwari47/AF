@@ -125,7 +125,7 @@ module.exports = function (app) {
       .save()
       .then(carObj => {
         response = { reqbody: request, message: "Car details inserted successfully" };
-        console.log("carDetailsDAO - insertCarDetails - Data inserted successfully in class. Server final response - " + JSON.stringify(carObj));
+        console.log("carDetailsDAO - insertCarDetails - Data inserted successfully in CarDetails. Server final response - " + JSON.stringify(carObj));
         return res.send(response);
       })
       .catch(err => {

@@ -1,7 +1,10 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const autoIncrement = require('mongoose-auto-increment');
 
 connection = mongoose.createConnection('mongodb://localhost:27017/AFDB', { useNewUrlParser: true });
+
+autoIncrement.initialize(connection);
 
 var CarDetailsSchema = new Schema({
 
@@ -245,4 +248,11 @@ var CarDetailsSchema = new Schema({
 
 CarDetailsSchema.index({ id: 1 }, { unique: true });
 
-module.exports = Class = mongoose.model("Class", CarDetailsSchema);
+CarDetailsSchema.plugin(autoIncrement.plugin, {
+  model: 'CarDetails',
+  field: 'id',
+  startAt: 100001,
+  incrementBy: 1
+});
+
+module.exports = Car = mongoose.model("CarDetails", CarDetailsSchema);
