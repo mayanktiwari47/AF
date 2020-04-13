@@ -80,24 +80,40 @@ class UsedCars extends Component {
       priceFrom: null,
       priceTo: null,
       year: null,
-      distance: null,
+      distanceCovered: null,
       engineSize: null,
       transAutoChecked: false,
       transManChecked: false,
       color: null,
-
+      petrolChecked:false,
+      dieselChecked:false,
+      cngChecked:false,
+      firstOwnerChecked:false,
+      secOwnerChecked:false,
       isModelDisabled: true,
+      hatchbackSelected:false,
+      suvSelected:false,
+      sedanSelected:false,
+      thumbnail:[],
+      color:null,
 
       errors: null,
     };
 
-    this.handleChange = this.handleChange.bind(this);
-    this.fetchCarDetails = this.fetchCarDetails.bind(this);
 
+    this.fetchCarDetails = this.fetchCarDetails.bind(this);
+   // this.arrayBufferToBase64 = this.arrayBufferToBase64(this);
     // Fetching car details on page load to show it on the Cart
-    this.fetchCarDetails();
+  //  this.fetchCarDetails();
   }
 
+
+  arrayBufferToBase64(buffer) {
+    var binary = '';
+    var bytes = [].slice.call(new Uint8Array(buffer));
+    bytes.forEach((b) => binary += String.fromCharCode(b));
+    return window.btoa(binary);
+};
 
 
   // { ...rest } = props;
@@ -105,7 +121,7 @@ class UsedCars extends Component {
 
 
   populateDropDowns() {//console.log("Values Passed : "+ JSON.stringify(FILTERS['YEAR']));
-    var priceFrom = [], priceTo = [], maker = [], city = [], year = [], distance = [], engineSize = [];
+    var priceFrom = [], priceTo = [], maker = [], city = [], year = [], distanceCovered = [], engineSize = [];
 
     for (var i in FILTERS['PRICEFROM'])
       priceFrom.push({ "label": i, "value": FILTERS['PRICEFROM'][i] })
@@ -117,7 +133,7 @@ class UsedCars extends Component {
       year.push({ "label": j, "value": FILTERS['YEAR'][j] })
 
     for (var j in FILTERS['DISTANCECOVERED'])
-      distance.push({ "label": j, "value": FILTERS['DISTANCECOVERED'][j] })
+    distanceCovered.push({ "label": j, "value": FILTERS['DISTANCECOVERED'][j] })
 
     for (var j in FILTERS['ENGINESIZE'])
       engineSize.push({ "label": j, "value": FILTERS['ENGINESIZE'][j] })
@@ -137,32 +153,19 @@ class UsedCars extends Component {
       priceFrom,
       priceTo,
       year,
-      distance,
-      engineSize
-
+      distanceCovered,
+      engineSize,
+      selectedCity: this.props.location.selectedCity||null,
+      selectedMaker: this.props.location.selectedMaker||null,
+      model:this.props.location.model||null,
+      selectedModel:this.props.location.selectedModel||null,
+      isModelDisabled:this.props.location.isModelDisabled||false
+    },()=>{
+this.fetchCarDetails();
 
     });
 
-    if (this.props.location.selectedCity)
-      this.setState({
-
-        selectedCity: this.props.location.selectedCity,
-
-      });
-    if (this.props.location.selectedMaker)
-      this.setState({
-        selectedMaker: this.props.location.selectedMaker,
-
-      });
-    if (this.props.location.selectedModel || this.props.location.model)
-      this.setState({
-        isModelDisabled: false, model: this.props.location.model,
-        selectedModel: this.props.location.selectedModel,
-
-      });
-
-
-  }
+ }
 
   // { ...rest } = props;
   componentDidMount() {
@@ -181,28 +184,47 @@ class UsedCars extends Component {
 
   }
 
-  handleChange = (event) => {
-    console.log("handleCheckChange")
 
-    if (event.target.checked)
-      this.setState({ checked: true });
-    else
-      this.setState({ checked: false });
-  };
 
   fetchCarDetails() {
+console.log("getting Car Detail")
+   /*  axios.post("http://localhost:8001/api/fetchAllCarDetails", 
+    {"selectedFeeTemplate":this.state.selectedFeeTemplate}) */
+    var data=  {selectedCity:this.state.selectedCity, selectedMaker:this.state.selectedMaker,
+      selectedModel:this.state.selectedModel, selectedPriceFrom:this.state.selectedPriceFrom,
+      selectedPriceTo:this.state.selectedPriceTo,selectedYear:this.state.selectedYear,    selectedDistance:this.state.selectedDistance, 
+      transManChecked:this.state.transManChecked,transAutoChecked:this.state.transAutoChecked, 
+      selectedEngineSize:this.state.selectedEngineSize,color: this.state.color, petrolChecked:this.state.petrolChecked,
+      dieselChecked:this.state.dieselChecked,cngChecked:this.state.cngChecked,firstOwnerChecked:this.state.firstOwnerChecked,
+      secOwnerChecked:this.state.secOwnerChecked, hatchbackSelected:this.state.hatchbackSelected,
+      suvSelected:this.state.suvSelected, sedanSelected:this.state.sedanSelected
+    }
 
-    axios.get("http://localhost:8001/api/fetchAllCarDetails").then(cRes => {
 
+    axios.post("http://localhost:8001/api/fetchAllCarDetails",data)
+    .then(cRes => {
+      console.log('cRes - fetchCarDetails - All Car details - ' + JSON.stringify(cRes.data));
       if (cRes.data.errors) {
 
         return this.setState({ errors: cRes.data.errors });
 
       } else {
+        
+        this.setState({ carDetails: cRes.data },
+          ()=>{
+            
+            var base64Flag = 'data:image/jpeg;base64,';
+            var thumbnail=[];
+            for(var i=0; i < cRes.data.length;i++)
+            { var imageStr = this.arrayBufferToBase64(cRes.data[i].thumbnail.data.data);
+              thumbnail.push(base64Flag + imageStr); }
+              this.setState({
+                thumbnail
+            });
+           
+          } );
 
-        this.setState({ carDetails: cRes.data });
-
-        console.log('UsedCars - fetchCarDetails - All Car details - ' + JSON.stringify(this.state.carDetails));
+       // console.log('UsedCars - fetchCarDetails - All Car details - ' + JSON.stringify(this.state.carDetails));
       }
     });
   }
@@ -261,7 +283,7 @@ class UsedCars extends Component {
               </div>
 
               <ExpansionPanel
-                expanded={true}>
+                defaultExpanded={true}>
                 <ExpansionPanelSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1a-content"
@@ -271,10 +293,10 @@ class UsedCars extends Component {
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
 
-                  <div className={"filters-child"}>
+                  <div >
 
 
-                    <br />
+                    
                     <FormControl variant="outlined" className={classes.formControl}>
                       <InputLabel id="demo-simple-select-outlined-label">City</InputLabel>
                       <Select
@@ -315,7 +337,7 @@ class UsedCars extends Component {
 
 
 
-              <ExpansionPanel expanded={true}>
+              <ExpansionPanel defaultExpanded={true}>
                 <ExpansionPanelSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1a-content"
@@ -325,8 +347,8 @@ class UsedCars extends Component {
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
 
-                  <div className={"filters-child"}>
-                    <br />
+                  <div >
+              
                     <FormControl variant="outlined" className={classes.formControl}>
                       <InputLabel id="demo-simple-select-outlined-label">Select Maker</InputLabel>
                       <Select
@@ -377,7 +399,7 @@ class UsedCars extends Component {
                       </Select>
                     </FormControl>
 
-                    <br /><br /><br />
+                    <br /><br />
                     <FormControl variant="outlined" className={classes.formControl}>
                       <InputLabel id="demo-simple-select-outlined-label">Model</InputLabel>
                       <Select
@@ -432,7 +454,7 @@ class UsedCars extends Component {
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
 
-                  <div className={"filters-child"}>
+                  <div >
                     <br />
                     <FormControl variant="outlined" className={classes.formControl}>
                       <InputLabel id="demo-simple-select-outlined-label">Price From</InputLabel>
@@ -475,7 +497,7 @@ class UsedCars extends Component {
                         value={this.state.selectedPriceTo || ""}
                         style={{ width: 200, backgroundColor: "white", }}
                         onChange={(event) => {  //console.log(JSON.stringify(value));
-                          this.setState({ selectedPriceto: event.target.value })
+                          this.setState({ selectedPriceTo: event.target.value })
 
                         }}
 
@@ -512,11 +534,8 @@ class UsedCars extends Component {
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
 
-                  <div className={"filters-child"}>
+                  <div >
                     <br />
-
-
-
 
                     <br />
                     <FormControl variant="outlined" className={classes.formControl}>
@@ -565,7 +584,7 @@ class UsedCars extends Component {
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
 
-                  <div className={"filters-child"}>
+                  <div >
                     <br />
                     <FormControl variant="outlined" className={classes.formControl}>
                       <InputLabel id="demo-simple-select-outlined-label">Distance Covered</InputLabel>
@@ -615,8 +634,8 @@ class UsedCars extends Component {
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
 
-                  <div className={"filters-child"}>
-                    <h5>Transmission</h5>
+                  <div >
+                    <h6>Transmission</h6>
 
 
                     <FormControlLabel
@@ -650,8 +669,8 @@ class UsedCars extends Component {
                   </div>
                 </ExpansionPanelDetails>
                 <ExpansionPanelDetails>
-                  <div className={"filters-child"}>
-                    <h5>Engine Size</h5>
+                  <div>
+                    <h6>Engine Size</h6>
 
                     <FormControl variant="outlined" className={classes.formControl}>
                       <InputLabel id="demo-simple-select-outlined-label">Engine Size</InputLabel>
@@ -708,7 +727,7 @@ class UsedCars extends Component {
                         <Grid container item xs={12} spacing={3}>
                           <React.Fragment>
                             <Grid item xs={4}>
-                              <ReactCircleColorPicker colors={[{ hex: '#FFFFFF' }]}
+                              <ReactCircleColorPicker checked={true} colors={[{ hex: '#FFFFFF' }]}
                                />
                               <h6>White</h6>
                             </Grid>
@@ -767,11 +786,11 @@ class UsedCars extends Component {
                 aria-controls="panel1a-content"
                 id="panel1a-header"
               >
-                <Typography className={this.classes.heading}>Fule Type</Typography>
+                <Typography className={this.classes.heading}>Fuel Type</Typography>
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>
 
-                <div className={"filters-child"}>
+                <div >
 
 
 
@@ -779,8 +798,11 @@ class UsedCars extends Component {
                     control={<Checkbox
 
                       color="primary"
-                      checked={this.state.checked}
-                      onChange={this.handleChange}
+                      checked={this.state.petrolChecked}
+                      onChange={(event) => {  //console.log(JSON.stringify(value));
+                        this.setState({ petrolChecked: !this.state.petrolChecked })
+                      }}
+
                       inputProps={{ 'aria-label': 'primary checkbox' }}
                     />}
                     label="Petrol"
@@ -790,8 +812,10 @@ class UsedCars extends Component {
                     control={<Checkbox
                       color="primary"
 
-                      checked={this.state.checked}
-                      onChange={this.handleChange}
+                      checked={this.state.dieselChecked}
+                      onChange={(event) => {  //console.log(JSON.stringify(value));
+                        this.setState({ dieselChecked: !this.state.dieselChecked })
+                      }}
                       inputProps={{ 'aria-label': 'primary checkbox' }}
                     />}
                     label="Diesel"
@@ -799,9 +823,10 @@ class UsedCars extends Component {
                   <FormControlLabel
                     control={<Checkbox
                       color="primary"
-
-                      checked={this.state.checked}
-                      onChange={this.handleChange}
+                      checked={this.state.cngChecked}
+                      onChange={(event) => {  //console.log(JSON.stringify(value));
+                        this.setState({ cngChecked: !this.state.cngChecked })
+                      }}
                       inputProps={{ 'aria-label': 'primary checkbox' }}
                     />}
                     label="CNG"
@@ -824,7 +849,7 @@ class UsedCars extends Component {
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>
 
-                <div className={"filters-child"}>
+                <div >
 
 
 
@@ -832,8 +857,10 @@ class UsedCars extends Component {
                     control={<Checkbox
 
                       color="primary"
-                      checked={this.state.checked}
-                      onChange={this.handleChange}
+                      checked={this.state.firstOwnerChecked}
+                      onChange={(event) => {  //console.log(JSON.stringify(value));
+                        this.setState({ firstOwnerChecked: !this.state.firstOwnerChecked })
+                      }}
                       inputProps={{ 'aria-label': 'primary checkbox' }}
                     />}
                     label="First Owner"
@@ -843,8 +870,10 @@ class UsedCars extends Component {
                     control={<Checkbox
                       color="primary"
 
-                      checked={this.state.checked}
-                      onChange={this.handleChange}
+                      checked={this.state.secOwnerChecked}
+                      onChange={(event) => {  //console.log(JSON.stringify(value));
+                        this.setState({ secOwnerChecked: !this.state.secOwnerChecked })
+                      }}
                       inputProps={{ 'aria-label': 'primary checkbox' }}
                     />}
                     label="Second Owner"
@@ -868,7 +897,7 @@ class UsedCars extends Component {
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>
 
-                <div className={"filters-child"}>
+                <div >
 
 
 
@@ -876,8 +905,10 @@ class UsedCars extends Component {
                     control={<Checkbox
 
                       color="primary"
-                      checked={this.state.checked}
-                      onChange={this.handleChange}
+                      checked={this.state.hatchbackSelected}
+                      onChange={(event) => {  //console.log(JSON.stringify(value));
+                        this.setState({ hatchbackSelected: !this.state.hatchbackSelected })
+                      }}
                       inputProps={{ 'aria-label': 'primary checkbox' }}
                     />}
                     label="Hatchback"
@@ -887,8 +918,10 @@ class UsedCars extends Component {
                     control={<Checkbox
                       color="primary"
 
-                      checked={this.state.checked}
-                      onChange={this.handleChange}
+                      checked={this.state.sedanSelected}
+                      onChange={(event) => {  //console.log(JSON.stringify(value));
+                        this.setState({ sedanSelected: !this.state.sedanSelected })
+                      }}
                       inputProps={{ 'aria-label': 'primary checkbox' }}
                     />}
                     label="Sedan"
@@ -897,8 +930,9 @@ class UsedCars extends Component {
                     control={<Checkbox
                       color="primary"
 
-                      checked={this.state.checked}
-                      onChange={this.handleChange}
+                      checked={this.state.suvSelected}
+                      onChange={(event) => {  //console.log(JSON.stringify(value));
+                        this.setState({ suvSelected: !this.state.suvSelected })}}
                       inputProps={{ 'aria-label': 'primary checkbox' }}
                     />}
                     label="SUV"
@@ -918,24 +952,28 @@ class UsedCars extends Component {
           >
 
               <Container>
-              {this.state.carDetails && this.state.carDetails.map(cardetail => {
+              {this.state.carDetails && this.state.carDetails.map((cardetail,index)=> {
                 return (
                   <article className="shelf-item-container"
                   // onClick={props.onClick} 
                   >
                     {true && (
-                      <div className="shelf-item-shipping">Free shipping</div>
+                      <div ><b><font color='red'>{cardetail.yearOfReg+" Reg."}</font></b></div>
                     )}
-
-                    <img src={require("./images/abc.jpg")} alt='image name' />
+                    <img src={this.state.thumbnail[index]} alt='image name'  title={cardetail.maker + " " 
+                    + cardetail.model+" "+cardetail.engineSize+" "+cardetail.modelType}/>
+                    {/* <img src={require("./images/abc.jpg")} alt='image name' /> */}
                     {/* <img src={abc} alt='image name' /> */}
 
-                    <div className="shelf-item-name">{this.state.carDetails[0].maker + " " + this.state.carDetails[0].model}</div>
-                    <div className="shelf-item-description">{this.state.carDetails[0].engineSizeInL + "L "
-                      + this.state.carDetails[0].fuelType + " " + this.state.carDetails[0].color}</div>
-                    <div className="shelf-item-description">More details here</div>
-                    <div className="shelf-item-price">{"Rs " + this.state.carDetails[0].price}</div>
-                    <div className="shelf-item-buy-btn">Buy Now</div>
+                    <div className="shelf-item-name">{cardetail.maker + " " 
+                    + cardetail.model+" "+cardetail.engineSize+" "+cardetail.modelType}</div>
+                    
+                    <div className="shelf-item-price"><font color ='Blue'>{"Rs. " + cardetail.price}</font></div>
+                    <div className="shelf-item-description">{cardetail.distanceCovered + " Kms | "
+                      + cardetail.fuelType + " | "+ cardetail.transmission}</div>
+                   {/*  <div className="shelf-item-description">More details here</div>
+                   
+                    <div className="shelf-item-buy-btn">Buy Now</div> */}
                   </article>
                 );
               })}

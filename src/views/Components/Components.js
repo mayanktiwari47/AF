@@ -456,10 +456,11 @@ class Components extends Component {
                   pathname: '/used-cars',
                   selectedCity: this.state.selectedCity,
                   selectedMaker: this.state.selectedMaker,
-                  selectedModel: this.state.selectedModel||null,
+                  selectedModel: this.state.selectedModel,
                   city: this.state.city,
                   maker: this.state.maker,
-                  model: this.state.model || null
+                  model: this.state.model,
+                  isModelDisabled:this.state.isModelDisabled
 
                 }}
                   disabled={true}

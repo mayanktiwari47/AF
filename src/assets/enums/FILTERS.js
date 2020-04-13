@@ -44,11 +44,11 @@ const FILTERS = {
     
     },
     "ENGINESIZE": {
-        "1200 CC or less": "1200",
-        "1500 CC or less": "1500",
-        "2000 CC or less": "2000",
-        "2500 CC or less": "2500",
-        "3000 CC or less": "3000",
+        "1.2 L or less": "1.2",
+        "1.5 L or less": "1.5",
+        "2.0 L or less": "2.0",
+        "2.5 L or less": "2.5",
+        "3.0 L or less": "3.0",
     
     },
 

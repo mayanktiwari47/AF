@@ -73,7 +73,7 @@ module.exports = function (app) {
      */
   function fetchAllCarDetails(req, res) {
 
-    console.log("CarDetailsDAO - fetchAllCarDetails ENTRY");
+    console.log("CarDetailsDAO - fetchAllCarDetails ENTRY"+JSON.stringify(req.body));
 
     //Initial validation like fields empty check
     var errors = validationResult(req);
@@ -86,7 +86,7 @@ module.exports = function (app) {
     CarDetails.find()
       .then(function (carDetails) {
 
-        console.log("CarDetailsDAO - fetchAllCarDetails - All Car details -  " + carDetails);
+        //console.log("CarDetailsDAO - fetchAllCarDetails - All Car details -  " + carDetails);
 
         res.send(carDetails);
       })
@@ -137,7 +137,7 @@ module.exports = function (app) {
 
   }
 
-  app.get("/api/fetchAllCarDetails", fetchAllCarDetails, (req, res) => {
+  app.post("/api/fetchAllCarDetails", fetchAllCarDetails, (req, res) => {
     console.log("fetchAllCarDetails get service running");
   });
 

@@ -26,22 +26,20 @@ var CarDetailsSchema = new Schema({
     type: String,
     required: true,
   },
+  modelType: {
+    type: String,
+    required: true,
+  },
+
   price: {
     type: Number,
     required: true,
   },
-  manufactureDate: {
-    type: Date,
-    required: true,
-  },
-  firstOwnerPurchaseYear: {
-    type: Date,
-    required: true,
-  },
-  carAge: {
+  yearOfReg: {
     type: Number,
     required: true,
   },
+ 
   distanceCovered: {
     type: Number,
     required: true,
@@ -50,7 +48,7 @@ var CarDetailsSchema = new Schema({
     type: String,
     required: true,
   },
-  engineSizeInL: {
+  engineSize: {
     type: Number,
     required: true,
   },
@@ -67,10 +65,6 @@ var CarDetailsSchema = new Schema({
     required: true,
   },
   bodyType: {
-    type: String,
-    required: true,
-  },
-  driveType: {
     type: String,
     required: true,
   },
@@ -120,22 +114,10 @@ var CarDetailsSchema = new Schema({
       required: true,
     }
   },
-  previousOwners: {
+  noOfOwners: {
 
-    type: Array,
-
-    name: {
-      type: String,
-      required: true
-    },
-    address: {
-      type: String,
-      required: true
-    },
-    contactNumber: {
-      type: [Number],
-      required: true
-    }
+    type: Number,
+    required: true,
   },
   lastMOT: {
     type: Date
