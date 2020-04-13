@@ -6,6 +6,9 @@
 package-lock.json
 /.vscode
 
+# Resources
+/server/src/resources/images
+
 # testing
 /coverage
 

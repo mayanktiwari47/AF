@@ -23,6 +23,16 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import { Container, Row, Col } from "react-bootstrap";
 // import { Container, Row, Col } from 'reactstrap';
+import MAKER_MODEL from "assets/enums/MAKER_MODEL.js";
+import CITY from "assets/enums/CITY.js";
+import FILTERS from "assets/enums/FILTERS.js";
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import { withStyles } from "@material-ui/core/styles";
+
+
 import {
   ReactiveBase,
   DataSearch,
@@ -46,6 +56,7 @@ class UsedCars extends Component {
   classes = makeStyles(styles);
 
   // const [checked, setChecked] = React.useState(false);
+  //const { ...rest } = this.props;
 
   //const { ...rest } = this.props;
 
@@ -54,16 +65,121 @@ class UsedCars extends Component {
     super(props);
 
     this.state = {
-      carDetails: []
+      carDetails: [],
+      city: null,
+      maker: null,
+      model: null,
+      selectedMaker: null,
+      selectedModel: null,
+      selectedCity: null,
+      selectedPriceFrom: null,
+      selectedPriceTo: null,
+      selectedYear: null,
+      selectedDistance: null,
+      selectedEngineSize: null,
+      priceFrom: null,
+      priceTo: null,
+      year: null,
+      distance: null,
+      engineSize: null,
+      transAutoChecked: false,
+      transManChecked: false,
+      color: null,
+
+      isModelDisabled: true,
+
+      errors: null,
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.fetchCarDetails = this.fetchCarDetails.bind(this);
 
+    // Fetching car details on page load to show it on the Cart
     this.fetchCarDetails();
   }
 
+
+
   // { ...rest } = props;
+
+
+
+  populateDropDowns() {//console.log("Values Passed : "+ JSON.stringify(FILTERS['YEAR']));
+    var priceFrom = [], priceTo = [], maker = [], city = [], year = [], distance = [], engineSize = [];
+
+    for (var i in FILTERS['PRICEFROM'])
+      priceFrom.push({ "label": i, "value": FILTERS['PRICEFROM'][i] })
+
+    for (var j in FILTERS['PRICETO'])
+      priceTo.push({ "label": j, "value": FILTERS['PRICETO'][j] })
+
+    for (var j in FILTERS['YEAR'])
+      year.push({ "label": j, "value": FILTERS['YEAR'][j] })
+
+    for (var j in FILTERS['DISTANCECOVERED'])
+      distance.push({ "label": j, "value": FILTERS['DISTANCECOVERED'][j] })
+
+    for (var j in FILTERS['ENGINESIZE'])
+      engineSize.push({ "label": j, "value": FILTERS['ENGINESIZE'][j] })
+
+
+
+    for (var k in MAKER_MODEL) maker.push({
+      "label": k.charAt(0) + k.slice(1).toLowerCase(),
+      "value": k.toLowerCase()
+    })
+
+
+    for (var k in CITY) city.push({ "label": CITY[k], "value": CITY[k].toLowerCase() })
+    this.setState({
+      city,
+      maker,
+      priceFrom,
+      priceTo,
+      year,
+      distance,
+      engineSize
+
+
+    });
+
+    if (this.props.location.selectedCity)
+      this.setState({
+
+        selectedCity: this.props.location.selectedCity,
+
+      });
+    if (this.props.location.selectedMaker)
+      this.setState({
+        selectedMaker: this.props.location.selectedMaker,
+
+      });
+    if (this.props.location.selectedModel || this.props.location.model)
+      this.setState({
+        isModelDisabled: false, model: this.props.location.model,
+        selectedModel: this.props.location.selectedModel,
+
+      });
+
+
+  }
+
+  // { ...rest } = props;
+  componentDidMount() {
+    this.populateDropDowns();
+  }
+  componentWillUnmount() {
+    this.setState({
+      city: null,
+      maker: null,
+      model: null,
+      selectedMaker: null,
+      seletedModel: null,
+      selectedCity: null,
+
+    });
+
+  }
 
   handleChange = (event) => {
     console.log("handleCheckChange")
@@ -93,6 +209,8 @@ class UsedCars extends Component {
 
   render() {
 
+    const { classes } = this.props;
+
     return (
       <div>
         <Header
@@ -108,6 +226,7 @@ class UsedCars extends Component {
         />
 
         <div className={classNames(this.classes.main)}>
+
           <SectionDownload />
           {/* <h3> Hi </h3> */}
 
@@ -132,6 +251,7 @@ class UsedCars extends Component {
                 }}
               />
             </div> */}
+
           <div className={"display"}>
             <div className={"leftSidebar"}>
 
@@ -140,7 +260,8 @@ class UsedCars extends Component {
 
               </div>
 
-              <ExpansionPanel>
+              <ExpansionPanel
+                expanded={true}>
                 <ExpansionPanelSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1a-content"
@@ -153,68 +274,48 @@ class UsedCars extends Component {
                   <div className={"filters-child"}>
 
 
+                    <br />
+                    <FormControl variant="outlined" className={classes.formControl}>
+                      <InputLabel id="demo-simple-select-outlined-label">City</InputLabel>
+                      <Select
+                        id="city"
+                        // clearOnEscape={true}
+                        //openOnFocus={true}
+                        value={this.state.selectedCity || ""}
+                        style={{ width: 200, backgroundColor: "white", }}
+                        onChange={(event) => {  //console.log(JSON.stringify(value));
+                          this.setState({ selectedCity: event.target.value })
 
-                    <FormControlLabel
-                      control={<Checkbox
+                        }}
 
-                        color="primary"
-                        checked={this.state.checked}
-                        onChange={this.handleChange}
-                        inputProps={{ 'aria-label': 'primary checkbox' }}
-                      />}
-                      label="Delhi"
-                    />
 
-                    <FormControlLabel
-                      control={<Checkbox
-                        color="primary"
 
-                        checked={this.state.checked}
-                        onChange={this.handleChange}
-                        inputProps={{ 'aria-label': 'primary checkbox' }}
-                      />}
-                      label="Gurgaon"
-                    />
-                    <FormControlLabel
-                      control={<Checkbox
-                        color="primary"
+                        label="City"
+                      >
+                        <MenuItem value="All">
+                          All
+          </MenuItem>
+                        {this.state.city && this.state.city.map((element, i) => { //console.log("meanu Item : "+element.value)
+                          return (<MenuItem key={i} value={element.value}>
+                            {element.label}</MenuItem>);
+                        }
+                        )}
 
-                        checked={this.state.checked}
-                        onChange={this.handleChange}
-                        inputProps={{ 'aria-label': 'primary checkbox' }}
-                      />}
-                      label="Noida"
-                    />
 
-                    <FormControlLabel
-                      control={<Checkbox
-                        color="primary"
 
-                        checked={this.state.checked}
-                        onChange={this.handleChange}
-                        inputProps={{ 'aria-label': 'primary checkbox' }}
-                      />}
-                      label="Mumbai"
-                    />
 
-                    <FormControlLabel
-                      control={<Checkbox
-                        color="primary"
+                      </Select>
+                    </FormControl>
 
-                        checked={this.state.checked}
-                        onChange={this.handleChange}
-                        inputProps={{ 'aria-label': 'primary checkbox' }}
-                      />}
-                      label="Banglore"
-                    />
+                    <br />
                   </div>
-                </ExpansionPanelDetails>
+                </ExpansionPanelDetails >
 
-              </ExpansionPanel>
+              </ExpansionPanel  >
 
 
 
-              <ExpansionPanel>
+              <ExpansionPanel expanded={true}>
                 <ExpansionPanelSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1a-content"
@@ -226,29 +327,89 @@ class UsedCars extends Component {
 
                   <div className={"filters-child"}>
                     <br />
-                    <Autocomplete
-                      id="selectMaker"
-                      options={[
-                        { title: 'The Shawshank Redemption', year: 1994 },
-                        { title: 'The Godfather', year: 1972 },
-                        { title: 'The Godfather: Part II', year: 1974 },
-                      ]}
-                      getOptionLabel={(option) => option.title}
-                      style={{ width: 200, backgroundColor: "white", }}
-                      renderInput={(params) => <TextField {...params} label="Make" variant="outlined" />}
-                    />
-                    <br />
-                    <Autocomplete
-                      id="selectModel"
-                      options={[
-                        { title: 'The Shawshank Redemption', year: 1994 },
-                        { title: 'The Godfather', year: 1972 },
-                        { title: 'The Godfather: Part II', year: 1974 },
-                      ]}
-                      getOptionLabel={(option) => option.title}
-                      style={{ width: 200, backgroundColor: "white", }}
-                      renderInput={(params) => <TextField {...params} label="Model" variant="outlined" />}
-                    />
+                    <FormControl variant="outlined" className={classes.formControl}>
+                      <InputLabel id="demo-simple-select-outlined-label">Select Maker</InputLabel>
+                      <Select
+                        id="selectMaker"
+                        openOnFocus={true}
+
+                        clearOnEscape={true}
+
+                        value={this.state.selectedMaker || ""}
+                        style={{ width: 200, backgroundColor: "white", }}
+                        onChange={(e) => {
+
+                          if (e.target.value) { //console.log("event: "+JSON.stringify( e.target.value));
+                            this.setState({ isModelDisabled: false, selectedMaker: e.target.value, selectedModel: null }
+                              , () => {
+
+                                let temp = []
+                                if (e.target.value == "All")
+                                  for (var i in MAKER_MODEL)
+                                    for (var j in MAKER_MODEL[i]) {//console.log("i[j]  "+JSON.stringify(MAKER_MODEL[i]))
+                                      temp.push({
+                                        "label": MAKER_MODEL[i][j],
+                                        "value": MAKER_MODEL[i][j].toLowerCase()
+                                      });
+                                    }
+                                else
+                                  for (var k in MAKER_MODEL[e.target.value.toUpperCase()])
+                                    temp.push({
+                                      "label": MAKER_MODEL[e.target.value.toUpperCase()][k],
+                                      "value": k.toLowerCase()
+                                    })
+
+                                this.setState({ model: temp })
+                              })
+                          }
+                        }}
+                        label="Select Maker"
+                      >
+                        <MenuItem value="All">
+                          All
+          </MenuItem>
+                        {this.state.maker && this.state.maker.map((element, i) => {// console.log("meanu Item : "+element.value)
+                          return (<MenuItem key={i} value={element.value}>
+                            {element.label}</MenuItem>);
+                        }
+                        )}
+
+                      </Select>
+                    </FormControl>
+
+                    <br /><br /><br />
+                    <FormControl variant="outlined" className={classes.formControl}>
+                      <InputLabel id="demo-simple-select-outlined-label">Model</InputLabel>
+                      <Select
+                        id="model"
+
+                        clearOnEscape={true}
+                        disabled={this.state.isModelDisabled}
+                        openOnFocus={true}
+                        value={this.state.selectedModel || ""}
+                        style={{ width: 200, backgroundColor: "white", }}
+                        onChange={(event) => {  //console.log(JSON.stringify(value));
+                          this.setState({ selectedModel: event.target.value })
+
+                        }}
+
+                        label="Model"
+                      >
+                        <MenuItem value="All">
+                          All
+          </MenuItem>
+                        {this.state.model && this.state.model.map((element, i) => { //console.log("meanu Item : "+element.value)
+                          return (<MenuItem key={i} value={element.value}>
+                            {element.label}</MenuItem>);
+                        }
+                        )}
+
+
+
+
+                      </Select>
+                    </FormControl>
+
 
 
                   </div>
@@ -267,35 +428,73 @@ class UsedCars extends Component {
                   aria-controls="panel1a-content"
                   id="panel1a-header"
                 >
-                  <Typography className={this.classes.heading}>Price(in Lakhs)</Typography>
+                  <Typography className={this.classes.heading}>Price</Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
 
                   <div className={"filters-child"}>
                     <br />
-                    <Autocomplete
-                      id="priceFrom"
-                      options={[
-                        { title: 'The Shawshank Redemption', year: 1994 },
-                        { title: 'The Godfather', year: 1972 },
-                        { title: 'The Godfather: Part II', year: 1974 },
-                      ]}
-                      getOptionLabel={(option) => option.title}
-                      style={{ width: 200, backgroundColor: "white", }}
-                      renderInput={(params) => <TextField {...params} label="From" variant="outlined" />}
-                    />
-                    <br />
-                    <Autocomplete
-                      id="priceTo"
-                      options={[
-                        { title: 'The Shawshank Redemption', year: 1994 },
-                        { title: 'The Godfather', year: 1972 },
-                        { title: 'The Godfather: Part II', year: 1974 },
-                      ]}
-                      getOptionLabel={(option) => option.title}
-                      style={{ width: 200, backgroundColor: "white", }}
-                      renderInput={(params) => <TextField {...params} label="To" variant="outlined" />}
-                    />
+                    <FormControl variant="outlined" className={classes.formControl}>
+                      <InputLabel id="demo-simple-select-outlined-label">Price From</InputLabel>
+                      <Select
+                        id="priceFrom"
+                        // clearOnEscape={true}
+                        //openOnFocus={true}
+                        value={this.state.selectedPriceFrom || ""}
+                        style={{ width: 200, backgroundColor: "white", }}
+                        onChange={(event) => {  //console.log(JSON.stringify(value));
+                          this.setState({ selectedPriceFrom: event.target.value })
+
+                        }}
+
+
+
+                        label="Price From"
+                      >
+
+                        {this.state.priceFrom && this.state.priceFrom.map(element => { //console.log("meanu Item : "+element.value)
+                          return (<MenuItem key={element.label} value={element.value}>
+                            {element.label}</MenuItem>);
+                        }
+                        )
+                        }
+
+
+
+                      </Select>
+                    </FormControl>
+
+
+                    <br /><br />
+                    <FormControl variant="outlined" className={classes.formControl}>
+                      <InputLabel id="demo-simple-select-outlined-label">Price To</InputLabel>
+                      <Select
+                        id="priceTo"
+                        // clearOnEscape={true}
+                        //openOnFocus={true}
+                        value={this.state.selectedPriceTo || ""}
+                        style={{ width: 200, backgroundColor: "white", }}
+                        onChange={(event) => {  //console.log(JSON.stringify(value));
+                          this.setState({ selectedPriceto: event.target.value })
+
+                        }}
+
+
+
+                        label="Price To"
+                      >
+
+                        {this.state.priceTo && this.state.priceTo.map(element => { //console.log("meanu Item : "+element.value)
+                          return (<MenuItem key={element.label} value={element.value}>
+                            {element.label}</MenuItem>);
+                        }
+                        )
+                        }
+
+
+
+                      </Select>
+                    </FormControl>
 
                     <br />
                   </div>
@@ -315,29 +514,40 @@ class UsedCars extends Component {
 
                   <div className={"filters-child"}>
                     <br />
-                    <Autocomplete
-                      id="yearFrom"
-                      options={[
-                        { title: 'The Shawshank Redemption', year: 1994 },
-                        { title: 'The Godfather', year: 1972 },
-                        { title: 'The Godfather: Part II', year: 1974 },
-                      ]}
-                      getOptionLabel={(option) => option.title}
-                      style={{ width: 200, backgroundColor: "white", }}
-                      renderInput={(params) => <TextField {...params} label="From" variant="outlined" />}
-                    />
+
+
+
+
                     <br />
-                    <Autocomplete
-                      id="yearTo"
-                      options={[
-                        { title: 'The Shawshank Redemption', year: 1994 },
-                        { title: 'The Godfather', year: 1972 },
-                        { title: 'The Godfather: Part II', year: 1974 },
-                      ]}
-                      getOptionLabel={(option) => option.title}
-                      style={{ width: 200, backgroundColor: "white", }}
-                      renderInput={(params) => <TextField {...params} label="To" variant="outlined" />}
-                    />
+                    <FormControl variant="outlined" className={classes.formControl}>
+                      <InputLabel id="demo-simple-select-outlined-label">Year</InputLabel>
+                      <Select
+                        id="year"
+                        // clearOnEscape={true}
+                        //openOnFocus={true}
+                        value={this.state.selectedYear || ""}
+                        style={{ width: 200, backgroundColor: "white", }}
+                        onChange={(event) => {  //console.log(JSON.stringify(value));
+                          this.setState({ selectedYear: event.target.value })
+
+                        }}
+
+
+
+                        label="Year"
+                      >
+
+                        {this.state.year && this.state.year.map(element => { //console.log("meanu Item : "+element.value)
+                          return (<MenuItem key={element.label} value={element.value}>
+                            {element.label}</MenuItem>);
+                        }
+                        )
+                        }
+
+
+
+                      </Select>
+                    </FormControl>
 
                     <br />
                   </div>
@@ -351,35 +561,41 @@ class UsedCars extends Component {
                   aria-controls="panel1a-content"
                   id="panel1a-header"
                 >
-                  <Typography className={this.classes.heading}>Mileage</Typography>
+                  <Typography className={this.classes.heading}>Distance Covered</Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
 
                   <div className={"filters-child"}>
                     <br />
-                    <Autocomplete
-                      id="mileageFrom"
-                      options={[
-                        { title: 'The Shawshank Redemption', year: 1994 },
-                        { title: 'The Godfather', year: 1972 },
-                        { title: 'The Godfather: Part II', year: 1974 },
-                      ]}
-                      getOptionLabel={(option) => option.title}
-                      style={{ width: 200, backgroundColor: "white", }}
-                      renderInput={(params) => <TextField {...params} label="From" variant="outlined" />}
-                    />
-                    <br />
-                    <Autocomplete
-                      id="mileageTo"
-                      options={[
-                        { title: 'The Shawshank Redemption', year: 1994 },
-                        { title: 'The Godfather', year: 1972 },
-                        { title: 'The Godfather: Part II', year: 1974 },
-                      ]}
-                      getOptionLabel={(option) => option.title}
-                      style={{ width: 200, backgroundColor: "white", }}
-                      renderInput={(params) => <TextField {...params} label="To" variant="outlined" />}
-                    />
+                    <FormControl variant="outlined" className={classes.formControl}>
+                      <InputLabel id="demo-simple-select-outlined-label">Distance Covered</InputLabel>
+                      <Select
+                        id="distanceCovered"
+                        // clearOnEscape={true}
+                        //openOnFocus={true}
+                        value={this.state.selectedDistance || ""}
+                        style={{ width: 200, backgroundColor: "white", }}
+                        onChange={(event) => {  //console.log(JSON.stringify(value));
+                          this.setState({ selectedDistance: event.target.value })
+
+                        }}
+
+
+
+                        label="Distance Covered"
+                      >
+
+                        {this.state.distance && this.state.distance.map(element => { //console.log("meanu Item : "+element.value)
+                          return (<MenuItem key={element.label} value={element.value}>
+                            {element.label}</MenuItem>);
+                        }
+                        )
+                        }
+
+
+
+                      </Select>
+                    </FormControl>
 
                     <br />
                   </div>
@@ -407,8 +623,11 @@ class UsedCars extends Component {
                       control={<Checkbox
 
                         color="primary"
-                        checked={this.state.checked}
-                        onChange={this.handleChange}
+                        checked={this.state.transManChecked}
+                        onChange={(event) => {  //console.log(JSON.stringify(value));
+                          this.setState({ transManChecked: !this.state.transManChecked })
+                        }}
+
                         inputProps={{ 'aria-label': 'primary checkbox' }}
                       />}
                       label="Manual"
@@ -418,8 +637,10 @@ class UsedCars extends Component {
                       control={<Checkbox
                         color="primary"
 
-                        checked={this.state.checked}
-                        onChange={this.handleChange}
+                        checked={this.state.transAutoChecked}
+                        onChange={(event) => {  //console.log(JSON.stringify(value));
+                          this.setState({ transAutoChecked: !this.state.transAutoChecked })
+                        }}
                         inputProps={{ 'aria-label': 'primary checkbox' }}
                       />}
                       label="Automatic"
@@ -432,29 +653,35 @@ class UsedCars extends Component {
                   <div className={"filters-child"}>
                     <h5>Engine Size</h5>
 
-                    <Autocomplete
-                      id="engSizeFrom"
-                      options={[
-                        { title: 'The Shawshank Redemption', year: 1994 },
-                        { title: 'The Godfather', year: 1972 },
-                        { title: 'The Godfather: Part II', year: 1974 },
-                      ]}
-                      getOptionLabel={(option) => option.title}
-                      style={{ width: 200, backgroundColor: "white", }}
-                      renderInput={(params) => <TextField {...params} label="From" variant="outlined" />}
-                    />
-                    <br />
-                    <Autocomplete
-                      id="engSizeTo"
-                      options={[
-                        { title: 'The Shawshank Redemption', year: 1994 },
-                        { title: 'The Godfather', year: 1972 },
-                        { title: 'The Godfather: Part II', year: 1974 },
-                      ]}
-                      getOptionLabel={(option) => option.title}
-                      style={{ width: 200, backgroundColor: "white", }}
-                      renderInput={(params) => <TextField {...params} label="To" variant="outlined" />}
-                    />
+                    <FormControl variant="outlined" className={classes.formControl}>
+                      <InputLabel id="demo-simple-select-outlined-label">Engine Size</InputLabel>
+                      <Select
+                        id="engineSize"
+                        // clearOnEscape={true}
+                        //openOnFocus={true}
+                        value={this.state.selectedEngineSize || ""}
+                        style={{ width: 200, backgroundColor: "white", }}
+                        onChange={(event) => {  //console.log(JSON.stringify(value));
+                          this.setState({ selectedEngineSize: event.target.value })
+
+                        }}
+
+
+
+                        label="Engine Size"
+                      >
+
+                        {this.state.engineSize && this.state.engineSize.map(element => { //console.log("meanu Item : "+element.value)
+                          return (<MenuItem key={element.label} value={element.value}>
+                            {element.label}</MenuItem>);
+                        }
+                        )
+                        }
+
+
+
+                      </Select>
+                    </FormControl>
 
                     <br />
                   </div>
@@ -477,242 +704,222 @@ class UsedCars extends Component {
 
 
                   <div className={this.gridClasses.root}>
-                    <Grid container spacing={1}>
-                      <Grid container item xs={12} spacing={3}>
-                        <React.Fragment>
-                          <Grid item xs={4}>
-                            <ReactCircleColorPicker colors={[{ hex: '#FFFFFF' }]} />
-                            <h6>White</h6>
-                          </Grid>
-                          <Grid item xs={4}>
-                            <ReactCircleColorPicker colors={[{ hex: '#000000' }]} />
-                            <h6>Black</h6>
-                          </Grid>
-                          <Grid item xs={4}>
-                            <ReactCircleColorPicker colors={[{ hex: '#C0C0C0' }]} />
-                            <h6>Silver</h6>
-                          </Grid>
-                        </React.Fragment>
+                      <Grid container spacing={1}>
+                        <Grid container item xs={12} spacing={3}>
+                          <React.Fragment>
+                            <Grid item xs={4}>
+                              <ReactCircleColorPicker colors={[{ hex: '#FFFFFF' }]}
+                               />
+                              <h6>White</h6>
+                            </Grid>
+                            <Grid item xs={4}>
+                              <ReactCircleColorPicker colors={[{ hex: '#000000' }]} />
+                              <h6>Black</h6>
+                            </Grid>
+                            <Grid item xs={4}>
+                              <ReactCircleColorPicker colors={[{ hex: '#C0C0C0' }]} />
+                              <h6>Silver</h6>
+                            </Grid>
+                          </React.Fragment>
+                        </Grid>
+                        <Grid container item xs={12} spacing={3}>
+                          <React.Fragment>
+                            <Grid item xs={4}>
+                              <ReactCircleColorPicker colors={[{ hex: '#808080' }]} />
+                              <h6>Grey</h6>
+                            </Grid>
+                            <Grid item xs={4}>
+                              <ReactCircleColorPicker colors={[{ hex: '#0000FF' }]} />
+                              <h6>Blue</h6>
+                            </Grid>
+                            <Grid item xs={4}>
+                              <ReactCircleColorPicker colors={[{ hex: '#f5f5dc' }]} />
+                              <h6>Beige</h6>
+                            </Grid>
+                          </React.Fragment>
+                        </Grid>
+                        <Grid container item xs={12} spacing={3}>
+                          <React.Fragment>
+                            <Grid item xs={4}>
+                              <ReactCircleColorPicker colors={[{ hex: '#cd7f32' }]} />
+                              <h6>Bronze</h6>
+                            </Grid>
+                            <Grid item xs={4}>
+                              <ReactCircleColorPicker colors={[{ hex: '#A52A2A' }]} />
+                              <h6>Brown</h6>
+                            </Grid>
+                            <Grid item xs={4}>
+                              <ReactCircleColorPicker colors={[{ hex: '#800000' }]} />
+                              <h6>Maroon</h6>
+                            </Grid>
+                          </React.Fragment>
+                        </Grid>
                       </Grid>
-                      <Grid container item xs={12} spacing={3}>
-                        <React.Fragment>
-                          <Grid item xs={4}>
-                            <ReactCircleColorPicker colors={[{ hex: '#808080' }]} />
-                            <h6>Grey</h6>
-                          </Grid>
-                          <Grid item xs={4}>
-                            <ReactCircleColorPicker colors={[{ hex: '#0000FF' }]} />
-                            <h6>Blue</h6>
-                          </Grid>
-                          <Grid item xs={4}>
-                            <ReactCircleColorPicker colors={[{ hex: '#f5f5dc' }]} />
-                            <h6>Beige</h6>
-                          </Grid>
-                        </React.Fragment>
-                      </Grid>
-                      <Grid container item xs={12} spacing={3}>
-                        <React.Fragment>
-                          <Grid item xs={4}>
-                            <ReactCircleColorPicker colors={[{ hex: '#cd7f32' }]} />
-                            <h6>Bronze</h6>
-                          </Grid>
-                          <Grid item xs={4}>
-                            <ReactCircleColorPicker colors={[{ hex: '#A52A2A' }]} />
-                            <h6>Brown</h6>
-                          </Grid>
-                          <Grid item xs={4}>
-                            <ReactCircleColorPicker colors={[{ hex: '#800000' }]} />
-                            <h6>Maroon</h6>
-                          </Grid>
-                        </React.Fragment>
-                      </Grid>
-                    </Grid>
-                  </div>
+                    </div>
 
                 </ExpansionPanelDetails>
 
               </ExpansionPanel>
 
-              <ExpansionPanel>
-                <ExpansionPanelSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls="panel1a-content"
-                  id="panel1a-header"
-                >
-                  <Typography className={this.classes.heading}>Fule Type</Typography>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
+            <ExpansionPanel>
+              <ExpansionPanelSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+              >
+                <Typography className={this.classes.heading}>Fule Type</Typography>
+              </ExpansionPanelSummary>
+              <ExpansionPanelDetails>
 
-                  <div className={"filters-child"}>
-
-
-
-                    <FormControlLabel
-                      control={<Checkbox
-
-                        color="primary"
-                        checked={this.state.checked}
-                        onChange={this.handleChange}
-                        inputProps={{ 'aria-label': 'primary checkbox' }}
-                      />}
-                      label="Petrol"
-                    />
-
-                    <FormControlLabel
-                      control={<Checkbox
-                        color="primary"
-
-                        checked={this.state.checked}
-                        onChange={this.handleChange}
-                        inputProps={{ 'aria-label': 'primary checkbox' }}
-                      />}
-                      label="Diesel"
-                    />
-                    <FormControlLabel
-                      control={<Checkbox
-                        color="primary"
-
-                        checked={this.state.checked}
-                        onChange={this.handleChange}
-                        inputProps={{ 'aria-label': 'primary checkbox' }}
-                      />}
-                      label="CNG"
-                    />
-
-
-                  </div>
-                </ExpansionPanelDetails>
-
-              </ExpansionPanel>
-
-
-              <ExpansionPanel>
-                <ExpansionPanelSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls="panel1a-content"
-                  id="panel1a-header"
-                >
-                  <Typography className={this.classes.heading}>No of Owners</Typography>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
-
-                  <div className={"filters-child"}>
+                <div className={"filters-child"}>
 
 
 
-                    <FormControlLabel
-                      control={<Checkbox
+                  <FormControlLabel
+                    control={<Checkbox
 
-                        color="primary"
-                        checked={this.state.checked}
-                        onChange={this.handleChange}
-                        inputProps={{ 'aria-label': 'primary checkbox' }}
-                      />}
-                      label="First Owner"
-                    />
+                      color="primary"
+                      checked={this.state.checked}
+                      onChange={this.handleChange}
+                      inputProps={{ 'aria-label': 'primary checkbox' }}
+                    />}
+                    label="Petrol"
+                  />
 
-                    <FormControlLabel
-                      control={<Checkbox
-                        color="primary"
+                  <FormControlLabel
+                    control={<Checkbox
+                      color="primary"
 
-                        checked={this.state.checked}
-                        onChange={this.handleChange}
-                        inputProps={{ 'aria-label': 'primary checkbox' }}
-                      />}
-                      label="Second Owner"
-                    />
+                      checked={this.state.checked}
+                      onChange={this.handleChange}
+                      inputProps={{ 'aria-label': 'primary checkbox' }}
+                    />}
+                    label="Diesel"
+                  />
+                  <FormControlLabel
+                    control={<Checkbox
+                      color="primary"
 
-
-                  </div>
-                </ExpansionPanelDetails>
-
-              </ExpansionPanel>
-
-
-
-              <ExpansionPanel>
-                <ExpansionPanelSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls="panel1a-content"
-                  id="panel1a-header"
-                >
-                  <Typography className={this.classes.heading}>Body Type</Typography>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
-
-                  <div className={"filters-child"}>
+                      checked={this.state.checked}
+                      onChange={this.handleChange}
+                      inputProps={{ 'aria-label': 'primary checkbox' }}
+                    />}
+                    label="CNG"
+                  />
 
 
+                </div>
+              </ExpansionPanelDetails>
 
-                    <FormControlLabel
-                      control={<Checkbox
-
-                        color="primary"
-                        checked={this.state.checked}
-                        onChange={this.handleChange}
-                        inputProps={{ 'aria-label': 'primary checkbox' }}
-                      />}
-                      label="Hatchback"
-                    />
-
-                    <FormControlLabel
-                      control={<Checkbox
-                        color="primary"
-
-                        checked={this.state.checked}
-                        onChange={this.handleChange}
-                        inputProps={{ 'aria-label': 'primary checkbox' }}
-                      />}
-                      label="Sedan"
-                    />
-                    <FormControlLabel
-                      control={<Checkbox
-                        color="primary"
-
-                        checked={this.state.checked}
-                        onChange={this.handleChange}
-                        inputProps={{ 'aria-label': 'primary checkbox' }}
-                      />}
-                      label="SUV"
-                    />
+            </ExpansionPanel>
 
 
-                  </div>
-                </ExpansionPanelDetails>
+            <ExpansionPanel>
+              <ExpansionPanelSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+              >
+                <Typography className={this.classes.heading}>No of Owners</Typography>
+              </ExpansionPanelSummary>
+              <ExpansionPanelDetails>
 
-              </ExpansionPanel>
+                <div className={"filters-child"}>
 
 
 
-            </div>
-            <div
-              className={"mainBar"}
-            >
-              {/* <ResultCard
-                  componentId="results"
-                  dataField="original_title"
-                  react={{
-                    "and": ["mainSearch", "ratingsFilter"]
-                  }}
-                  pagination={true}
-                  size={20}
-                  onData={(res) => (
-                    {
-                      "image": res.image,
-                      "title": res.original_title,
-                      "description": res.average_rating + " ★ "
-                    }
-                  )}
-                  className="result-data"
-                  innerClass={{
-                    "image": "result-image",
-                    "resultStats": "result-stats"
-                  }}
-                /> */}
+                  <FormControlLabel
+                    control={<Checkbox
+
+                      color="primary"
+                      checked={this.state.checked}
+                      onChange={this.handleChange}
+                      inputProps={{ 'aria-label': 'primary checkbox' }}
+                    />}
+                    label="First Owner"
+                  />
+
+                  <FormControlLabel
+                    control={<Checkbox
+                      color="primary"
+
+                      checked={this.state.checked}
+                      onChange={this.handleChange}
+                      inputProps={{ 'aria-label': 'primary checkbox' }}
+                    />}
+                    label="Second Owner"
+                  />
+
+
+                </div>
+              </ExpansionPanelDetails>
+
+            </ExpansionPanel>
+
+
+
+            <ExpansionPanel>
+              <ExpansionPanelSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+              >
+                <Typography className={this.classes.heading}>Body Type</Typography>
+              </ExpansionPanelSummary>
+              <ExpansionPanelDetails>
+
+                <div className={"filters-child"}>
+
+
+
+                  <FormControlLabel
+                    control={<Checkbox
+
+                      color="primary"
+                      checked={this.state.checked}
+                      onChange={this.handleChange}
+                      inputProps={{ 'aria-label': 'primary checkbox' }}
+                    />}
+                    label="Hatchback"
+                  />
+
+                  <FormControlLabel
+                    control={<Checkbox
+                      color="primary"
+
+                      checked={this.state.checked}
+                      onChange={this.handleChange}
+                      inputProps={{ 'aria-label': 'primary checkbox' }}
+                    />}
+                    label="Sedan"
+                  />
+                  <FormControlLabel
+                    control={<Checkbox
+                      color="primary"
+
+                      checked={this.state.checked}
+                      onChange={this.handleChange}
+                      inputProps={{ 'aria-label': 'primary checkbox' }}
+                    />}
+                    label="SUV"
+                  />
+
+
+                </div>
+              </ExpansionPanelDetails>
+
+            </ExpansionPanel>
+
+
+
+          </div>
+          <div
+            className={"mainBar"}
+          >
 
               <Container>
-                {this.state.carDetails && this.state.carDetails.map(cardetail => {
-                  return (
+              {this.state.carDetails && this.state.carDetails.map(cardetail => {
+                return (
                   <article className="shelf-item-container"
                   // onClick={props.onClick} 
                   >
@@ -730,25 +937,25 @@ class UsedCars extends Component {
                     <div className="shelf-item-price">{"Rs " + this.state.carDetails[0].price}</div>
                     <div className="shelf-item-buy-btn">Buy Now</div>
                   </article>
-                  );
-                })}
-              </Container>
-            </div>
-
+                );
+              })}
+            </Container>
           </div>
-          {/* </ReactiveBase> */}
-
 
         </div>
-
-
-
-        <div><Footer /></div>
+        {/* </ReactiveBase> */}
 
 
       </div>
+
+
+
+      <div><Footer /></div>
+
+
+      </div >
     );
   }
 }
 
-export default UsedCars;
+export default withStyles(styles)(UsedCars);

@@ -30,7 +30,7 @@ const componentsStyle = {
   dropdown: {
     display: "flex",
     alignItems: 'center',
-   left:"120px",
+   left:"50px",
     bottom:"20px",
    
    // fontFamily: "Helvetica",
