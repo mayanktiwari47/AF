@@ -82,30 +82,13 @@ class UsedCars extends Component {
       year: null,
       distanceCovered: null,
       engineSize: null,
-      transAutoChecked: false,
-      transManChecked: false,
-      color: null,
-      petrolChecked:false,
-      dieselChecked:false,
-      cngChecked:false,
-      firstOwnerChecked:false,
-      secOwnerChecked:false,
+     transmission:[],
+      color: [],
+      fuelType:[],
+      noOfOwners:[],
       isModelDisabled: true,
-      hatchbackSelected:false,
-      suvSelected:false,
-      sedanSelected:false,
+      bodyType:[],
       thumbnail:[],
-      color:null,
-      checkedBeigeColor:false,
-      checkedBlackColor:false,
-      checkedBlueColor:false,
-      checkedBronzeColor:false,
-      checkedGreyColor:false,
-      checkedBrownColor:false,
-      checkedMaroonColor:false,
-      checkedSilverColor:false,
-      checkedWhiteColor:false,
-
       errors: null,
     };
 
@@ -201,20 +184,8 @@ console.log("getting Car Detail")
     {"selectedFeeTemplate":this.state.selectedFeeTemplate}) */
     var data=  {selectedCity:this.state.selectedCity, selectedMaker:this.state.selectedMaker,
       selectedModel:this.state.selectedModel, selectedPriceFrom:this.state.selectedPriceFrom,
-      selectedPriceTo:this.state.selectedPriceTo,selectedYear:this.state.selectedYear,    selectedDistance:this.state.selectedDistance, 
-      transManChecked:this.state.transManChecked,transAutoChecked:this.state.transAutoChecked, 
-      selectedEngineSize:this.state.selectedEngineSize,color: this.state.color, petrolChecked:this.state.petrolChecked,
-      dieselChecked:this.state.dieselChecked,cngChecked:this.state.cngChecked,firstOwnerChecked:this.state.firstOwnerChecked,
-      secOwnerChecked:this.state.secOwnerChecked, hatchbackSelected:this.state.hatchbackSelected,
-      suvSelected:this.state.suvSelected, sedanSelected:this.state.sedanSelected, checkedBeigeColor:this.state.checkedBeigeColor,
-      checkedBlackColor:this.state.checkedBlackColor,
-      checkedBlueColor:this.state.checkedBlueColor,
-      checkedBronzeColor:this.state.checkedBronzeColor,
-      checkedGreyColor:this.state.checkedGreyColor,
-      checkedBrownColor:this.state.checkedBrownColor,
-      checkedMaroonColor:this.state.checkedMaroonColor,
-      checkedSilverColor:this.state.checkedSilverColor,
-      checkedWhiteColor:this.state.checkedWhiteColor,
+      selectedPriceTo:this.state.selectedPriceTo,selectedYear:this.state.selectedYear,selectedDistance:this.state.selectedDistance, 
+      transmission:this.state.transmission,color:this.state.color, fuelType:this.state.fuelType,noOfOwners:this.state.noOfOwners,bodyType:this.state.bodyType
     }
 
 
@@ -300,7 +271,7 @@ console.log("getting Car Detail")
                         value={this.state.selectedCity || ""}
                         style={{ width: 200, backgroundColor: "white", }}
                         onChange={(event) => {  //console.log(JSON.stringify(value));
-                          this.setState({ selectedCity: event.target.value })
+                          this.setState({ selectedCity: event.target.value },()=>{this.fetchCarDetails()})
 
                         }}
 
@@ -373,7 +344,7 @@ console.log("getting Car Detail")
                                       "value": k.toLowerCase()
                                     })
 
-                                this.setState({ model: temp })
+                                this.setState({ model: temp },()=>{this.fetchCarDetails()})
                               })
                           }
                         }}
@@ -403,7 +374,7 @@ console.log("getting Car Detail")
                         value={this.state.selectedModel || "All"}
                         style={{ width: 200, backgroundColor: "white", }}
                         onChange={(event) => {  //console.log(JSON.stringify(value));
-                          this.setState({ selectedModel: event.target.value })
+                          this.setState({ selectedModel: event.target.value },()=>{this.fetchCarDetails()})
 
                         }}
 
@@ -457,7 +428,7 @@ console.log("getting Car Detail")
                         value={this.state.selectedPriceFrom || ""}
                         style={{ width: 200, backgroundColor: "white", }}
                         onChange={(event) => {  //console.log(JSON.stringify(value));
-                          this.setState({ selectedPriceFrom: event.target.value })
+                          this.setState({ selectedPriceFrom: event.target.value },()=>{this.fetchCarDetails()})
 
                         }}
 
@@ -489,7 +460,7 @@ console.log("getting Car Detail")
                         value={this.state.selectedPriceTo || ""}
                         style={{ width: 200, backgroundColor: "white", }}
                         onChange={(event) => {  //console.log(JSON.stringify(value));
-                          this.setState({ selectedPriceTo: event.target.value })
+                          this.setState({ selectedPriceTo: event.target.value },()=>{this.fetchCarDetails()})
 
                         }}
 
@@ -539,7 +510,7 @@ console.log("getting Car Detail")
                         value={this.state.selectedYear || ""}
                         style={{ width: 200, backgroundColor: "white", }}
                         onChange={(event) => {  //console.log(JSON.stringify(value));
-                          this.setState({ selectedYear: event.target.value })
+                          this.setState({ selectedYear: event.target.value },()=>{this.fetchCarDetails()})
 
                         }}
 
@@ -587,7 +558,7 @@ console.log("getting Car Detail")
                         value={this.state.selectedDistance || ""}
                         style={{ width: 200, backgroundColor: "white", }}
                         onChange={(event) => {  //console.log(JSON.stringify(value));
-                          this.setState({ selectedDistance: event.target.value })
+                          this.setState({ selectedDistance: event.target.value },()=>{this.fetchCarDetails()})
 
                         }}
 
@@ -627,17 +598,23 @@ console.log("getting Car Detail")
                 <ExpansionPanelDetails>
 
                   <div >
-                    <h6>Transmission</h6>
+                    <b>Transmission</b>
+                    <br/>
 
 
                     <FormControlLabel
                       control={<Checkbox
 
                         color="primary"
-                        checked={this.state.transManChecked}
-                        onChange={(event) => {  //console.log(JSON.stringify(value));
-                          this.setState({ transManChecked: !this.state.transManChecked })
-                        }}
+                      //  checked={this.state.transManChecked}
+                        onChange={() =>{ var temp = this.state.transmission;
+                          if (temp.includes("manual"))
+                          temp.splice(temp.indexOf("manual"),1)
+                          else
+                          temp.push("manual")
+                           this.setState({transmission:temp},()=>{this.fetchCarDetails()})}} 
+
+
 
                         inputProps={{ 'aria-label': 'primary checkbox' }}
                       />}
@@ -648,23 +625,23 @@ console.log("getting Car Detail")
                       control={<Checkbox
                         color="primary"
 
-                        checked={this.state.transAutoChecked}
-                        onChange={(event) => {  //console.log(JSON.stringify(value));
-                          this.setState({ transAutoChecked: !this.state.transAutoChecked })
-                        }}
+                       // checked={this.state.transAutoChecked}
+                       onChange={() =>{ var temp = this.state.transmission;
+                        if (temp.includes("auto"))
+                        temp.splice(temp.indexOf("auto"),1)
+                        else
+                        temp.push("auto")
+                         this.setState({transmission:temp},()=>{this.fetchCarDetails()})}} 
+
                         inputProps={{ 'aria-label': 'primary checkbox' }}
                       />}
                       label="Automatic"
                     />
-
-
-                  </div>
+                 </div>
                 </ExpansionPanelDetails>
                 <ExpansionPanelDetails>
                   <div>
-                    <h6>Engine Size</h6>
-
-                    <FormControl variant="outlined" className={classes.formControl}>
+                  <FormControl variant="outlined" className={classes.formControl}>
                       <InputLabel id="demo-simple-select-outlined-label">Engine Size</InputLabel>
                       <Select
                         id="engineSize"
@@ -673,7 +650,7 @@ console.log("getting Car Detail")
                         value={this.state.selectedEngineSize || ""}
                         style={{ width: 200, backgroundColor: "white", }}
                         onChange={(event) => {  //console.log(JSON.stringify(value));
-                          this.setState({ selectedEngineSize: event.target.value })
+                          this.setState({ selectedEngineSize: event.target.value },()=>{this.fetchCarDetails()})
 
                         }}
 
@@ -719,19 +696,40 @@ console.log("getting Car Detail")
                         <Grid container item xs={12} spacing={3}>
                           <React.Fragment>
                             <Grid item xs={4}>
-                              <ReactCircleColorPicker checked={this.state.checkedWhiteColor}
-                               onChange={() => this.setState({checkedWhiteColor:!this.state.checkedWhiteColor})} colors={[{ hex: '#FFFFFF' }]}
+                              <ReactCircleColorPicker 
+                              //checked={this.state.checkedWhiteColor}
+                               onChange={() =>{ var temp = this.state.color;
+                                if (temp.includes("white"))
+                                temp.splice(temp.indexOf("white"),1)
+                                else
+                                temp.push("white")
+                                 this.setState({color:temp},()=>{this.fetchCarDetails()})}} 
+                                 
+                                 colors={[{ hex: '#FFFFFF' }]}
                                />
                               <h6>White</h6>
                             </Grid>
-                            <Grid item xs={4}>''
-                              <ReactCircleColorPicker checked={this.state.checkedBlackColor}
-                               onChange={() => this.setState({checkedBlackColor:!this.state.checkedBlackColor})} colors={[{ hex: '#000000' }]} />
+                            <Grid item xs={4}>
+                              <ReactCircleColorPicker 
+                              //checked={this.state.checkedBlackColor}
+                              onChange={() =>{ var temp = this.state.color;
+                                if (temp.includes("black"))
+                                temp.splice(temp.indexOf("black"),1)
+                                else
+                                temp.push("black")
+                                 this.setState({color:temp},()=>{this.fetchCarDetails()})}} 
+                                colors={[{ hex: '#000000' }]} />
                               <h6>Black</h6>
                             </Grid>
                             <Grid item xs={4}>
-                              <ReactCircleColorPicker checked={this.state.checkedSilverColor}
-                               onChange={() => this.setState({checkedSilverColor:!this.state.checkedSilverColor})}colors={[{ hex: '#C0C0C0' }]} />
+                              <ReactCircleColorPicker 
+                              //checked={this.state.checkedSilverColor}
+                              onChange={() =>{ var temp = this.state.color;
+                                if (temp.includes("silver"))
+                                temp.splice(temp.indexOf("silver"),1)
+                                else
+                                temp.push("silver")
+                                 this.setState({color:temp},()=>{this.fetchCarDetails()})}} colors={[{ hex: '#C0C0C0' }]} />
                               <h6>Silver</h6>
                             </Grid>
                           </React.Fragment>
@@ -739,19 +737,36 @@ console.log("getting Car Detail")
                         <Grid container item xs={12} spacing={3}>
                           <React.Fragment>
                             <Grid item xs={4}>
-                              <ReactCircleColorPicker checked={this.state.checkedGreyColor}
-                               onChange={() => this.setState({checkedGreyColor:!this.state.checkedGreyColor})} colors={[{ hex: '#808080' }]} />
+                              <ReactCircleColorPicker
+                              // checked={this.state.checkedGreyColor}
+                              onChange={() =>{ var temp = this.state.color;
+                                if (temp.includes("grey"))
+                                temp.splice(temp.indexOf("grey"),1)
+                                else
+                                temp.push("grey")
+                                 this.setState({color:temp},()=>{this.fetchCarDetails()})}}                                 colors={[{ hex: '#808080' }]} />
                               <h6>Grey</h6>
                             </Grid>
                             <Grid item xs={4}>
-                              <ReactCircleColorPicker checked={this.state.checkedBlueColor||false}
-                               onChange={() => this.setState({checkedBlueColor:!this.state.checkedBlueColor})} colors={[{ hex: '#0000FF' }]} />
+                              <ReactCircleColorPicker 
+                              checked={this.state.checkedBlueColor||false}
+                              onChange={() =>{ var temp = this.state.color;
+                                if (temp.includes("blue"))
+                                temp.splice(temp.indexOf("blue"),1)
+                                else
+                                temp.push("blue")
+                                 this.setState({color:temp},()=>{this.fetchCarDetails()})}}                                colors={[{ hex: '#0000FF' }]} />
                               <h6>Blue</h6>
                             </Grid>
                             <Grid item xs={4}>
-                              <ReactCircleColorPicker checked={this.state.checkedBeigeColor}
-                               onChange={() => this.setState({checkedBeigeColor:!this.state.checkedBeigeColor})}
-                               colors={[{ hex: '#f5f5dc' }]} />
+                              <ReactCircleColorPicker
+                              // checked={this.state.checkedBeigeColor}
+                              onChange={() =>{ var temp = this.state.color;
+                                if (temp.includes("beige"))
+                                temp.splice(temp.indexOf("beige"),1)
+                                else
+                                temp.push("beige")
+                                 this.setState({color:temp},()=>{this.fetchCarDetails()})}}                                colors={[{ hex: '#f5f5dc' }]} />
                               <h6>Beige</h6>
                             </Grid>
                           </React.Fragment>
@@ -759,18 +774,37 @@ console.log("getting Car Detail")
                         <Grid container item xs={12} spacing={3}>
                           <React.Fragment>
                             <Grid item xs={4}>
-                              <ReactCircleColorPicker checked={this.state.checkedBronzeColor}
-                               onChange={() => this.setState({checkedBronzeColor:!this.state.checkedBronzeColor})} colors={[{ hex: '#cd7f32' }]} />
+                              <ReactCircleColorPicker
+                              // checked={this.state.checkedBronzeColor}
+                              onChange={() =>{ var temp = this.state.color;
+                                if (temp.includes("bronze"))
+                                temp.splice(temp.indexOf("bronze"),1)
+                                else
+                                temp.push("bronze")
+                                 this.setState({color:temp},()=>{this.fetchCarDetails()})}}                                colors={[{ hex: '#cd7f32' }]} />
                               <h6>Bronze</h6>
                             </Grid>
                             <Grid item xs={4}>
-                              <ReactCircleColorPicker checked={this.state.checkedBrownColor}
-                               onChange={() => this.setState({checkedBrownColor:!this.state.checkedBrownColor})} colors={[{ hex: '#A52A2A' }]} />
+                              <ReactCircleColorPicker 
+                              //checked={this.state.checkedBrownColor}
+                              onChange={() =>{ var temp = this.state.color;
+                                if (temp.includes("brown"))
+                                temp.splice(temp.indexOf("brown"),1)
+                                else
+                                temp.push("brown")
+                                 this.setState({color:temp},()=>{this.fetchCarDetails()})}}                                colors={[{ hex: '#A52A2A' }]} />
                               <h6>Brown</h6>
                             </Grid>
                             <Grid item xs={4}>
-                              <ReactCircleColorPicker checked={this.state.checkedMaroonColor}
-                               onChange={() => this.setState({checkedMaroonColor:!this.state.checkedMaroonColor})} colors={[{ hex: '#800000' }]} />
+                              <ReactCircleColorPicker
+                              //
+                               checked={this.state.checkedMaroonColor}
+                               onChange={() =>{ var temp = this.state.color;
+                                if (temp.includes("maroon"))
+                                temp.splice(temp.indexOf("maroon"),1)
+                                else
+                                temp.push("maroon")
+                                 this.setState({color:temp},()=>{this.fetchCarDetails()})}}                                colors={[{ hex: '#800000' }]} />
                               <h6>Maroon</h6>
                             </Grid>
                           </React.Fragment>
@@ -800,10 +834,13 @@ console.log("getting Car Detail")
                     control={<Checkbox
 
                       color="primary"
-                      checked={() => this.state.petrolChecked}
-                      onChange={(event) => {  //console.log(JSON.stringify(value));
-                        this.setState({ petrolChecked: !this.state.petrolChecked })
-                      }}
+                     // checked={() => this.state.petrolChecked}
+                     onChange={() =>{ var temp = this.state.fuelType;
+                      if (temp.includes("petrol"))
+                      temp.splice(temp.indexOf("petrol"),1)
+                      else
+                      temp.push("petrol")
+                       this.setState({fuelType:temp},()=>{this.fetchCarDetails()})}} 
 
                       inputProps={{ 'aria-label': 'primary checkbox' }}
                     />}
@@ -814,10 +851,13 @@ console.log("getting Car Detail")
                     control={<Checkbox
                       color="primary"
 
-                      checked={this.state.dieselChecked}
-                      onChange={(event) => {  //console.log(JSON.stringify(value));
-                        this.setState({ dieselChecked: !this.state.dieselChecked })
-                      }}
+                     // checked={this.state.dieselChecked}
+                     onChange={() =>{ var temp = this.state.fuelType;
+                      if (temp.includes("diesel"))
+                      temp.splice(temp.indexOf("diesel"),1)
+                      else
+                      temp.push("diesel")
+                       this.setState({fuelType:temp},()=>{this.fetchCarDetails()})}} 
                       inputProps={{ 'aria-label': 'primary checkbox' }}
                     />}
                     label="Diesel"
@@ -825,10 +865,13 @@ console.log("getting Car Detail")
                   <FormControlLabel
                     control={<Checkbox
                       color="primary"
-                      checked={this.state.cngChecked}
-                      onChange={(event) => {  //console.log(JSON.stringify(value));
-                        this.setState({ cngChecked: !this.state.cngChecked })
-                      }}
+                     // checked={this.state.cngChecked}
+                     onChange={() =>{ var temp = this.state.fuelType;
+                      if (temp.includes("cng"))
+                      temp.splice(temp.indexOf("cng"),1)
+                      else
+                      temp.push("cng")
+                       this.setState({fuelType:temp},()=>{this.fetchCarDetails()})}} 
                       inputProps={{ 'aria-label': 'primary checkbox' }}
                     />}
                     label="CNG"
@@ -859,10 +902,13 @@ console.log("getting Car Detail")
                     control={<Checkbox
 
                       color="primary"
-                      checked={this.state.firstOwnerChecked}
-                      onChange={(event) => {  //console.log(JSON.stringify(value));
-                        this.setState({ firstOwnerChecked: !this.state.firstOwnerChecked })
-                      }}
+                     // checked={this.state.firstOwnerChecked}
+                     onChange={() =>{ var temp = this.state.noOfOwners;
+                      if (temp.includes("first"))
+                      temp.splice(temp.indexOf("first"),1)
+                      else
+                      temp.push("first")
+                       this.setState({noOfOwners:temp},()=>{this.fetchCarDetails()})}} 
                       inputProps={{ 'aria-label': 'primary checkbox' }}
                     />}
                     label="First Owner"
@@ -872,10 +918,13 @@ console.log("getting Car Detail")
                     control={<Checkbox
                       color="primary"
 
-                      checked={this.state.secOwnerChecked}
-                      onChange={(event) => {  //console.log(JSON.stringify(value));
-                        this.setState({ secOwnerChecked: !this.state.secOwnerChecked })
-                      }}
+                    //  checked={this.state.secOwnerChecked}
+                    onChange={() =>{ var temp = this.state.noOfOwners;
+                      if (temp.includes("second"))
+                      temp.splice(temp.indexOf("second"),1)
+                      else
+                      temp.push("second")
+                       this.setState({noOfOwners:temp},()=>{this.fetchCarDetails()})}}
                       inputProps={{ 'aria-label': 'primary checkbox' }}
                     />}
                     label="Second Owner"
@@ -907,10 +956,13 @@ console.log("getting Car Detail")
                     control={<Checkbox
 
                       color="primary"
-                      checked={this.state.hatchbackSelected}
-                      onChange={(event) => {  //console.log(JSON.stringify(value));
-                        this.setState({ hatchbackSelected: !this.state.hatchbackSelected })
-                      }}
+                     // checked={this.state.hatchbackSelected}
+                     onChange={() =>{ var temp = this.state.bodyType;
+                      if (temp.includes("hatchback"))
+                      temp.splice(temp.indexOf("hatchback"),1)
+                      else
+                      temp.push("hatchback")
+                       this.setState({bodyType:temp},()=>{this.fetchCarDetails()})}}
                       inputProps={{ 'aria-label': 'primary checkbox' }}
                     />}
                     label="Hatchback"
@@ -920,10 +972,13 @@ console.log("getting Car Detail")
                     control={<Checkbox
                       color="primary"
 
-                      checked={this.state.sedanSelected}
-                      onChange={(event) => {  //console.log(JSON.stringify(value));
-                        this.setState({ sedanSelected: !this.state.sedanSelected })
-                      }}
+                     // checked={this.state.sedanSelected}
+                     onChange={() =>{ var temp = this.state.bodyType;
+                      if (temp.includes("sedan"))
+                      temp.splice(temp.indexOf("sedan"),1)
+                      else
+                      temp.push("sedan")
+                       this.setState({bodyType:temp},()=>{this.fetchCarDetails()})}}
                       inputProps={{ 'aria-label': 'primary checkbox' }}
                     />}
                     label="Sedan"
@@ -932,9 +987,13 @@ console.log("getting Car Detail")
                     control={<Checkbox
                       color="primary"
 
-                      checked={this.state.suvSelected}
-                      onChange={(event) => {  //console.log(JSON.stringify(value));
-                        this.setState({ suvSelected: !this.state.suvSelected })}}
+                      //checked={this.state.suvSelected}
+                      onChange={() =>{ var temp = this.state.bodyType;
+                        if (temp.includes("suv"))
+                        temp.splice(temp.indexOf("suv"),1)
+                        else
+                        temp.push("suv")
+                         this.setState({bodyType:temp},()=>{this.fetchCarDetails()})}}
                       inputProps={{ 'aria-label': 'primary checkbox' }}
                     />}
                     label="SUV"
