@@ -267,30 +267,7 @@ console.log("getting Car Detail")
         <div className={classNames(this.classes.main)}>
 
           <SectionDownload />
-          {/* <h3> Hi </h3> */}
-
-          {/* <ReactiveBase
-            app="good-books-ds"
-            credentials="nY6NNTZZ6:27b76b9f-18ea-456c-bc5e-3a5263ebc63d"
-          > */}
-          {/* <div className="navbar">
-              <div className="logo">
-                The Booksearch App
-            </div>
-              <DataSearch
-                componentId="mainSearch"
-                dataField={["original_title", "original_title.search", "authors", "authors.search"]}
-                queryFormat="and"
-                placeholder="Search for a book title or an author"
-                autosuggest={false}
-                className="datasearch"
-                innerClass={{
-                  "input": "searchbox",
-                  "list": "suggestionlist"
-                }}
-              />
-            </div> */}
-
+         
           <div className={"display"}>
             <div className={"leftSidebar"}>
 
@@ -331,9 +308,7 @@ console.log("getting Car Detail")
 
                         label="City"
                       >
-                        <MenuItem value="All">
-                          All
-          </MenuItem>
+                     
                         {this.state.city && this.state.city.map((element, i) => { //console.log("meanu Item : "+element.value)
                           return (<MenuItem key={i} value={element.value}>
                             {element.label}</MenuItem>);
@@ -373,8 +348,8 @@ console.log("getting Car Detail")
                         openOnFocus={true}
 
                         clearOnEscape={true}
-
-                        value={this.state.selectedMaker || ""}
+                       // defaultValue="All"
+                        value={this.state.selectedMaker||"All"}
                         style={{ width: 200, backgroundColor: "white", }}
                         onChange={(e) => {
 
@@ -425,7 +400,7 @@ console.log("getting Car Detail")
                         clearOnEscape={true}
                         disabled={this.state.isModelDisabled}
                         openOnFocus={true}
-                        value={this.state.selectedModel || ""}
+                        value={this.state.selectedModel || "All"}
                         style={{ width: 200, backgroundColor: "white", }}
                         onChange={(event) => {  //console.log(JSON.stringify(value));
                           this.setState({ selectedModel: event.target.value })
@@ -621,7 +596,7 @@ console.log("getting Car Detail")
                         label="Distance Covered"
                       >
 
-                        {this.state.distance && this.state.distance.map(element => { //console.log("meanu Item : "+element.value)
+                        {this.state.distanceCovered && this.state.distanceCovered.map(element => { //console.log("meanu Item : "+element.value)
                           return (<MenuItem key={element.label} value={element.value}>
                             {element.label}</MenuItem>);
                         }

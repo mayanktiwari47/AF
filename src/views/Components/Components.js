@@ -351,9 +351,7 @@ class Components extends Component {
 
                     label="City"
                   >
-                    <MenuItem value="All">
-                      All
-          </MenuItem>
+                  
                     {this.state.city && this.state.city.map((element, i) => { //console.log("meanu Item : "+element.value)
                       return (<MenuItem key={i} value={element.value}>
                         {element.label}</MenuItem>);
