@@ -49,7 +49,7 @@ article {
 }
 
 .shelf-item-container:hover {
-  border: 2px gold solid;
+  border: 2px blue solid;
   cursor: pointer;
 }
 

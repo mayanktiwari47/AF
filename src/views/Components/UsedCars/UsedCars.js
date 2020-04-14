@@ -96,6 +96,15 @@ class UsedCars extends Component {
       sedanSelected:false,
       thumbnail:[],
       color:null,
+      checkedBeigeColor:false,
+      checkedBlackColor:false,
+      checkedBlueColor:false,
+      checkedBronzeColor:false,
+      checkedGreyColor:false,
+      checkedBrownColor:false,
+      checkedMaroonColor:false,
+      checkedSilverColor:false,
+      checkedWhiteColor:false,
 
       errors: null,
     };
@@ -197,7 +206,15 @@ console.log("getting Car Detail")
       selectedEngineSize:this.state.selectedEngineSize,color: this.state.color, petrolChecked:this.state.petrolChecked,
       dieselChecked:this.state.dieselChecked,cngChecked:this.state.cngChecked,firstOwnerChecked:this.state.firstOwnerChecked,
       secOwnerChecked:this.state.secOwnerChecked, hatchbackSelected:this.state.hatchbackSelected,
-      suvSelected:this.state.suvSelected, sedanSelected:this.state.sedanSelected
+      suvSelected:this.state.suvSelected, sedanSelected:this.state.sedanSelected, checkedBeigeColor:this.state.checkedBeigeColor,
+      checkedBlackColor:this.state.checkedBlackColor,
+      checkedBlueColor:this.state.checkedBlueColor,
+      checkedBronzeColor:this.state.checkedBronzeColor,
+      checkedGreyColor:this.state.checkedGreyColor,
+      checkedBrownColor:this.state.checkedBrownColor,
+      checkedMaroonColor:this.state.checkedMaroonColor,
+      checkedSilverColor:this.state.checkedSilverColor,
+      checkedWhiteColor:this.state.checkedWhiteColor,
     }
 
 
@@ -343,7 +360,7 @@ console.log("getting Car Detail")
                   aria-controls="panel1a-content"
                   id="panel1a-header"
                 >
-                  <Typography className={this.classes.heading}>Make and Model</Typography>
+                  <Typography className={this.classes.heading}>Make & Model</Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
 
@@ -727,16 +744,19 @@ console.log("getting Car Detail")
                         <Grid container item xs={12} spacing={3}>
                           <React.Fragment>
                             <Grid item xs={4}>
-                              <ReactCircleColorPicker checked={true} colors={[{ hex: '#FFFFFF' }]}
+                              <ReactCircleColorPicker checked={this.state.checkedWhiteColor}
+                               onChange={() => this.setState({checkedWhiteColor:!this.state.checkedWhiteColor})} colors={[{ hex: '#FFFFFF' }]}
                                />
                               <h6>White</h6>
                             </Grid>
-                            <Grid item xs={4}>
-                              <ReactCircleColorPicker colors={[{ hex: '#000000' }]} />
+                            <Grid item xs={4}>''
+                              <ReactCircleColorPicker checked={this.state.checkedBlackColor}
+                               onChange={() => this.setState({checkedBlackColor:!this.state.checkedBlackColor})} colors={[{ hex: '#000000' }]} />
                               <h6>Black</h6>
                             </Grid>
                             <Grid item xs={4}>
-                              <ReactCircleColorPicker colors={[{ hex: '#C0C0C0' }]} />
+                              <ReactCircleColorPicker checked={this.state.checkedSilverColor}
+                               onChange={() => this.setState({checkedSilverColor:!this.state.checkedSilverColor})}colors={[{ hex: '#C0C0C0' }]} />
                               <h6>Silver</h6>
                             </Grid>
                           </React.Fragment>
@@ -744,15 +764,19 @@ console.log("getting Car Detail")
                         <Grid container item xs={12} spacing={3}>
                           <React.Fragment>
                             <Grid item xs={4}>
-                              <ReactCircleColorPicker colors={[{ hex: '#808080' }]} />
+                              <ReactCircleColorPicker checked={this.state.checkedGreyColor}
+                               onChange={() => this.setState({checkedGreyColor:!this.state.checkedGreyColor})} colors={[{ hex: '#808080' }]} />
                               <h6>Grey</h6>
                             </Grid>
                             <Grid item xs={4}>
-                              <ReactCircleColorPicker colors={[{ hex: '#0000FF' }]} />
+                              <ReactCircleColorPicker checked={this.state.checkedBlueColor||false}
+                               onChange={() => this.setState({checkedBlueColor:!this.state.checkedBlueColor})} colors={[{ hex: '#0000FF' }]} />
                               <h6>Blue</h6>
                             </Grid>
                             <Grid item xs={4}>
-                              <ReactCircleColorPicker colors={[{ hex: '#f5f5dc' }]} />
+                              <ReactCircleColorPicker checked={this.state.checkedBeigeColor}
+                               onChange={() => this.setState({checkedBeigeColor:!this.state.checkedBeigeColor})}
+                               colors={[{ hex: '#f5f5dc' }]} />
                               <h6>Beige</h6>
                             </Grid>
                           </React.Fragment>
@@ -760,15 +784,18 @@ console.log("getting Car Detail")
                         <Grid container item xs={12} spacing={3}>
                           <React.Fragment>
                             <Grid item xs={4}>
-                              <ReactCircleColorPicker colors={[{ hex: '#cd7f32' }]} />
+                              <ReactCircleColorPicker checked={this.state.checkedBronzeColor}
+                               onChange={() => this.setState({checkedBronzeColor:!this.state.checkedBronzeColor})} colors={[{ hex: '#cd7f32' }]} />
                               <h6>Bronze</h6>
                             </Grid>
                             <Grid item xs={4}>
-                              <ReactCircleColorPicker colors={[{ hex: '#A52A2A' }]} />
+                              <ReactCircleColorPicker checked={this.state.checkedBrownColor}
+                               onChange={() => this.setState({checkedBrownColor:!this.state.checkedBrownColor})} colors={[{ hex: '#A52A2A' }]} />
                               <h6>Brown</h6>
                             </Grid>
                             <Grid item xs={4}>
-                              <ReactCircleColorPicker colors={[{ hex: '#800000' }]} />
+                              <ReactCircleColorPicker checked={this.state.checkedMaroonColor}
+                               onChange={() => this.setState({checkedMaroonColor:!this.state.checkedMaroonColor})} colors={[{ hex: '#800000' }]} />
                               <h6>Maroon</h6>
                             </Grid>
                           </React.Fragment>
@@ -786,7 +813,7 @@ console.log("getting Car Detail")
                 aria-controls="panel1a-content"
                 id="panel1a-header"
               >
-                <Typography className={this.classes.heading}>Fuel Type</Typography>
+                <Typography className={() => this.classes.heading}>Fuel Type</Typography>
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>
 
@@ -798,7 +825,7 @@ console.log("getting Car Detail")
                     control={<Checkbox
 
                       color="primary"
-                      checked={this.state.petrolChecked}
+                      checked={() => this.state.petrolChecked}
                       onChange={(event) => {  //console.log(JSON.stringify(value));
                         this.setState({ petrolChecked: !this.state.petrolChecked })
                       }}
