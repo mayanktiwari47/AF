@@ -114,9 +114,8 @@ var CarDetailsSchema = new Schema({
       required: true,
     }
   },
-  noOfOwners: {
-
-    type: Number,
+  ownership: {
+    type: String,
     required: true,
   },
   lastMOT: {

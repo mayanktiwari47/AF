@@ -117,10 +117,10 @@ module.exports = function (app) {
     if (request.city) {
       fetchCarDetailsByFiltersJSON.city = request.city;
     }
-    if (request.maker) {
+    if (request.maker && request.maker !== 'All') {
       fetchCarDetailsByFiltersJSON.maker = request.maker;
     }
-    if (request.model) {
+    if (request.model && request.model !== 'All') {
       fetchCarDetailsByFiltersJSON.model = request.model;
     }
 
@@ -166,8 +166,9 @@ module.exports = function (app) {
       var fuelTypeJSON = { "$in": request.fuelType };
       fetchCarDetailsByFiltersJSON.fuelType = fuelTypeJSON;
     }
-    if (request.noOfOwners) {
-      fetchCarDetailsByFiltersJSON.noOfOwners = request.noOfOwners;
+    if (request.ownership) {
+      var ownershipJSON = { "$in": request.ownership };
+      fetchCarDetailsByFiltersJSON.ownership = request.ownershipJSON;
     }
     if (request.bodyType) {
       var bodyTypeJSON = { "$in": request.bodyType };
