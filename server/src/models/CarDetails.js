@@ -36,7 +36,7 @@ var CarDetailsSchema = new Schema({
     required: true,
   },
   yearOfReg: {
-    type: Number,
+    type: Date,
     required: true,
   },
  
@@ -60,7 +60,7 @@ var CarDetailsSchema = new Schema({
     type: String,
     required: true,
   },
-  fuelConsumptionInKMPL: {
+  fuelConsumption: {
     type: Number,
     required: true,
   },
