@@ -233,8 +233,10 @@ console.log("getting Car Detail")
             var base64Flag = 'data:image/jpeg;base64,';
             var thumbnail=[];
             for(var i=0; i < cRes.data.length;i++)
-            { var imageStr = this.arrayBufferToBase64(cRes.data[i].thumbnail.data.data);
-              thumbnail.push(base64Flag + imageStr); }
+            { 
+              // var imageStr = this.arrayBufferToBase64(cRes.data[i].thumbnail.data.data);
+              // thumbnail.push(base64Flag + imageStr); 
+            }
               this.setState({
                 thumbnail
             });

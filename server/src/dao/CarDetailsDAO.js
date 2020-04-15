@@ -96,6 +96,90 @@ module.exports = function (app) {
 
   }
 
+  /**
+     * @description Post method for fetchCarDetailsByFilters service
+     */
+    function fetchCarDetailsByFilters(req, res) {
+
+      console.log("CarDetailsDAO - fetchCarDetailsByFilters ENTRY"+JSON.stringify(req.body));
+  
+      //Initial validation like fields empty check
+      var errors = validationResult(req);
+  
+      //Mapping the value to the same object
+      if (!errors.isEmpty()) {
+        return res.send({ errors: errors.mapped() });
+      }
+
+      var request = req.body;
+      var fetchCarDetailsByFiltersJSON = {};
+
+      if(request.city) {
+        fetchCarDetailsByFiltersJSON.city = request.city;
+      }
+      if(request.maker) {
+        fetchCarDetailsByFiltersJSON.maker = request.maker;
+      }
+      if(request.model) {
+        fetchCarDetailsByFiltersJSON.model = request.model;
+      }
+      // if(request.priceFrom) {
+      //   fetchCarDetailsByFiltersJSON.priceFrom = request.priceFrom
+      // }
+      // if(request.priceTo) {
+      //   fetchCarDetailsByFiltersJSON.priceTo = request.priceTo
+      // }
+
+      // year condition - And above
+      if(request.yearOfReg) {
+        fetchCarDetailsByFiltersJSON.yearOfReg = request.yearOfReg;
+      }
+      // Distance condition - less than
+      if(request.distanceCovered) {
+        fetchCarDetailsByFiltersJSON.distanceCovered = request.distanceCovered;
+      }
+      // Array
+      if(request.transmission) {
+        fetchCarDetailsByFiltersJSON.transmission = request.transmission;
+      }
+      if(request.engineSize) {
+        fetchCarDetailsByFiltersJSON.engineSize = request.engineSize;
+      }
+      // Array
+      if(request.color) {
+        fetchCarDetailsByFiltersJSON.color = request.color;
+      }
+      if(request.fuleType) {
+        fetchCarDetailsByFiltersJSON.fuleType = request.fuleType;
+      }
+      if(request.noOfOwners) {
+        fetchCarDetailsByFiltersJSON.noOfOwners = request.noOfOwners;
+      }
+      if(request.bodyType) {
+        fetchCarDetailsByFiltersJSON.bodyType = request.bodyType;
+      }
+      // if(request.driveType) {
+      //   fetchCarDetailsByFiltersJSON.driveType = request.driveType
+      // }
+
+      console.log("CarDetailsDAO - fetchCarDetailsByFilters - fetchCarDetailsByFiltersJSON - " 
+      + JSON.stringify(fetchCarDetailsByFiltersJSON));
+  
+      CarDetails.find(
+        fetchCarDetailsByFiltersJSON
+      )
+        .then(function (carDetails) {
+  
+          //console.log("CarDetailsDAO - fetchCarDetailsByFilters - All Car details -  " + carDetails);
+  
+          res.send(carDetails);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+  
+    }
+
   async function insertCarDetails(req, res) {
 
     console.log("CarDetailsDAO - insertCarDetails - " + JSON.stringify(req.body));
@@ -139,6 +223,10 @@ module.exports = function (app) {
 
   app.post("/api/fetchAllCarDetails", fetchAllCarDetails, (req, res) => {
     console.log("fetchAllCarDetails get service running");
+  });
+
+  app.post("/api/fetchCarDetailsByFilters", fetchCarDetailsByFilters, (req, res) => {
+    console.log("fetchCarDetailsByFilters post service running");
   });
 
   app.post("/api/insertCarDetails", insertCarDetailsValidation, insertCarDetails, (req, res) => {
