@@ -33,7 +33,7 @@ const componentsStyle = {
    left:"50px",
     bottom:"20px",
    
-   // fontFamily: "Helvetica",
+   fontFamily: "Helvetica",
     position:"absolute",
     justifyContent: "center",
   textAlign: "center",
@@ -41,6 +41,8 @@ const componentsStyle = {
 
 
   },
+
+  
   main: {
     background: "#FFFFFF",
     position: "relative",

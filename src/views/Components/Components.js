@@ -320,7 +320,7 @@ class Components extends Component {
 
                 <div className={classes.brand}>
                   {/* <h1 className={classes.title}>A Brand New Feeling!</h1> */}
-                  <h3 className={classes.subtitle}>
+                  <h3 >
                     Buy or finance Car online. We’ll deliver it. Love it or we’ll collect it.
                 </h3>
                 </div>

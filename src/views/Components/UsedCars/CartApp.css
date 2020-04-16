@@ -49,7 +49,7 @@ article {
 }
 
 .shelf-item-container:hover {
-  border: 2px blue solid;
+  border: 2px black solid;
   cursor: pointer;
 }
 
@@ -71,12 +71,14 @@ article {
 .shelf-item-name {
   height: 60px;
   font-size: 2em;
-  font-weight: 500;;
+  font-weight: 500;
+  text-transform: capitalize;   
 }
 
 .shelf-item-description {
   height: 30px;
   font-size: 1.2em;
+  text-transform: capitalize; 
 }
 
 .shelf-item-price {
@@ -117,6 +119,7 @@ article {
   line-height: 35px;
   text-align: center;
 }
+
 
 .checkmark {
   position: absolute;

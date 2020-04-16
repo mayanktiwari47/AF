@@ -1,3 +1,5 @@
+
+
 import React, { Component } from "react";
 import classNames from "classnames";
 import { makeStyles } from "@material-ui/core/styles";
@@ -33,26 +35,17 @@ import InputLabel from '@material-ui/core/InputLabel';
 import { withStyles } from "@material-ui/core/styles";
 
 
-import {
-  ReactiveBase,
-  DataSearch,
-  SingleRange,
-  ResultCard,
-  RangeSlider
-} from '@appbaseio/reactivesearch';
-
-
 
 
 
 class UsedCars extends Component {
 
-  gridClasses = makeStyles((theme) => ({
+ /*  gridClasses = makeStyles((theme) => ({
     root: {
       flexGrow: 1,
     },
 
-  }));
+  })); */
   classes = makeStyles(styles);
 
   // const [checked, setChecked] = React.useState(false);
@@ -279,6 +272,8 @@ class UsedCars extends Component {
     const { classes } = this.props;
 
     return (
+
+    
       <div>
         <Header
           //  brand="Auto Faktory"
@@ -485,6 +480,9 @@ class UsedCars extends Component {
                         value={this.state.selectedPriceFrom || ""}
                         style={{ width: 200, backgroundColor: "white", }}
                         onChange={(event) => {  //console.log(JSON.stringify(value));
+                          if(this.state.selectedPriceTo && parseInt(event.target.value)>parseInt(this.state.selectedPriceTo))
+
+                          this.setState({selectedPriceTo:null});
                           this.setState({ selectedPriceFrom: event.target.value }, () => { this.fetchCarDetails() })
 
                         }}
@@ -517,6 +515,8 @@ class UsedCars extends Component {
                         value={this.state.selectedPriceTo || ""}
                         style={{ width: 200, backgroundColor: "white", }}
                         onChange={(event) => {  //console.log(JSON.stringify(value));
+                          if(this.state.selectedPriceFrom && parseInt(event.target.value)<parseInt(this.state.selectedPriceFrom))
+                          this.setState({selectedPriceFrom:null});
                           this.setState({ selectedPriceTo: event.target.value }, () => { this.fetchCarDetails() })
 
                         }}
@@ -754,7 +754,7 @@ class UsedCars extends Component {
                 <ExpansionPanelDetails>
 
 
-                  <div className={this.gridClasses.root}>
+                  <div >
                     <Grid container spacing={1}>
                       <Grid container item xs={12} spacing={3}>
                         <React.Fragment>
@@ -1116,19 +1116,27 @@ class UsedCars extends Component {
                     // onClick={props.onClick} 
                     >
                       {true && (
-                        <div ><b><font color='red'>{cardetail.yearOfReg + " Reg."}</font></b></div>
+                        <div ><b>{cardetail.yearOfReg.substring(0,4) + " Reg."}</b></div>
                       )}
-                      <img src={this.state.thumbnail[index]} alt='image name' title={cardetail.maker + " "
-                        + cardetail.model + " " + cardetail.engineSize + " " + cardetail.modelType} />
+                      <img src={this.state.thumbnail[index]} alt='image name'
+                       title={cardetail.maker.charAt(0).toUpperCase()+cardetail.maker.slice(1)+ " "
+                        + cardetail.model  + " " + cardetail.modelType} />
                       {/* <img src={require("./images/abc.jpg")} alt='image name' /> */}
                       {/* <img src={abc} alt='image name' /> */}
 
-                      <div className="shelf-item-name">{cardetail.maker + " "
+                      <div className="shelf-item-name">{cardetail.maker+ " "
                         + cardetail.model + " " + cardetail.engineSize + " " + cardetail.modelType}</div>
 
-                      <div className="shelf-item-price"><font color='Blue'>{"Rs. " + cardetail.price}</font></div>
-                      <div className="shelf-item-description">{cardetail.distanceCovered + " Kms | "
-                        + cardetail.fuelType + " | " + cardetail.transmission}</div>
+                      <div className="shelf-item-price"><b>{cardetail.price.toLocaleString('en-IN', {
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 0,
+                        style: 'currency',
+                        currency: 'INR'
+                    })}</b></div>
+                      <div className="shelf-item-description"><b>{cardetail.distanceCovered +" Kms "} </b> |
+                      <b>{" "+cardetail.fuelType+" "} </b> | <b>{" "+cardetail.engineSize+" L "} </b>|
+                      <b>{" "+cardetail.transmission} </b>
+                       </div>
                       {/*  <div className="shelf-item-description">More details here</div>
                    
                     <div className="shelf-item-buy-btn">Buy Now</div> */}
