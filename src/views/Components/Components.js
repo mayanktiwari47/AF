@@ -304,7 +304,7 @@ class Components extends Component {
         <Header
           //  brand="Auto Faktory"
           rightLinks={<HeaderLinks />}
-          fixed
+          
           color="white"
           changeColorOnScroll={{
             height: 400,
@@ -312,6 +312,7 @@ class Components extends Component {
           }}
         // {...rest}
         />
+        <div className={classes.parallex}>
         <Parallax image={require("assets/img/homeBKD.jpg")}>
           <div className={classes.container}>
 
@@ -319,8 +320,7 @@ class Components extends Component {
               <GridItem> <div>
 
                 <div className={classes.brand}>
-                  {/* <h1 className={classes.title}>A Brand New Feeling!</h1> */}
-                  <h3 >
+                 <h3 >
                     Buy or finance Car online. We’ll deliver it. Love it or we’ll collect it.
                 </h3>
                 </div>
@@ -466,7 +466,7 @@ class Components extends Component {
                   className={classes.link}>
                   <Button size="lg"
                     id="searchCars"
-                    ononClick={this.getStudentByRollNo}
+                   // ononClick={}
                     style={{ width: 300, backgroundColor: "Red", }}
 
                   >
@@ -483,7 +483,7 @@ class Components extends Component {
 
           </div>
         </Parallax>
-
+        </div>
         <div className={classNames(classes.main)}>
           <div className={classes.container}>
             <ProductSection />

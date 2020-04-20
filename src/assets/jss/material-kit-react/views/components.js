@@ -5,9 +5,13 @@ const componentsStyle = {
   container,
   brand: {
     color: { black },
-    marginTop: "-100px",
+    marginTop: "-150px",
     textAlign: "center",
     position: "relative",
+  },
+  parallex:{
+    marginTop: "-20px",
+
   },
   title: {
     fontSize: "3rem",
@@ -31,9 +35,9 @@ const componentsStyle = {
     display: "flex",
     alignItems: 'center',
    left:"50px",
-    bottom:"20px",
+    bottom:"50px",
    
-   fontFamily: "Helvetica",
+   // fontFamily: "Helvetica",
     position:"absolute",
     justifyContent: "center",
   textAlign: "center",
@@ -46,7 +50,8 @@ const componentsStyle = {
   main: {
     background: "#FFFFFF",
     position: "relative",
-    zIndex: "3"
+    zIndex: "3",
+    
   },
   mainRaised: {
     margin: "-60px 30px 0px",

@@ -1,4 +1,5 @@
 
+import { Link } from "react-router-dom";
 
 import React, { Component } from "react";
 import classNames from "classnames";
@@ -47,7 +48,6 @@ class UsedCars extends Component {
 
   })); */
   classes = makeStyles(styles);
-
   // const [checked, setChecked] = React.useState(false);
   //const { ...rest } = this.props;
 
@@ -83,8 +83,8 @@ class UsedCars extends Component {
       bodyType: [],
       thumbnail: [],
       errors: null,
+      selectedCarDetails:null
     };
-
 
     this.fetchCarDetails = this.fetchCarDetails.bind(this);
     // this.arrayBufferToBase64 = this.arrayBufferToBase64(this);
@@ -103,8 +103,7 @@ class UsedCars extends Component {
 
   // { ...rest } = props;
 
-
-
+ 
   populateDropDowns() {//console.log("Values Passed : "+ JSON.stringify(FILTERS['YEAR']));
     var priceFrom = [], priceTo = [], maker = [], city = [], year = [], distanceCovered = [], engineSize = [];
 
@@ -278,7 +277,7 @@ class UsedCars extends Component {
         <Header
           //  brand="Auto Faktory"
           rightLinks={<HeaderLinks />}
-          fixed
+          
           color="white"
           changeColorOnScroll={{
             height: 400,
@@ -289,13 +288,13 @@ class UsedCars extends Component {
 
         <div className={classNames(this.classes.main)}>
 
-          <SectionDownload />
+        
 
           <div className={"display"}>
             <div className={"leftSidebar"}>
 
-              <div className={"filters"}>
-                <h3> Filters </h3>
+              <div >
+                <h4> Filters </h4>
 
               </div>
 
@@ -755,10 +754,10 @@ class UsedCars extends Component {
 
 
                   <div >
-                    <Grid container spacing={1}>
-                      <Grid container item xs={12} spacing={3}>
-                        <React.Fragment>
-                          <Grid item xs={4}>
+                    <Grid container spacing={1} >
+                      <Grid container item xs={12} spacing={3} style={{alignItems:'center'}}>
+                        <React.Fragment >
+                          <Grid item xs={4} style={{alignItems:'center'}}>
                             <ReactCircleColorPicker
                               //checked={this.state.checkedWhiteColor}
                               onChange={() => {
@@ -772,7 +771,7 @@ class UsedCars extends Component {
 
                               colors={[{ hex: '#FFFFFF' }]}
                             />
-                            <h6>White</h6>
+                            White
                           </Grid>
                           <Grid item xs={4}>
                             <ReactCircleColorPicker
@@ -786,7 +785,7 @@ class UsedCars extends Component {
                                 this.setState({ color: temp }, () => { this.fetchCarDetails() })
                               }}
                               colors={[{ hex: '#000000' }]} />
-                            <h6>Black</h6>
+                            Black
                           </Grid>
                           <Grid item xs={4}>
                             <ReactCircleColorPicker
@@ -799,7 +798,7 @@ class UsedCars extends Component {
                                   temp.push("silver")
                                 this.setState({ color: temp }, () => { this.fetchCarDetails() })
                               }} colors={[{ hex: '#C0C0C0' }]} />
-                            <h6>Silver</h6>
+                            Silver
                           </Grid>
                         </React.Fragment>
                       </Grid>
@@ -816,7 +815,7 @@ class UsedCars extends Component {
                                   temp.push("grey")
                                 this.setState({ color: temp }, () => { this.fetchCarDetails() })
                               }} colors={[{ hex: '#808080' }]} />
-                            <h6>Grey</h6>
+                            Grey
                           </Grid>
                           <Grid item xs={4}>
                             <ReactCircleColorPicker
@@ -829,7 +828,7 @@ class UsedCars extends Component {
                                   temp.push("blue")
                                 this.setState({ color: temp }, () => { this.fetchCarDetails() })
                               }} colors={[{ hex: '#0000FF' }]} />
-                            <h6>Blue</h6>
+                            Blue
                           </Grid>
                           <Grid item xs={4}>
                             <ReactCircleColorPicker
@@ -842,7 +841,7 @@ class UsedCars extends Component {
                                   temp.push("beige")
                                 this.setState({ color: temp }, () => { this.fetchCarDetails() })
                               }} colors={[{ hex: '#f5f5dc' }]} />
-                            <h6>Beige</h6>
+                            Beige
                           </Grid>
                         </React.Fragment>
                       </Grid>
@@ -859,7 +858,7 @@ class UsedCars extends Component {
                                   temp.push("bronze")
                                 this.setState({ color: temp }, () => { this.fetchCarDetails() })
                               }} colors={[{ hex: '#cd7f32' }]} />
-                            <h6>Bronze</h6>
+                            Bronze
                           </Grid>
                           <Grid item xs={4}>
                             <ReactCircleColorPicker
@@ -872,9 +871,10 @@ class UsedCars extends Component {
                                   temp.push("brown")
                                 this.setState({ color: temp }, () => { this.fetchCarDetails() })
                               }} colors={[{ hex: '#A52A2A' }]} />
-                            <h6>Brown</h6>
+                            Brown
                           </Grid>
-                          <Grid item xs={4}>
+                          <Grid item xs={4} >
+                            
                             <ReactCircleColorPicker
                               //
                               checked={this.state.checkedMaroonColor}
@@ -886,7 +886,7 @@ class UsedCars extends Component {
                                   temp.push("maroon")
                                 this.setState({ color: temp }, () => { this.fetchCarDetails() })
                               }} colors={[{ hex: '#800000' }]} />
-                            <h6>Maroon</h6>
+                            Maroon
                           </Grid>
                         </React.Fragment>
                       </Grid>
@@ -1111,9 +1111,15 @@ class UsedCars extends Component {
 
               <Container>
                 {this.state.carDetails && this.state.carDetails.map((cardetail, index) => {
+                
                   return (
                     <article className="shelf-item-container"
-                    // onClick={props.onClick} 
+                     onClick={() => {console.log()
+                      this.props.history.push({
+                        pathname: '/selected-car',
+                        //search: '?query=abc',
+                        carDetails: cardetail
+                      })}} 
                     >
                       {true && (
                         <div ><b>{cardetail.yearOfReg.substring(0,4) + " Reg."}</b></div>
@@ -1144,6 +1150,8 @@ class UsedCars extends Component {
                   );
                 })}
               </Container>
+              
+           
             </div>
 
           </div>
