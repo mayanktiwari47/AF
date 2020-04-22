@@ -1,6 +1,6 @@
 
 import { Link } from "react-router-dom";
-
+import { connect } from 'react-redux';
 import React, { Component } from "react";
 import classNames from "classnames";
 import { makeStyles } from "@material-ui/core/styles";
@@ -36,7 +36,10 @@ import InputLabel from '@material-ui/core/InputLabel';
 import { withStyles } from "@material-ui/core/styles";
 
 
-
+function mapStateToProps(state) {
+  return {    selectedCar: state.selectedCar
+  };
+}
 
 
 class UsedCars extends Component {
@@ -1114,12 +1117,16 @@ class UsedCars extends Component {
                 
                   return (
                     <article className="shelf-item-container"
-                     onClick={() => {console.log()
-                      this.props.history.push({
-                        pathname: '/selected-car',
-                        //search: '?query=abc',
-                        carDetails: cardetail
-                      })}} 
+                     onClick={() => {
+                      this.props.dispatch({ type: "selectedCar", payload: {value:cardetail} }); 
+                      
+                      this.setState({selectedCar:cardetail},
+                      ()=>{ this.props.history.push({
+                      pathname: '/selected-car',
+                      //search: '?query=abc',
+                    //  carDetails: cardetail
+                    })})
+                     }} 
                     >
                       {true && (
                         <div ><b>{cardetail.yearOfReg.substring(0,4) + " Reg."}</b></div>
@@ -1170,4 +1177,4 @@ class UsedCars extends Component {
   }
 }
 
-export default withStyles(styles)(UsedCars);
+export default withStyles(styles)(connect(mapStateToProps)(UsedCars));

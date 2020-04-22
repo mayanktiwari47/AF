@@ -1,5 +1,5 @@
 
-
+import { connect } from 'react-redux';
 import React, { Component } from "react";
 import classNames from "classnames";
 import { makeStyles } from "@material-ui/core/styles";
@@ -36,9 +36,16 @@ import { withStyles } from "@material-ui/core/styles";
 
 
 
+function mapStateToProps(state) {
+    console.log("in CarDetails JS: "+JSON.stringify(state))
+    return {    
+        
+        carDetail: state.carDetail
+    };
+  }
+  
 
-
-class UsedCars extends Component {
+class SelectedCar extends Component {
 
  /*  gridClasses = makeStyles((theme) => ({
     root: {
@@ -105,7 +112,7 @@ class UsedCars extends Component {
 
 
 
-  populateDropDowns() {console.log("Values Passed : "+ JSON.stringify(this.props.location));
+  populateDropDowns() {//console.log("Values Passed : "+ JSON.stringify(this.props.location));
    
 
   }
@@ -250,7 +257,7 @@ class UsedCars extends Component {
           <SectionDownload />
 
           <div className={"display"}>
-        <h1>{this.props.location.carDetails.maker}</h1>
+       { this.props.carDetail && <h6>{this.props.carDetail.maker}</h6>}
           </div>
           {/* </ReactiveBase> */}
 
@@ -267,4 +274,5 @@ class UsedCars extends Component {
   }
 }
 
-export default withStyles(styles)(UsedCars);
+export default withStyles(styles) (connect(mapStateToProps) (SelectedCar));
+//export default {withStyles(styles),connect(mapStateToProps) SelectedCar};
