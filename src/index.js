@@ -48,11 +48,11 @@ const theme = createMuiTheme({
   },
 });
 
-function reducer(state= {}, action) {
+function reducer(state= [], action) {
   console.log('reducer: '+ JSON.stringify(state)+" Action: "+JSON.stringify(action));
 
   if(action.type==='selectedCar')
-  return {...state, carDetail:action.payload.value};
+  return [...state, {carDetail:action.payload.value}];
 
   return state;
 }

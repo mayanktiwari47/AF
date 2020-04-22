@@ -257,7 +257,7 @@ class SelectedCar extends Component {
           <SectionDownload />
 
           <div className={"display"}>
-       { this.props.carDetail && <h6>{this.props.carDetail.maker}</h6>}
+        <h6>{JSON.stringify(this.props)}</h6>
           </div>
           {/* </ReactiveBase> */}
 
