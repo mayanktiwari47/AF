@@ -33,7 +33,22 @@ import Select from '@material-ui/core/Select';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import { withStyles } from "@material-ui/core/styles";
-
+import ImageGallery from 'react-image-gallery';
+import "react-image-gallery/styles/css/image-gallery.css";
+const images = [
+  {
+    original: 'https://picsum.photos/id/1018/1000/600/',
+    thumbnail: 'https://picsum.photos/id/1018/250/150/',
+  },
+  {
+    original: 'https://picsum.photos/id/1015/1000/600/',
+    thumbnail: 'https://picsum.photos/id/1015/250/150/',
+  },
+  {
+    original: 'https://picsum.photos/id/1019/1000/600/',
+    thumbnail: 'https://picsum.photos/id/1019/250/150/',
+  },
+];
 
 
 function mapStateToProps(state) {
@@ -208,7 +223,9 @@ class SelectedCar extends Component {
           <SectionDownload />
 
           <div className={"display"}>
-        <h6>{JSON.stringify(this.props.carDetail)}</h6>
+     
+        <ImageGallery items={images} />
+        <h6>{this.props.carDetail.maker}</h6>
           </div>
           {/* </ReactiveBase> */}
 
