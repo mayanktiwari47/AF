@@ -37,12 +37,49 @@ import { withStyles } from "@material-ui/core/styles";
 
 
 function mapStateToProps(state) {
-    console.log("in CarDetails JS: "+JSON.stringify(state))
+    console.log("SelectedCar - mapStateToProps - CarDetail JS from UsedCars Page "+JSON.stringify(state));
+
+    // if(loadStateFromLocalStorage == null)
+
+    // saveStateInLocalStorage(state);
+
+  if(state !== null && state.length<1) {
+    var carDetailLS = loadStateFromLocalStorage();
+    console.log('SelectedCar - mapStateToProps - Page reload - carDetailLS - ' + JSON.stringify(carDetailLS));
+    return carDetailLS;
+
+  } else {
+    saveStateInLocalStorage(state[0]);
     return {    
-        
-        carDetail: state.carDetail
+      carDetail: state[0].carDetail
     };
   }
+
+    // return {    
+    //     carDetail: state
+    // };
+  }
+
+  const loadStateFromLocalStorage = () => {
+    try {
+      const serializedState = localStorage.getItem('carDetail');
+      if(serializedState === null) {
+        return undefined;
+      }
+      return JSON.parse(serializedState);
+    } catch (e) {
+      return undefined;
+    }
+  };
+  
+  const saveStateInLocalStorage = (state) => {
+    try {
+      const serializedState = JSON.stringify(state);
+      localStorage.setItem('carDetail', serializedState);
+    } catch (e) {
+      // Ignore write errors;
+    }
+  };
   
 
 class SelectedCar extends Component {
@@ -64,8 +101,10 @@ class SelectedCar extends Component {
 
     super(props);
 
+    const carDetailConst = props;
+
     this.state = {
-      carDetails: [],
+      carDetail: {},
       city: null,
       maker: null,
       model: null,
@@ -92,13 +131,24 @@ class SelectedCar extends Component {
       errors: null,
     };
 
+    this.setCarDetailInState = this.setCarDetailInState.bind(this);
 
-    this.fetchCarDetails = this.fetchCarDetails.bind(this);
-    // this.arrayBufferToBase64 = this.arrayBufferToBase64(this);
-    // Fetching car details on page load to show it on the Cart
-    //  this.fetchCarDetails();
+    console.log('SelectedCar - Constructor call - ' + JSON.stringify(props));
+
+    this.setCarDetailInState();
   }
 
+  setCarDetailInState() {
+
+    console.log('SelectedCar - setCarDetailInState - carDetails from State BEFORE - ' + JSON.stringify(this.state.carDetail)
+    + ' this.props - ' + JSON.stringify(this.props.carDetail));
+
+    this.setState({
+      carDetail: this.props.carDetail
+    }, ()=> {
+      console.log('SelectedCar - setCarDetailInState - carDetails from State AFTER - ' + JSON.stringify(this.state.carDetail));
+    });
+  }
 
   arrayBufferToBase64(buffer) {
     var binary = '';
@@ -110,10 +160,7 @@ class SelectedCar extends Component {
 
   // { ...rest } = props;
 
-
-
   populateDropDowns() {//console.log("Values Passed : "+ JSON.stringify(this.props.location));
-   
 
   }
 
@@ -134,107 +181,11 @@ class SelectedCar extends Component {
 
   }
 
-
-
-  fetchCarDetails() {
-    console.log("getting Car Detail")
-    /*  axios.post("http://localhost:8001/api/fetchAllCarDetails", 
-     {"selectedFeeTemplate":this.state.selectedFeeTemplate}) */
-    // var data = {
-    //   city: this.state.selectedCity, maker: this.state.selectedMaker,
-    //   model: this.state.selectedModel, priceFrom: this.state.selectedPriceFrom,
-    //   priceTo: this.state.selectedPriceTo, yearOfReg: this.state.selectedYear, distanceCovered: this.state.selectedDistance,
-    //   transmission: this.state.transmission, color: this.state.color, fuelType: this.state.fuelType, ownership: this.state.ownership, bodyType: this.state.bodyType
-    // }
-
-
-
-    var fetchCarDetailsByFiltersRequest = {};
-    if(this.state.selectedCity) {
-      fetchCarDetailsByFiltersRequest.city = this.state.selectedCity;
-    }
-    if(this.state.selectedMaker) {
-      fetchCarDetailsByFiltersRequest.maker = this.state.selectedMaker;
-    }
-    if(this.state.selectedModel) {
-      fetchCarDetailsByFiltersRequest.model = this.state.selectedModel;
-    }
-    if(this.state.selectedPriceFrom) {
-      fetchCarDetailsByFiltersRequest.priceFrom = this.state.selectedPriceFrom;
-    }
-    if(this.state.selectedPriceTo) {
-      fetchCarDetailsByFiltersRequest.priceTo = this.state.selectedPriceTo;
-    }
-    if(this.state.selectedYear) {
-      fetchCarDetailsByFiltersRequest.yearOfReg = this.state.selectedYear;
-    }
-    if(this.state.selectedDistance) {
-      fetchCarDetailsByFiltersRequest.distanceCovered = this.state.selectedDistance;
-    }
-
-    console.log('transmission transmission transmission - ' + JSON.stringify(this.state.transmission) + " length - " + this.state.transmission.length);
-    if(this.state.transmission && this.state.transmission.length>0) {
-      fetchCarDetailsByFiltersRequest["transmission"] = this.state.transmission;
-    }
-    if(this.state.color && this.state.color.length>0) {
-      fetchCarDetailsByFiltersRequest.color = this.state.color;
-    }
-    if(this.state.fuelType && this.state.fuelType.length>0) {
-      fetchCarDetailsByFiltersRequest.fuelType = this.state.fuelType;
-    }
-    if(this.state.ownership && this.state.ownership.length>0) {
-      fetchCarDetailsByFiltersRequest.ownership = this.state.ownership;
-    }
-    if(this.state.bodyType && this.state.bodyType.length>0) {
-      fetchCarDetailsByFiltersRequest.bodyType = this.state.bodyType;
-    }
-
-
-    // for (var i in data) {
-
-    //   console.log("fetchCarDetailsByFiltersRequest data[i] - " + i + " and isArray - " + Array.isArray(data[i]) + " and " + data[i]);
-
-    //   if (Array.isArray(data[i]) && typeof data[i] !== 'undefined' && data[i].length > 0) {
-    //     fetchCarDetailsByFiltersRequest[i] = data[i];
-    //   } else if (data[i]) {
-    //     fetchCarDetailsByFiltersRequest[i] = data[i];
-    //   }
-    // }
-
-    console.log("fetchCarDetailsByFiltersRequest data request - " + JSON.stringify(fetchCarDetailsByFiltersRequest));
-
-    axios.post("http://localhost:8001/api/fetchCarDetailsByFilters", fetchCarDetailsByFiltersRequest)
-      .then(cRes => {
-        console.log('cRes - fetchCarDetails - All Car details - ' + JSON.stringify(cRes.data));
-        if (cRes.data.errors) {
-
-          return this.setState({ errors: cRes.data.errors });
-
-        } else {
-
-          this.setState({ carDetails: cRes.data },
-            () => {
-
-              var base64Flag = 'data:image/jpeg;base64,';
-              var thumbnail = [];
-              for (var i = 0; i < cRes.data.length; i++) {
-                var imageStr = this.arrayBufferToBase64(cRes.data[i].thumbnail.data.data);
-                thumbnail.push(base64Flag + imageStr);
-              }
-              this.setState({
-                thumbnail
-              });
-
-            });
-
-          // console.log('UsedCars - fetchCarDetails - All Car details - ' + JSON.stringify(this.state.carDetails));
-        }
-      });
-  }
-
   render() {
 
     const { classes } = this.props;
+
+    console.log('render this.props.carDetail - ' + this.props.carDetail);
 
     return (
 
@@ -257,7 +208,7 @@ class SelectedCar extends Component {
           <SectionDownload />
 
           <div className={"display"}>
-        <h6>{JSON.stringify(this.props)}</h6>
+        <h6>{JSON.stringify(this.props.carDetail)}</h6>
           </div>
           {/* </ReactiveBase> */}
 
@@ -275,4 +226,3 @@ class SelectedCar extends Component {
 }
 
 export default withStyles(styles) (connect(mapStateToProps) (SelectedCar));
-//export default {withStyles(styles),connect(mapStateToProps) SelectedCar};
