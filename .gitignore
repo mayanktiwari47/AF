@@ -6,6 +6,7 @@
 package-lock.json
 /.vscode
 /src/fonts
+/src/assets/carImages/
 # Resources
 /server/src/resources/images
 
