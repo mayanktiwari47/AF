@@ -258,6 +258,8 @@ class UsedCars extends Component {
                 var imageStr = this.arrayBufferToBase64(cRes.data[i].thumbnail.data.data);
                 thumbnail.push(base64Flag + imageStr);
               }
+
+             
               this.setState({
                 thumbnail
               });

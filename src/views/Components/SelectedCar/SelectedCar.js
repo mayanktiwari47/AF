@@ -1,3 +1,4 @@
+import Button from "components/CustomButtons/Button.js";
 
 import { connect } from 'react-redux';
 import React, { Component } from "react";
@@ -35,6 +36,8 @@ import InputLabel from '@material-ui/core/InputLabel';
 import { withStyles } from "@material-ui/core/styles";
 import ImageGallery from 'react-image-gallery';
 import "react-image-gallery/styles/css/image-gallery.css";
+import "../UsedCars/App.css"
+//import "react-image-gallery/styles/scss/image-gallery.scss";
 const images = [
   {
     original: 'https://picsum.photos/id/1018/1000/600/',
@@ -48,6 +51,11 @@ const images = [
     original: 'https://picsum.photos/id/1019/1000/600/',
     thumbnail: 'https://picsum.photos/id/1019/250/150/',
   },
+  {
+    original: 'https://picsum.photos/id/1018/1000/600/',
+    thumbnail: 'https://picsum.photos/id/1018/250/150/',
+  }
+ 
 ];
 
 
@@ -144,6 +152,7 @@ class SelectedCar extends Component {
       bodyType: [],
       thumbnail: [],
       errors: null,
+      showImages: false
     };
 
     this.setCarDetailInState = this.setCarDetailInState.bind(this);
@@ -209,7 +218,7 @@ class SelectedCar extends Component {
         <Header
           //  brand="Auto Faktory"
           rightLinks={<HeaderLinks />}
-          fixed
+          
           color="white"
           changeColorOnScroll={{
             height: 400,
@@ -220,13 +229,20 @@ class SelectedCar extends Component {
 
         <div className={classNames(this.classes.main)}>
 
-          <SectionDownload />
+         
 
-          <div className={"display"}>
-     
-        <ImageGallery items={images} />
+        <Container style={{marginLeft:"0px"}}>
+        <Row>
+          <Col>
+        {this.state.showImages &&    <ImageGallery isFullscreen={true} items={images} /> }
+<Button onClick={()=>{this.setState({showImages:true})}}>Images</Button>
+        <img width={700} height={500} mode='fit' src =  {'data:image/jpeg;base64,'+this.arrayBufferToBase64(this.props.carDetail.thumbnail.data.data)}/>
+        </Col>
+        <Col>
         <h6>{this.props.carDetail.maker}</h6>
-          </div>
+        </Col>
+        </Row>
+        </Container>
           {/* </ReactiveBase> */}
 
 
