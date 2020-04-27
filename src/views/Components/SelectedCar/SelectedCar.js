@@ -236,7 +236,10 @@ class SelectedCar extends Component {
           <Col>
         {this.state.showImages &&    <ImageGallery isFullscreen={true} items={images} /> }
 <Button onClick={()=>{this.setState({showImages:true})}}>Images</Button>
-        <img width={700} height={500} mode='fit' src =  {'data:image/jpeg;base64,'+this.arrayBufferToBase64(this.props.carDetail.thumbnail.data.data)}/>
+        <img width={700} height={500} mode='fit'
+         src =  {'data:image/jpeg;base64,'+
+         this.arrayBufferToBase64(this.props.carDetail.thumbnail.data.data)}/>
+       
         </Col>
         <Col>
         <h6>{this.props.carDetail.maker}</h6>
