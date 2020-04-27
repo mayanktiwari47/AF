@@ -78,6 +78,8 @@ function mapStateToProps(state) {
     };
   }
 
+  
+
     // return {    
     //     carDetail: state
     // };
@@ -125,7 +127,6 @@ class SelectedCar extends Component {
     super(props);
 
     const carDetailConst = props;
-
     this.state = {
       carDetail: {},
       city: null,
@@ -234,13 +235,19 @@ class SelectedCar extends Component {
         <Container style={{marginLeft:"0px"}}>
         <Row>
           <Col>
-        {this.state.showImages &&    <ImageGallery isFullscreen={true} items={images} /> }
-<Button onClick={()=>{this.setState({showImages:true})}}>Images</Button>
+      
+<Button onClick={()=>{this.setState({showImages:true},()=>{  this._imageGallery.fullScreen();})}}>IMAGES</Button>
         <img width={700} height={500} mode='fit'
          src =  {'data:image/jpeg;base64,'+
          this.arrayBufferToBase64(this.props.carDetail.thumbnail.data.data)}/>
        
         </Col>
+       <Col>
+     {this.state.showImages && 
+    
+    <ImageGallery ref={f => this._imageGallery = f} items={images}  /> 
+     }
+</Col>
         <Col>
         <h6>{this.props.carDetail.maker}</h6>
         </Col>
