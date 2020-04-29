@@ -1,5 +1,5 @@
 import Button from "components/CustomButtons/Button.js";
-
+import fs from "fs";
 import { connect } from 'react-redux';
 import React, { Component } from "react";
 import classNames from "classnames";
@@ -37,11 +37,11 @@ import { withStyles } from "@material-ui/core/styles";
 import ImageGallery from 'react-image-gallery';
 import "react-image-gallery/styles/css/image-gallery.css";
 import "../UsedCars/App.css"
-//import "react-image-gallery/styles/scss/image-gallery.scss";
-const images = [
+import "react-image-gallery/styles/scss/image-gallery.scss";
+/* const images = [
   {
-    original: 'https://picsum.photos/id/1018/1000/600/',
-    thumbnail: 'https://picsum.photos/id/1018/250/150/',
+    original: require("./carImages/up-123451/1.jpg"),
+              thumbnail: require("./1.jpg")
   },
   {
     original: 'https://picsum.photos/id/1015/1000/600/',
@@ -56,15 +56,28 @@ const images = [
     thumbnail: 'https://picsum.photos/id/1018/250/150/',
   }
  
-];
+]; */
 
-
+var images = [];
 function mapStateToProps(state) {
     console.log("SelectedCar - mapStateToProps - CarDetail JS from UsedCars Page "+JSON.stringify(state));
+    
+    var context = require.context('./carImages/', false,/.jpg$/,'lazy');
+    
+    context.keys().forEach((filename)=>{
 
-    // if(loadStateFromLocalStorage == null)
+      var imgPath = './carImages/'+state[0].carDetail.registrationNumber+'/'+filename;
+      console.log('imagePath:' +imgPath)
+      images.push({
+        original: require(imgPath),
+        thumbnail: require(imgPath)
 
-    // saveStateInLocalStorage(state);
+      })
+
+
+    });
+
+       
 
   if(state !== null && state.length<1) {
     var carDetailLS = loadStateFromLocalStorage();
@@ -77,12 +90,7 @@ function mapStateToProps(state) {
       carDetail: state[0].carDetail
     };
   }
-
   
-
-    // return {    
-    //     carDetail: state
-    // };
   }
 
   const loadStateFromLocalStorage = () => {
