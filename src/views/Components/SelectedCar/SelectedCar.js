@@ -59,20 +59,23 @@ import "react-image-gallery/styles/scss/image-gallery.scss";
 ]; */
 
 var images = [];
-function mapStateToProps(state) {
+const mapStateToProps  = (state) => {
     console.log("SelectedCar - mapStateToProps - CarDetail JS from UsedCars Page "+JSON.stringify(state));
-    
-    var context = require.context('./carImages/', false,/.jpg$/,'lazy');
-    
+    const context = require.context('./carImages/', true,/.jpg$/,'lazy');
+    console.log('context imgpath'+JSON.stringify(context.keys()))  ;
     context.keys().forEach((filename)=>{
-
-      var imgPath = './carImages/'+state[0].carDetail.registrationNumber+'/'+filename;
-      console.log('imagePath:' +imgPath)
+ if(filename.includes(state[0].carDetail.registrationNumber)){
+     var imgPath ='./carImages'+filename.substring(1);
+      console.log('imagePath: ' +filename.substring(1));
       images.push({
         original: require(imgPath),
         thumbnail: require(imgPath)
 
       })
+
+
+    }
+    
 
 
     });
