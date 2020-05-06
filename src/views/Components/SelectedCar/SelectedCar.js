@@ -28,6 +28,7 @@ import { Container, Row, Col } from "react-bootstrap";
 // import { Container, Row, Col } from 'reactstrap';
 import MAKER_MODEL from "assets/enums/MAKER_MODEL.js";
 import CITY from "assets/enums/CITY.js";
+// import REGISTRATION_NUMBERS from "assets/enums/REGISTRATION_NUMBERS.js";
 import FILTERS from "assets/enums/FILTERS.js";
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
@@ -38,6 +39,8 @@ import ImageGallery from 'react-image-gallery';
 import "react-image-gallery/styles/css/image-gallery.css";
 import "../UsedCars/App.css"
 import "react-image-gallery/styles/scss/image-gallery.scss";
+import REGISTRATION_NUMBERS from "assets/enums/REGISTRATION_NUMBERS.js";
+import REGISTRATION_NUMBER_IMAGES_REQUIRE from "assets/enums/REGISTRATION_NUMBER_IMAGES_REQUIRE.js";
 /* const images = [
   {
     original: require("./carImages/up-123451/1.jpg"),
@@ -62,34 +65,69 @@ var images = [];
 function mapStateToProps(state) {
     console.log("SelectedCar - mapStateToProps - CarDetail JS from UsedCars Page "+JSON.stringify(state));
     
-    var context = require.context('./carImages/', false,/.jpg$/,'lazy');
-    
-    context.keys().forEach((filename)=>{
-
-      var imgPath = './carImages/'+state[0].carDetail.registrationNumber+'/'+filename;
-      console.log('imagePath:' +imgPath)
-      images.push({
-        original: require(imgPath),
-        thumbnail: require(imgPath)
-
-      })
-
-
-    });
-
-       
-
+    var carDetailLS = {};
   if(state !== null && state.length<1) {
-    var carDetailLS = loadStateFromLocalStorage();
-    console.log('SelectedCar - mapStateToProps - Page reload - carDetailLS - ' + JSON.stringify(carDetailLS));
-    return carDetailLS;
-
+    carDetailLS = loadStateFromLocalStorage();
+    // console.log('SelectedCar - mapStateToProps - Page reload - carDetailLS - ' + JSON.stringify(carDetailLS));
   } else {
     saveStateInLocalStorage(state[0]);
-    return {    
+    carDetailLS = {    
       carDetail: state[0].carDetail
     };
   }
+
+  console.log('SelectedCar - mapStateToProps - REGISTRATION_NUMBERS["one"] - ' + REGISTRATION_NUMBERS["one"]);
+
+  // var context = require.context(REGISTRATION_NUMBERS["one"], false,/.jpg$/,'lazy');
+  // const context = require.context('./CarImages/', true,/.jpg$/,'lazy');
+
+  // const context = REGISTRATION_NUMBERS[carDetailLS.carDetail.registrationNumber];
+  
+  // console.log('SelectedCar - mapStateToProps - imagePath - ' + context.keys() 
+  //   + " carDetailLS.carDetail.registrationNumber - " + carDetailLS.carDetail.registrationNumber + " context.keys() - " + context.keys());
+    
+    // context.keys().forEach((filename)=>{
+
+      // console.log('SelectedCar - mapStateToProps - filename - ' +filename); 
+
+      // var imgPath ='./carImages'+ filename.substring(1);
+
+      // console.log('SelectedCar - mapStateToProps - imagePath - ' +imgPath 
+      // + "array length - " + REGISTRATION_NUMBER_IMAGES_REQUIRE[carDetailLS.carDetail.registrationNumber].length);
+
+      // var imgPath1 = {
+      //   "100001": "./CarImages/100001/abc.jpg"
+      // };
+
+      if(REGISTRATION_NUMBER_IMAGES_REQUIRE[carDetailLS.carDetail.registrationNumber].length > 0) {
+
+        for (var i =0 ; i<REGISTRATION_NUMBER_IMAGES_REQUIRE[carDetailLS.carDetail.registrationNumber].length; i++) {
+          
+          console.log('SelectedCar - mapStateToProps - loop values - ' + JSON.stringify(REGISTRATION_NUMBER_IMAGES_REQUIRE[carDetailLS.carDetail.registrationNumber][i]));
+
+          images.push({
+    
+            original: REGISTRATION_NUMBER_IMAGES_REQUIRE[carDetailLS.carDetail.registrationNumber][i],
+            thumbnail: REGISTRATION_NUMBER_IMAGES_REQUIRE[carDetailLS.carDetail.registrationNumber][i]
+          })
+        }
+      }
+      
+      // images.push({
+
+      //   original: REGISTRATION_NUMBER_IMAGES_REQUIRE[carDetailLS.carDetail.registrationNumber],
+      //   thumbnail: REGISTRATION_NUMBER_IMAGES_REQUIRE[carDetailLS.carDetail.registrationNumber]
+
+      //   // original: require(imgPath1[100001]),
+      //   // thumbnail: require(imgPath1[100001])
+
+      //   // original: require('./CarImages/100001/abc.jpg'),
+      //   // thumbnail: require('./CarImages/100001/abc.jpg')
+      // })
+
+    // });
+
+  return carDetailLS;
   
   }
 

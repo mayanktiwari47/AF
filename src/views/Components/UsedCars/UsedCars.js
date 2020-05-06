@@ -209,7 +209,7 @@ class UsedCars extends Component {
       fetchCarDetailsByFiltersRequest.distanceCovered = this.state.selectedDistance;
     }
 
-    console.log('transmission transmission transmission - ' + JSON.stringify(this.state.transmission) + " length - " + this.state.transmission.length);
+    // console.log('transmission transmission transmission - ' + JSON.stringify(this.state.transmission) + " length - " + this.state.transmission.length);
     if(this.state.transmission && this.state.transmission.length>0) {
       fetchCarDetailsByFiltersRequest["transmission"] = this.state.transmission;
     }
@@ -238,11 +238,11 @@ class UsedCars extends Component {
     //   }
     // }
 
-    console.log("fetchCarDetailsByFiltersRequest data request - " + JSON.stringify(fetchCarDetailsByFiltersRequest));
+    // console.log("fetchCarDetailsByFiltersRequest data request - " + JSON.stringify(fetchCarDetailsByFiltersRequest));
 
     axios.post("http://localhost:8001/api/fetchCarDetailsByFilters", fetchCarDetailsByFiltersRequest)
       .then(cRes => {
-        console.log('cRes - fetchCarDetails - All Car details - ' + JSON.stringify(cRes.data));
+        // console.log('cRes - fetchCarDetails - All Car details - ' + JSON.stringify(cRes.data));
         if (cRes.data.errors) {
 
           return this.setState({ errors: cRes.data.errors });
