@@ -62,7 +62,7 @@ import REGISTRATION_NUMBER_IMAGES_REQUIRE from "assets/enums/REGISTRATION_NUMBER
 ]; */
 
 var images = [];
-function mapStateToProps(state) {
+const mapStateToProps  = (state) => {
     console.log("SelectedCar - mapStateToProps - CarDetail JS from UsedCars Page "+JSON.stringify(state));
     
     var carDetailLS = {};
