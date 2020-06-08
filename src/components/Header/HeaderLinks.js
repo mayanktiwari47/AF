@@ -71,7 +71,16 @@ export default function HeaderLinks(props) {
         <h4 className={classes.navLink}>Home </h4></Link>
       </ListItem>
       <ListItem className={classes.listItem}>
-        <h4 className={classes.navLink}>Sell</h4>
+      <Link style={{ textDecoration: 'none' }} to={{
+                  pathname: '/sell-car',
+                  
+
+                }}
+                  disabled={false}
+
+                  className={classes.link}>
+
+        <h4 className={classes.navLink}>Sell</h4> </Link>
       </ListItem>
       <ListItem className={classes.listItem}>
 

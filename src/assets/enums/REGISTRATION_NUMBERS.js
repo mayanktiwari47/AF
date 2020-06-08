@@ -1,7 +1,7 @@
 const REGISTRATION_NUMBERS = {
-    "one":"./CarImages/100001/abc.jpg",
-    "100001":require.context('./CarImages/100001', false,/.jpg$/,'lazy'),
-    "100002":require("./CarImages/100001/abc.jpg")
+    //
+    "up-123451":require.context('./carImages/up-123451', false,/.jpg$/,'lazy'),
+   // "100002":require("./CarImages/100001/abc.jpg")
     }
 
 // const REGISTRATION_NUMBERS = {

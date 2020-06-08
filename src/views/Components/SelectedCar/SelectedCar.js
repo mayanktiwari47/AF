@@ -7,19 +7,9 @@ import { makeStyles } from "@material-ui/core/styles";
 import Header from "components/Header/Header.js";
 import Footer from "components/Footer/Footer.js";
 import HeaderLinks from "components/Header/HeaderLinks.js";
-import SectionDownload from "../Sections/SectionDownload.js";
-import TextField from '@material-ui/core/TextField';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+
 import styles from "assets/jss/material-kit-react/views/components.js";
-import Checkbox from '@material-ui/core/Checkbox';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import Typography from '@material-ui/core/Typography';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import ReactCircleColorPicker from 'react-circle-color-picker';
-import Grid from '@material-ui/core/Grid';
+
 import axios from "axios";
 //import './CartApp.css';
 //import './App.css';
@@ -29,11 +19,7 @@ import { Container, Row, Col } from "react-bootstrap";
 import MAKER_MODEL from "assets/enums/MAKER_MODEL.js";
 import CITY from "assets/enums/CITY.js";
 // import REGISTRATION_NUMBERS from "assets/enums/REGISTRATION_NUMBERS.js";
-import FILTERS from "assets/enums/FILTERS.js";
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
+
 import { withStyles } from "@material-ui/core/styles";
 import ImageGallery from 'react-image-gallery';
 import "react-image-gallery/styles/css/image-gallery.css";

@@ -37,6 +37,7 @@ const FILTERS = {
     },
     "DISTANCECOVERED": {
         "10,000 Kms or less": "10000",
+        "20,000 Kms or less": "20000",
         "30,000 Kms or less": "30000",
         "50,000 Kms or less": "50000",
         "75,000 Kms or less": "75000",

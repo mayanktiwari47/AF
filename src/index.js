@@ -12,6 +12,7 @@ import LandingPage from "views/LandingPage/LandingPage.js";
 import ProfilePage from "views/ProfilePage/ProfilePage.js";
 import LoginPage from "views/LoginPage/LoginPage.js";
 import UsedCars from "views/Components/UsedCars/UsedCars.js";
+import SellCar from "views/Components/SellCar/SellCar.js";
 import SelectedCar from "views/Components/SelectedCar/SelectedCar.js";
 import museo from './fonts/Museo/Museo.woff2';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -77,6 +78,7 @@ ReactDOM.render(
       <Route path="/login-page" component={LoginPage} />
       <Route exact path="/" component={Components} />
       <Route exact path="/used-cars" component={UsedCars} />
+      <Route exact path="/sell-car" component={SellCar} />
       <Route exact path="/selected-car" component={SelectedCar} />
     </Switch>
   </Router></Provider>
