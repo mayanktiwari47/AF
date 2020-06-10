@@ -8,7 +8,6 @@ import { makeStyles } from "@material-ui/core/styles";
 // @material-ui/icons
 // core components
 import axios from "axios";
-
 import Header from "components/Header/Header.js";
 import Footer from "components/Footer/Footer.js";
 import GridContainer from "components/Grid/GridContainer.js";
@@ -45,7 +44,7 @@ class SellCar extends Component {
 
     super(props);
     //this.populateDropDowns();
-    this.stepFormRef = React.createRef();
+    this.stepFormRef=React.createRef();
     this.state = {
       city: null,
       maker: null,
@@ -100,45 +99,7 @@ class SellCar extends Component {
   };
 
 
-  reset = e => {
-    document.getElementById("zipfile").value = null;
-    document.getElementById("file").value = null;
-    this.setState({
-      userdata: null,
-
-      impSuccess: false,
-      errors: null,
-      importErrors: null,
-      visible: true,
-      modalSuccess: true,
-      file: null,
-      noFile: false,
-      corruptFile: false,
-      filename: null,
-      loader: false,
-      zipFile: null,
-      noZipFile: false,
-      corruptZipFile: false,
-      zipFilename: null,
-      showErrors: false,
-
-      disableButton: false
-    });
-  };
-
-  toggleSuccess() {
-    this.setState({
-      modalSuccess: !this.state.modalSuccess
-    });
-  }
-
-  /**
-   * @description Dismisses the alert
-   * @param {*} e
-   */
-  onDismiss() {
-    this.setState({ visible: !this.state.visible });
-  }
+  
 
  
 
@@ -174,8 +135,12 @@ class SellCar extends Component {
                 </h3>
                 <Button size=""
                     id="sellCar"
-                    ononClick={this.stepFormRef.current.focus()}
-                    style={{ width: 300, backgroundColor: "Red", }}>Sell Car</Button>
+                    onClick={() => { console.log("steporm: ",this.stepFormRef);
+                     if (this.stepFormRef && this.stepFormRef.current) {
+                      this.stepFormRef.current.scrollIntoView();
+                    } }}
+                   
+                   style={{ width: 300, backgroundColor: "Red", }}>Sell Car</Button>
                  </div>
 
 
@@ -204,9 +169,9 @@ class SellCar extends Component {
         <div className={classNames(classes.main)}>
           <div className={classes.container}>
             
-
-          <StepForm  ref={this.stepFormRef} />
-           
+<div ref={this.stepFormRef} > 
+          <StepForm   />
+          </div>
             <ProductSection />
 
           </div>

@@ -13,7 +13,7 @@ import Hidden from "@material-ui/core/Hidden";
 import Drawer from "@material-ui/core/Drawer";
 // @material-ui/icons
 import Menu from "@material-ui/icons/Menu";
-
+import { Link } from "react-router-dom";
 // core components
 import styles from "assets/jss/material-kit-react/components/headerStyle.js";
 
@@ -66,8 +66,19 @@ export default function Header(props) {
   return (
     <AppBar className={appBarClasses}>
 
+
 <Toolbar>
+
+<Link  to={{
+                  pathname: '/',
+                  
+
+                }}
+                  
+
+                  className={classes.link}>
           <img src="AutoLogo.jpg" alt="logo" className={classes.logo} />
+          </Link>
       </Toolbar>
       <Toolbar className={classes.container}>
      

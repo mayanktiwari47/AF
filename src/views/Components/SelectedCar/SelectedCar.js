@@ -280,8 +280,9 @@ class SelectedCar extends Component {
     <ImageGallery ref={f => this._imageGallery = f} items={images}  /> 
      }
 </Col>
-        <Col>
-        <h6>{this.props.carDetail.maker}</h6>
+        <Col><div>
+        <h2><b>{this.props.carDetail.maker + " "+this.props.carDetail.model}</b></h2>
+        </div>
         </Col>
         </Row>
         </Container>
