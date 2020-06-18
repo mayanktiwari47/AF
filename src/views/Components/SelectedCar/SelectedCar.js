@@ -1,172 +1,92 @@
-import Button from "components/CustomButtons/Button.js";
-import fs from "fs";
-import { connect } from 'react-redux';
-import React, { Component } from "react";
-import classNames from "classnames";
-import { makeStyles } from "@material-ui/core/styles";
-import Header from "components/Header/Header.js";
-import Footer from "components/Footer/Footer.js";
-import HeaderLinks from "components/Header/HeaderLinks.js";
-import SectionDownload from "../Sections/SectionDownload.js";
-import TextField from '@material-ui/core/TextField';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+import { makeStyles, withStyles } from "@material-ui/core/styles";
+import REGISTRATION_NUMBER_IMAGES_REQUIRE from "assets/enums/REGISTRATION_NUMBER_IMAGES_REQUIRE.js";
+import REGISTRATION_NUMBER_OUTSIDE_IMAGES_DIRECTORY from "assets/enums/REGISTRATION_NUMBER_OUTSIDE_IMAGES_DIRECTORY.js";
 import styles from "assets/jss/material-kit-react/views/components.js";
-import Checkbox from '@material-ui/core/Checkbox';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import Typography from '@material-ui/core/Typography';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import ReactCircleColorPicker from 'react-circle-color-picker';
-import Grid from '@material-ui/core/Grid';
-import axios from "axios";
 //import './CartApp.css';
 //import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
-import { Container, Row, Col } from "react-bootstrap";
-// import { Container, Row, Col } from 'reactstrap';
-import MAKER_MODEL from "assets/enums/MAKER_MODEL.js";
-import CITY from "assets/enums/CITY.js";
-// import REGISTRATION_NUMBERS from "assets/enums/REGISTRATION_NUMBERS.js";
-import FILTERS from "assets/enums/FILTERS.js";
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import { withStyles } from "@material-ui/core/styles";
+import Footer from "components/Footer/Footer.js";
+import Header from "components/Header/Header.js";
+import HeaderLinks from "components/Header/HeaderLinks.js";
+import React, { Component } from "react";
+// import React360 from 'react-360-image';
+import React360 from 'react-360-image/src/React360';
+import { Helmet } from "react-helmet";
 import ImageGallery from 'react-image-gallery';
 import "react-image-gallery/styles/css/image-gallery.css";
-import "../UsedCars/App.css"
 import "react-image-gallery/styles/scss/image-gallery.scss";
-import REGISTRATION_NUMBERS from "assets/enums/REGISTRATION_NUMBERS.js";
-import REGISTRATION_NUMBER_IMAGES_REQUIRE from "assets/enums/REGISTRATION_NUMBER_IMAGES_REQUIRE.js";
-/* const images = [
-  {
-    original: require("./carImages/up-123451/1.jpg"),
-              thumbnail: require("./1.jpg")
-  },
-  {
-    original: 'https://picsum.photos/id/1015/1000/600/',
-    thumbnail: 'https://picsum.photos/id/1015/250/150/',
-  },
-  {
-    original: 'https://picsum.photos/id/1019/1000/600/',
-    thumbnail: 'https://picsum.photos/id/1019/250/150/',
-  },
-  {
-    original: 'https://picsum.photos/id/1018/1000/600/',
-    thumbnail: 'https://picsum.photos/id/1018/250/150/',
-  }
- 
-]; */
+import { connect } from 'react-redux';
+import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
+import "../SelectedCar/styles/css/image-gallery.css";
+import "../SelectedCar/styles/scss/image-gallery.scss";
+import "../UsedCars/App.css";
+import "./app.css";
+import "./SelectedCar.css";
+import "kaleidoscopejs/dist/kaleidoscope.min.js";
+import {Kaleidoscope} from "kaleidoscopejs/dist/kaleidoscope.min.js";
 
 var images = [];
-const mapStateToProps  = (state) => {
-    console.log("SelectedCar - mapStateToProps - CarDetail JS from UsedCars Page "+JSON.stringify(state));
-    
-    var carDetailLS = {};
-  if(state !== null && state.length<1) {
+const mapStateToProps = (state) => {
+  console.log("SelectedCar - mapStateToProps - CarDetail JS from UsedCars Page " + JSON.stringify(state));
+
+  var carDetailLS = {};
+  if (state !== null && state.length < 1) {
     carDetailLS = loadStateFromLocalStorage();
     // console.log('SelectedCar - mapStateToProps - Page reload - carDetailLS - ' + JSON.stringify(carDetailLS));
   } else {
     saveStateInLocalStorage(state[0]);
-    carDetailLS = {    
+    carDetailLS = {
       carDetail: state[0].carDetail
     };
   }
 
-  console.log('SelectedCar - mapStateToProps - REGISTRATION_NUMBERS["one"] - ' + REGISTRATION_NUMBERS["one"]);
 
-  // var context = require.context(REGISTRATION_NUMBERS["one"], false,/.jpg$/,'lazy');
-  // const context = require.context('./CarImages/', true,/.jpg$/,'lazy');
+  if (REGISTRATION_NUMBER_IMAGES_REQUIRE[carDetailLS.carDetail.registrationNumber].length > 0) {
 
-  // const context = REGISTRATION_NUMBERS[carDetailLS.carDetail.registrationNumber];
-  
-  // console.log('SelectedCar - mapStateToProps - imagePath - ' + context.keys() 
-  //   + " carDetailLS.carDetail.registrationNumber - " + carDetailLS.carDetail.registrationNumber + " context.keys() - " + context.keys());
-    
-    // context.keys().forEach((filename)=>{
+    for (var i = 0; i < REGISTRATION_NUMBER_IMAGES_REQUIRE[carDetailLS.carDetail.registrationNumber].length; i++) {
 
-      // console.log('SelectedCar - mapStateToProps - filename - ' +filename); 
+      console.log('SelectedCar - mapStateToProps - loop values - ' + JSON.stringify(REGISTRATION_NUMBER_IMAGES_REQUIRE[carDetailLS.carDetail.registrationNumber][i]));
 
-      // var imgPath ='./carImages'+ filename.substring(1);
+      images.push({
 
-      // console.log('SelectedCar - mapStateToProps - imagePath - ' +imgPath 
-      // + "array length - " + REGISTRATION_NUMBER_IMAGES_REQUIRE[carDetailLS.carDetail.registrationNumber].length);
-
-      // var imgPath1 = {
-      //   "100001": "./CarImages/100001/abc.jpg"
-      // };
-
-      if(REGISTRATION_NUMBER_IMAGES_REQUIRE[carDetailLS.carDetail.registrationNumber].length > 0) {
-
-        for (var i =0 ; i<REGISTRATION_NUMBER_IMAGES_REQUIRE[carDetailLS.carDetail.registrationNumber].length; i++) {
-          
-          console.log('SelectedCar - mapStateToProps - loop values - ' + JSON.stringify(REGISTRATION_NUMBER_IMAGES_REQUIRE[carDetailLS.carDetail.registrationNumber][i]));
-
-          images.push({
-    
-            original: REGISTRATION_NUMBER_IMAGES_REQUIRE[carDetailLS.carDetail.registrationNumber][i],
-            thumbnail: REGISTRATION_NUMBER_IMAGES_REQUIRE[carDetailLS.carDetail.registrationNumber][i]
-          })
-        }
-      }
-      
-      // images.push({
-
-      //   original: REGISTRATION_NUMBER_IMAGES_REQUIRE[carDetailLS.carDetail.registrationNumber],
-      //   thumbnail: REGISTRATION_NUMBER_IMAGES_REQUIRE[carDetailLS.carDetail.registrationNumber]
-
-      //   // original: require(imgPath1[100001]),
-      //   // thumbnail: require(imgPath1[100001])
-
-      //   // original: require('./CarImages/100001/abc.jpg'),
-      //   // thumbnail: require('./CarImages/100001/abc.jpg')
-      // })
-
-    // });
-
-  return carDetailLS;
-  
+        original: REGISTRATION_NUMBER_IMAGES_REQUIRE[carDetailLS.carDetail.registrationNumber][i],
+        thumbnail: REGISTRATION_NUMBER_IMAGES_REQUIRE[carDetailLS.carDetail.registrationNumber][i]
+      })
+    }
   }
 
-  const loadStateFromLocalStorage = () => {
-    try {
-      const serializedState = localStorage.getItem('carDetail');
-      if(serializedState === null) {
-        return undefined;
-      }
-      return JSON.parse(serializedState);
-    } catch (e) {
+  return carDetailLS;
+
+}
+
+const loadStateFromLocalStorage = () => {
+  try {
+    const serializedState = localStorage.getItem('carDetail');
+    if (serializedState === null) {
       return undefined;
     }
-  };
-  
-  const saveStateInLocalStorage = (state) => {
-    try {
-      const serializedState = JSON.stringify(state);
-      localStorage.setItem('carDetail', serializedState);
-    } catch (e) {
-      // Ignore write errors;
-    }
-  };
-  
+    return JSON.parse(serializedState);
+  } catch (e) {
+    return undefined;
+  }
+};
+
+const var100003 = "100003";
+
+const saveStateInLocalStorage = (state) => {
+  try {
+    const serializedState = JSON.stringify(state);
+    localStorage.setItem('carDetail', serializedState);
+  } catch (e) {
+    // Ignore write errors;
+  }
+};
+
 
 class SelectedCar extends Component {
 
- /*  gridClasses = makeStyles((theme) => ({
-    root: {
-      flexGrow: 1,
-    },
-
-  })); */
   classes = makeStyles(styles);
-
-  // const [checked, setChecked] = React.useState(false);
-  //const { ...rest } = this.props;
-
-  //const { ...rest } = this.props;
 
   constructor(props) {
 
@@ -199,10 +119,31 @@ class SelectedCar extends Component {
       bodyType: [],
       thumbnail: [],
       errors: null,
-      showImages: false
+      showImages: false,
+
+
+      showIndex: false,
+      showBullets: true,
+      infinite: true,
+      showThumbnails: true,
+      showFullscreenButton: true,
+      showGalleryFullscreenButton: true,
+      showPlayButton: true,
+      showGalleryPlayButton: true,
+      showNav: true,
+      isRTL: false,
+      slideDuration: 450,
+      slideInterval: 2000,
+      slideOnThumbnailOver: false,
+      thumbnailPosition: 'bottom',
+      showVideo: {},
+
+      registrationNumber: null
+
     };
 
     this.setCarDetailInState = this.setCarDetailInState.bind(this);
+    this.kaleidoscope = this.kaleidoscope.bind(this);
 
     console.log('SelectedCar - Constructor call - ' + JSON.stringify(props));
 
@@ -212,11 +153,11 @@ class SelectedCar extends Component {
   setCarDetailInState() {
 
     console.log('SelectedCar - setCarDetailInState - carDetails from State BEFORE - ' + JSON.stringify(this.state.carDetail)
-    + ' this.props - ' + JSON.stringify(this.props.carDetail));
+      + ' this.props - ' + JSON.stringify(this.props.carDetail));
 
     this.setState({
       carDetail: this.props.carDetail
-    }, ()=> {
+    }, () => {
       console.log('SelectedCar - setCarDetailInState - carDetails from State AFTER - ' + JSON.stringify(this.state.carDetail));
     });
   }
@@ -238,7 +179,13 @@ class SelectedCar extends Component {
   // { ...rest } = props;
   componentDidMount() {
     this.populateDropDowns();
+
+    const script = document.createElement("script");
+    script.src = "node_modules/kaleidoscopejs/dist/kaleidoscope.min.js";
+    script.async = true;
+    document.body.appendChild(script);
   }
+
   componentWillUnmount() {
     this.setState({
       city: null,
@@ -252,6 +199,29 @@ class SelectedCar extends Component {
 
   }
 
+  _onImageLoad(event) {
+    console.debug('loaded image', event.target.src);
+  }
+
+  _onSlide(index) {
+    console.debug('slid to index', index);
+  }
+
+
+  kaleidoscope() {
+    var viewer = new Kaleidoscope.Image({
+        source: 'http://thiago.me/image-360/Polie_Academy_53.JPG',
+        containerId: '#container360',
+        height: window.innerHeight,
+        width: window.innerWidth,
+    });
+    viewer.render();
+
+    window.onresize = function() {
+        viewer.setSize({height: window.innerHeight, width: window.innerWidth});
+    };
+}
+
   render() {
 
     const { classes } = this.props;
@@ -260,12 +230,12 @@ class SelectedCar extends Component {
 
     return (
 
-    
+
       <div>
         <Header
           //  brand="Auto Faktory"
           rightLinks={<HeaderLinks />}
-          
+
           color="white"
           changeColorOnScroll={{
             height: 400,
@@ -274,39 +244,99 @@ class SelectedCar extends Component {
         // {...rest}
         />
 
-        <div className={classNames(this.classes.main)}>
+        <div class="box">
 
-         
+{/* <img src={require("./CarImages/100001/abc.jpg")} /> */}
 
-        <Container style={{marginLeft:"0px"}}>
-        <Row>
-          <Col>
-      
-<Button onClick={()=>{this.setState({showImages:true},()=>{  this._imageGallery.fullScreen();})}}>IMAGES</Button>
-        <img width={700} height={500} mode='fit'
-         src =  {'data:image/jpeg;base64,'+
-         this.arrayBufferToBase64(this.props.carDetail.thumbnail.data.data)}/>
-       
-        </Col>
-       <Col>
-     {this.state.showImages && 
-    
-    <ImageGallery ref={f => this._imageGallery = f} items={images}  /> 
-     }
-</Col>
-        <Col>
-        <h6>{this.props.carDetail.maker}</h6>
-        </Col>
-        </Row>
-        </Container>
-          {/* </ReactiveBase> */}
+          <Tabs >
+            <TabList>
+              <Tab>
+                <img src={require("./CarImages/carClosedDoor.jpg")} alt={"Image icon"} height="32" width="32" /> Images
+              </Tab>
+              <Tab>Outer Preview 360</Tab>
+              <Tab>Inner Preview 360</Tab>
+              <Tab>Full view</Tab>
+            </TabList>
 
+            <TabPanel>
+              <div class="spaceBox">
+
+                <section className="app">
+                  <ImageGallery
+                    ref={f => this._imageGallery = f}
+                    items={images}
+                    lazyLoad={false}
+                    // onClick={this._onImageClick.bind(this)}
+                    onImageLoad={this._onImageLoad}
+                    // onSlide={this._onSlide.bind(this)}
+                    // onPause={this._onPause.bind(this)}
+                    // onScreenChange={this._onScreenChange.bind(this)}
+                    // onPlay={this._onPlay.bind(this)}
+                    infinite={this.state.infinite}
+                    showBullets={this.state.showBullets}
+                    showFullscreenButton={this.state.showFullscreenButton && this.state.showGalleryFullscreenButton}
+                    showPlayButton={this.state.showPlayButton && this.state.showGalleryPlayButton}
+                    showThumbnails={this.state.showThumbnails}
+                    showIndex={this.state.showIndex}
+                    showNav={this.state.showNav}
+                    isRTL={this.state.isRTL}
+                    thumbnailPosition={this.state.thumbnailPosition}
+                    slideDuration={parseInt(this.state.slideDuration)}
+                    slideInterval={parseInt(this.state.slideInterval)}
+                    slideOnThumbnailOver={this.state.slideOnThumbnailOver}
+                    additionalClass="app-image-gallery"
+                  />
+                </section>
+
+              </div>
+            </TabPanel>
+            <TabPanel>
+            <div class="spaceBox">
+            {/* <div class="image360Dimension"> */}
+        <React360 
+        // dir="awair-360" 
+        dir="CarImages/Outer/100003" 
+        numImages={11} />
+        {/* </div> */}
+        </div>
+            </TabPanel>
+            <TabPanel>
+
+<React360 dir={REGISTRATION_NUMBER_OUTSIDE_IMAGES_DIRECTORY[this.props.carDetail.registrationNumber]} numImages={11} />
+    </TabPanel>
+
+    {/* <TabPanel>
+    <Helmet>
+        <script src="kaleidoscopejs/dist/kaleidoscope.min.js"></script>
+        {this.kaleidoscope()} */}
+        
+        {/* <script type="text/javascript" charset="utf-8"> {`
+(function() {
+    var viewer = new Kaleidoscope.Image({
+        source: 'http://thiago.me/image-360/Polie_Academy_53.JPG',
+        containerId: '#container360',
+        height: window.innerHeight,
+        width: window.innerWidth,
+    });
+    viewer.render();
+
+    window.onresize = function() {
+        viewer.setSize({height: window.innerHeight, width: window.innerWidth});
+    };
+})();
+`}
+    </script> */}
+
+    {/* </Helmet>
+    </TabPanel> */}
+            
+          </Tabs>
 
         </div>
 
-
-
-        <div><Footer /></div>
+        {/* <div> */}
+        <Footer />
+        {/* </div> */}
 
 
       </div >
@@ -314,4 +344,4 @@ class SelectedCar extends Component {
   }
 }
 
-export default withStyles(styles) (connect(mapStateToProps) (SelectedCar));
+export default withStyles(styles)(connect(mapStateToProps)(SelectedCar));

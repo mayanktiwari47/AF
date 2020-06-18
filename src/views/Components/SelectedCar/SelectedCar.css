@@ -1,0 +1,27 @@
+.image-gallery-slide {
+    background: black;
+}
+
+.box{
+    width: 60%;
+    height: 30%;
+    /* max-height: 40%; */
+    /* max-width: 80%;
+    max-height: auto; */
+    border: 5px solid red; 
+    color: black;
+    margin-top: 2%;
+    margin-left: 4%;
+}  
+.spaceBox {
+    margin-top: 1%;
+    margin-left: 1%;
+}
+.image360Dimension {
+    width: 60%;
+    height: 30%;
+}
+
+/* .fullscreen .image-gallery-slide img {
+    max-height: 100vh;
+} */
