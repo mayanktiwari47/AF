@@ -12,6 +12,19 @@ import React, { Component } from "react";
 // import React360 from 'react-360-image';
 import React360 from 'react-360-image/src/React360';
 import { Helmet } from "react-helmet";
+import Button from "components/CustomButtons/Button.js";
+import fs from "fs";
+import classNames from "classnames";
+
+import axios from "axios";
+//import './CartApp.css';
+//import './App.css';
+import { Container, Row, Col } from "react-bootstrap";
+// import { Container, Row, Col } from 'reactstrap';
+import MAKER_MODEL from "assets/enums/MAKER_MODEL.js";
+import CITY from "assets/enums/CITY.js";
+// import REGISTRATION_NUMBERS from "assets/enums/REGISTRATION_NUMBERS.js";
+
 import ImageGallery from 'react-image-gallery';
 import "react-image-gallery/styles/css/image-gallery.css";
 import "react-image-gallery/styles/scss/image-gallery.scss";

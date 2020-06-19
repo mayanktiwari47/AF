@@ -10,4 +10,4 @@
             "INNOVA":"Innova"}
     }
 
-    export default MAKER_MODEL;
+    export default MAKER_MODEL
