@@ -1,6 +1,6 @@
 const REGISTRATION_NUMBERS = {
     //
-    "up-123451":require.context('./carImages/up-123451', false,/.jpg$/,'lazy'),
+    // "up-123451":require.context('./carImages/up-123451', false,/.jpg$/,'lazy'),
    // "100002":require("./CarImages/100001/abc.jpg")
     }
 
