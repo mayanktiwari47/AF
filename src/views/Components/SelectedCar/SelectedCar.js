@@ -315,7 +315,7 @@ class SelectedCar extends Component {
             </TabPanel>
             <TabPanel>
 
-<React360 dir={REGISTRATION_NUMBER_OUTSIDE_IMAGES_DIRECTORY[this.props.carDetail.registrationNumber]} numImages={11} />
+<React360 dir={REGISTRATION_NUMBER_OUTSIDE_IMAGES_DIRECTORY[this.props.carDetail.registrationNumber]} numImages={55} />
     </TabPanel>
 
     {/* <TabPanel>
