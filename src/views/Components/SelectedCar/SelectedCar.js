@@ -272,9 +272,9 @@ class SelectedCar extends Component {
               <Tab>
                 <img src={require("./CarImages/carClosedDoor.jpg")} alt={"Image icon"} height="32" width="32" /> Images
               </Tab>
-              <Tab>Outer Preview 360</Tab>
-              <Tab>Inner Preview 360</Tab>
-              <Tab>Full view</Tab>
+              <Tab>Closed Doors view</Tab>
+              <Tab>Open Doors View</Tab>
+              <Tab>Inner 360 View</Tab>
             </TabList>
 
             <TabPanel>
