@@ -307,15 +307,17 @@ class SelectedCar extends Component {
             <div class="spaceBox">
             {/* <div class="image360Dimension"> */}
         <React360 
-        // dir="awair-360" 
-        dir="CarImages/Outer/100003" 
-        numImages={11} />
+        dir="awair-360" 
+        numImages={55} 
+        // dir="CarImages/Outer/100003" 
+        // numImages={11} 
+        />
         {/* </div> */}
         </div>
             </TabPanel>
             <TabPanel>
 
-<React360 dir={REGISTRATION_NUMBER_OUTSIDE_IMAGES_DIRECTORY[this.props.carDetail.registrationNumber]} numImages={11} />
+<React360 dir={REGISTRATION_NUMBER_OUTSIDE_IMAGES_DIRECTORY[this.props.carDetail.registrationNumber]} numImages={7} />
     </TabPanel>
 
     {/* <TabPanel>
