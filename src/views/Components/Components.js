@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component,  Fragment  } from "react";
 // nodejs library that concatenates classes
 import classNames from "classnames";
 // react components for routing our app without refresh
@@ -7,6 +7,8 @@ import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 // @material-ui/icons
 // core components
+import Grid from "@material-ui/core/Grid"
+
 import axios from "axios";
 import Header from "components/Header/Header.js";
 import Footer from "components/Footer/Footer.js";
@@ -42,6 +44,7 @@ import ProductSection from "./Sections/ProductSection.js";
 import { withStyles } from "@material-ui/core/styles";
 
 import Input from '@material-ui/core/Input';
+import { FlashOffTwoTone } from "@material-ui/icons";
 
 
 
@@ -52,6 +55,7 @@ class Components extends Component {
 
     super(props);
     //this.populateDropDowns();
+    this.stepFormRef=React.createRef();
     this.state = {
       city: null,
       maker: null,
@@ -59,7 +63,7 @@ class Components extends Component {
       selectedMaker: null,
       selectedModel: null,
       selectedCity: null,
-
+disabledMaker:true,
       isModelDisabled: true,
 
 
@@ -323,6 +327,14 @@ class Components extends Component {
                  <h3 >
                     Buy or finance Car online. We’ll deliver it. Love it or we’ll collect it.
                 </h3>
+                <Button size=""
+                    id="buyCar"
+                    onClick={() => { console.log("steporm: ",this.stepFormRef);
+                     if (this.stepFormRef && this.stepFormRef.current) {
+                      this.stepFormRef.current.scrollIntoView();
+                    } }}
+                   
+                   style={{ width: 300, backgroundColor: "Red", }}>Buy Car</Button>
                 </div>
 
 
@@ -332,7 +344,7 @@ class Components extends Component {
 
               </GridItem>
 
-              <div className={classes.dropdown} >
+            {/*   <div className={classes.dropdown} >
 
                 <FormControl variant="outlined" className={classes.formControl}>
                   <InputLabel id="demo-simple-select-outlined-label">City</InputLabel>
@@ -475,7 +487,7 @@ class Components extends Component {
 
 
               </div>
-
+ */}
             </GridContainer>
 
 
@@ -484,8 +496,180 @@ class Components extends Component {
           </div>
         </Parallax>
         </div>
+       
         <div className={classNames(classes.main)}>
           <div className={classes.container}>
+          <div ref={this.stepFormRef} > 
+
+          <Fragment>
+      <Grid container alignItems='center' spacing={3} noValidate>
+    
+      <Grid item >
+      <FormControl variant="outlined" className={classes.formControl}>
+                  <InputLabel id="demo-simple-select-outlined-label">City</InputLabel>
+                  <Select
+                    id="city"
+                    clearOnEscape={true}
+                    openOnFocus={true}
+                    value={this.state.selectedCity}
+                    style={{ width: 300, backgroundColor: "white", }}
+                    onChange={(event) => {  //console.log(JSON.stringify(value));
+                      this.setState({ selectedCity: event.target.value })
+
+                    }}
+
+
+
+                    label="City"
+                  >
+                  
+                    {this.state.city && this.state.city.map((element, i) => { //console.log("meanu Item : "+element.value)
+                      return (<MenuItem key={i} value={element.value}>
+                        {element.label}</MenuItem>);
+                    }
+                    )}
+
+
+
+
+                  </Select>
+                </FormControl>
+
+        </Grid>
+                  
+                    <Grid item >
+                    <FormControl variant="outlined" className={classes.formControl}>
+                  <InputLabel id="demo-simple-select-outlined-label">Select Maker</InputLabel>
+                  <Select
+                    id="selectMaker"
+                    openOnFocus={true}
+
+                    clearOnEscape={true}
+
+                    value={this.state.selectedMaker}
+                    style={{ width: 300, backgroundColor: "white", }}
+                    onChange={(e) => {
+
+                      if (e.target.value) { //console.log("event: "+JSON.stringify( e.target.value));
+                        this.setState({ isModelDisabled: false, selectedMaker: e.target.value, selectedModel: null }
+                          , () => {
+                            
+                            let temp = []
+                            if(e.target.value=="All")
+                              for(var i in MAKER_MODEL )
+                                for(var j in MAKER_MODEL[i])
+                             {//console.log("i[j]  "+JSON.stringify(MAKER_MODEL[i]))
+                               temp.push({ "label": MAKER_MODEL[i][j],
+                                "value": MAKER_MODEL[i][j].toLowerCase()});
+                          }
+                            else
+                            for (var k in MAKER_MODEL[e.target.value.toUpperCase()])
+                              temp.push({
+                                "label": MAKER_MODEL[e.target.value.toUpperCase()][k],
+                                "value": k.toLowerCase()
+                              })
+
+                            this.setState({ model: temp })
+                          })
+                      }
+                    }}
+                    label="Select Maker"
+                  >
+                    <MenuItem value="All">
+                      All
+          </MenuItem>
+                    {this.state.maker && this.state.maker.map((element, i) => {// console.log("meanu Item : "+element.value)
+                      return (<MenuItem key={i} value={element.value}>
+                        {element.label}</MenuItem>);
+                    }
+                    )}
+
+                  </Select>
+                </FormControl>
+
+
+        </Grid>
+
+        <Grid item >
+        <FormControl variant="outlined" className={classes.formControl}>
+                  <InputLabel id="demo-simple-select-outlined-label">Select Model</InputLabel>
+                  <Select
+                    id="model"
+
+                    clearOnEscape={true}
+                    disabled={this.state.isModelDisabled}
+                    openOnFocus={true}
+                    value={this.state.selectedModel}
+                    style={{ width: 300, backgroundColor: "white", }}
+                    onChange={(event) => {  //console.log(JSON.stringify(value));
+                      this.setState({ selectedModel: event.target.value })
+
+                    }}
+
+                    label="Model"
+                  >
+                    <MenuItem value="All">
+                      All
+          </MenuItem>
+                    {this.state.model && this.state.model.map((element, i) => { //console.log("meanu Item : "+element.value)
+                      return (<MenuItem key={i} value={element.value}>
+                        {element.label}</MenuItem>);
+                    }
+                    )}
+
+
+
+
+                  </Select>
+                </FormControl>
+
+
+        </Grid>
+
+
+
+      
+</Grid>
+<Grid container alignContent='center' spacing={3} noValidate>
+
+
+
+      
+
+       </Grid>
+
+
+
+     
+      <div
+        style={{ display: "flex", marginTop: 50, justifyContent: "center" }}
+      >
+    
+    <Link to={{
+                  pathname: '/used-cars',
+                  selectedCity: this.state.selectedCity,
+                  selectedMaker: this.state.selectedMaker,
+                  selectedModel: this.state.selectedModel,
+                  city: this.state.city,
+                  maker: this.state.maker,
+                  model: this.state.model,
+                  isModelDisabled:this.state.isModelDisabled
+
+                }}
+                  disabled={true}
+
+                  className={classes.link}>
+                  <Button size="lg"
+                    id="searchCars"
+                   // ononClick={}
+                    style={{ width: 300, backgroundColor: "Red", }}
+
+                  >
+                    Search Cars</Button></Link>
+
+      </div>
+    </Fragment>
+</div>
             <ProductSection />
 
           </div>
