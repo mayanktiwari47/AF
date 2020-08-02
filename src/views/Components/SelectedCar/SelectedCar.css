@@ -12,7 +12,18 @@
     color: black;
     margin-top: 2%;
     margin-left: 4%;
-}  
+}
+.bAuto{
+    /* width: auto; */
+    /* height: auto; */
+    /* max-height: 40%; */
+    max-width: 90%;
+    /* max-height: auto; */
+    border: 5px solid red; 
+    /* color: black; */
+    /* margin-top: 2%; */
+    margin-left: 4%;
+}
 .spaceBox {
     margin-top: 1%;
     margin-left: 1%;

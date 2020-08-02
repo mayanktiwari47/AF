@@ -15,6 +15,15 @@ const REGISTRATION_NUMBER_IMAGES_REQUIRE = {
         require("./CarImages/100001/6.jpg"),
       
     ],
+    "100003": [
+        require("./CarImages/100003/1.jpg"),
+         require("./CarImages/100003/2.jpg"),
+         require("./CarImages/100003/3.jpg"),
+         require("./CarImages/100003/4.jpg"),
+         require("./CarImages/100003/5.jpg"),
+         require("./CarImages/100003/6.jpg"),
+       
+     ],
 
     "up-123451": [
         require("./CarImages/up-123451/1.jpg"),
