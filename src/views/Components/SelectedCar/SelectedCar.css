@@ -19,7 +19,7 @@
     /* max-height: 40%; */
     max-width: 90%;
     /* max-height: auto; */
-    border: 5px solid red; 
+    border: 5px solid darkgrey; 
     /* color: black; */
     /* margin-top: 2%; */
     margin-left: 4%;
@@ -31,6 +31,24 @@
 .image360Dimension {
     width: 60%;
     height: 30%;
+}
+
+.tabBorder {
+    border-style: solid; 
+    border-color: darkgrey;
+    color: darkgrey;
+    margin-top: 1%;
+    margin-bottom: 1%;
+}
+
+.tabBorderTemp {
+    margin-top: 1%;
+    margin-bottom: 1%;
+}
+
+. {
+    color: blue;
+    border-color: blue;
 }
 
 /* .fullscreen .image-gallery-slide img {

@@ -272,18 +272,30 @@ class SelectedCar extends Component {
 
 {/* <img src={require("./CarImages/100001/abc.jpg")} /> */}
 
-          <Tabs >
-            <TabList>
-              <Tab>
-                <img src={require("./CarImages/carClosedDoor.jpg")} alt={"Image icon"} height="32" width="32" /> Images
+          <Tabs selectedTabClassName="selectedTabBorderTemp">
+            <TabList  >
+              <Tab style={{ "border-style": "solid", "border-color": "darkgrey", "color": "darkgrey" }}>
+                {/* <img src={require("./CarImages/carClosedDoor.jpg")} alt={"Image icon"} height="32" width="32" /> */}
+                Images
               </Tab>
-              <Tab>Closed Doors view</Tab>
-              <Tab>Open Doors View</Tab>
-              <Tab>Inner 360 View</Tab>
+              <Tab style={{ "border-style": "solid", "border-color": "darkgrey", "color": "darkgrey" }}>Closed Doors view</Tab>
+              <Tab style={{ "border-style": "solid", "border-color": "darkgrey", "color": "darkgrey" }}>Open Doors View</Tab>
+              <Tab style={{ "border-style": "solid", "border-color": "darkgrey", "color": "darkgrey" }}>Inner 360 View</Tab>
+
+              {/* <Tab className="tabBorder">
+                 <img src={require("./CarImages/carClosedDoor.jpg")} alt={"Image icon"} height="32" width="32" /> 
+                Images
+              </Tab>
+              <Tab className="tabBorder">Closed Doors view</Tab>
+              <Tab className="tabBorder">Open Doors View</Tab>
+              <Tab className="tabBorder">Inner 360 View</Tab> */}
             </TabList>
 
+            
+
             <TabPanel>
-              <div class="spaceBox">
+              {/* <div class="spaceBox"> */}
+              <div>
 
                 <section className="app">
                   <ImageGallery
@@ -315,15 +327,12 @@ class SelectedCar extends Component {
               </div>
             </TabPanel>
             <TabPanel>
-            <div class="spaceBox">
-            {/* <div class="image360Dimension"> */}
+            {/* <div class="spaceBox"> */}
+            <div>
         <React360 
         dir="awair-360" 
         numImages={55} 
-        // dir="CarImages/Outer/100003" 
-        // numImages={11} 
         />
-        {/* </div> */}
         </div>
             </TabPanel>
             <TabPanel>
