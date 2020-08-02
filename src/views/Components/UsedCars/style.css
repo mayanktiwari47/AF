@@ -1,0 +1,10 @@
+/*  Custom Styles  */
+body {
+  margin: 0;
+  background-color: #ee1111;
+}
+
+.content {
+  margin-top: 50px;
+  text-align: center;
+}

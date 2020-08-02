@@ -502,7 +502,7 @@ disabledMaker:true,
           <div ref={this.stepFormRef} > 
 
           <Fragment>
-      <Grid container alignItems='center' spacing={3} noValidate>
+      <Grid container justify='center' spacing={3} noValidate>
     
       <Grid item >
       <FormControl variant="outlined" className={classes.formControl}>

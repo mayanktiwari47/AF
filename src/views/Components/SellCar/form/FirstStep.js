@@ -48,7 +48,7 @@ const FirstStep = ({
 
   return (
     <Fragment>
-      <Grid container alignItems='center' spacing={3} noValidate>
+      <Grid container justify='center' spacing={3} noValidate>
         <Grid item>
         <FormControl variant="outlined">
            <InputLabel htmlFor="year">Year</InputLabel>
@@ -176,7 +176,7 @@ const FirstStep = ({
 
         </Grid>
 </Grid>
-<Grid container alignContent='center' spacing={3} noValidate>
+<Grid container justify='center' spacing={3} noValidate>
 
         <Grid item >
                     <FormControl variant="outlined" >
