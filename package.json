@@ -42,8 +42,10 @@
     "react-stepzilla": "^6.0.2",
     "react-swipeable-views": "0.13.9",
     "react-tabs": "^3.1.1",
+    "reactrix-sidebar": "0.0.4",
     "reactstrap": "^8.4.1",
-    "redux": "^4.0.5"
+    "redux": "^4.0.5",
+    "semantic-ui-react": "^1.0.0"
   },
   "devDependencies": {
     "@babel/cli": "7.8.4",

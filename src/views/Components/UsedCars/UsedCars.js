@@ -34,8 +34,10 @@ import Select from '@material-ui/core/Select';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import { withStyles } from "@material-ui/core/styles";
-
-
+import { slide as Menu } from 'react-burger-menu'
+import Sidebar from "reactrix-sidebar";
+import "reactrix-sidebar/index.css";
+import "./style.css";
 function mapStateToProps(state) {
   return {    selectedCar: state.selectedCar
   };
@@ -49,7 +51,17 @@ class UsedCars extends Component {
       flexGrow: 1,
     },
 
+
+    
+
   })); */
+
+  showSettings (event) {
+    event.preventDefault();
+  
+  }
+
+
   classes = makeStyles(styles);
   // const [checked, setChecked] = React.useState(false);
   //const { ...rest } = this.props;
@@ -61,6 +73,7 @@ class UsedCars extends Component {
     super(props);
 
     this.state = {
+   
       carDetails: [],
       city: null,
       maker: null,
@@ -86,11 +99,11 @@ class UsedCars extends Component {
       bodyType: [],
       thumbnail: [],
       errors: null,
-      selectedCarDetails:null
+      selectedCarDetails:null,
+      
     };
-
     this.fetchCarDetails = this.fetchCarDetails.bind(this);
-    // this.arrayBufferToBase64 = this.arrayBufferToBase64(this);
+     // this.arrayBufferToBase64 = this.arrayBufferToBase64(this);
     // Fetching car details on page load to show it on the Cart
     //  this.fetchCarDetails();
   }
@@ -274,7 +287,11 @@ class UsedCars extends Component {
   render() {
 
     const { classes } = this.props;
-
+    var options = {
+      side: "left",
+      effect: "grow",
+      overlay:false
+    };
     return (
 
     
@@ -295,14 +312,29 @@ class UsedCars extends Component {
 
         
 
-          <div className={"display"}>
-            <div className={"leftSidebar"}>
+         
+          
 
-              <div >
+
+
+  
+       
+
+          
+
+
+        
+            <div
+              className={"mainBar"}
+            >
+
+<Sidebar {...options}>
+  
+        <nav>
+        <div >
                 <h4> Filters </h4>
 
               </div>
-
               <ExpansionPanel
                 defaultExpanded={true}>
                 <ExpansionPanelSummary
@@ -354,8 +386,7 @@ class UsedCars extends Component {
 
               </ExpansionPanel  >
 
-
-
+              
               <ExpansionPanel defaultExpanded={true}>
                 <ExpansionPanelSummary
                   expandIcon={<ExpandMoreIcon />}
@@ -1109,12 +1140,11 @@ class UsedCars extends Component {
 
 
 
-            </div>
-            <div
-              className={"mainBar"}
-            >
-
-              <Container>
+       
+        </nav>
+        <div className="content">
+         
+        <Container>
                 {this.state.carDetails && this.state.carDetails.map((cardetail, index) => {
                 
                   return (
@@ -1160,10 +1190,14 @@ class UsedCars extends Component {
                 })}
               </Container>
               
+        </div>
+      </Sidebar>
+
+
            
             </div>
 
-          </div>
+         
           {/* </ReactiveBase> */}
 
 
