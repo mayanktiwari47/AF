@@ -46,7 +46,7 @@
     margin-bottom: 1%;
 }
 
-. {
+.selectedTabBorderTemp {
     color: blue;
     border-color: blue;
 }
