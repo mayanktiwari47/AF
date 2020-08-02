@@ -263,7 +263,12 @@ class SelectedCar extends Component {
         // {...rest}
         />
 
-        <div class="box">
+        <div class="row">
+
+<div class="col-md-8 bAuto" >
+
+        <div>
+        {/* <div class="box"> */}
 
 {/* <img src={require("./CarImages/100001/abc.jpg")} /> */}
 
@@ -385,6 +390,20 @@ class SelectedCar extends Component {
     </TabPanel>
             
           </Tabs>
+
+        </div>
+
+        </div>
+        
+        <div class="col-md-3">
+
+<p>Forms Portal provides a syntax for place-holders to display custom/OOTB metadata. The placeholders are populated after displaying the results of forms, drafts, or submissions.
+To include a repeatable entry, configure the value of the attribute data-repeatable to true .
+*In the example discussed, two Div elements are present at the top in the custom template. The first, with "__FP_boxes-container" CSS class, works as a container element for the forms that are listed. The second, with "__FP_boxes" CSS class, is a template for the basic entities, in this case a Form. The data-repeatable attribute present in the Div element has the value true .
+Each placeholder has an exclusive OOTB metadata set. To display custom metadata at a particular place on the form, add the $metadata_prop property at the place.
+In the example, the metadata property is used at multiple instance. For example, it is used in description , name , formUrl , htmlStyle , pdfUrl , pdfStyle , and path in the prescribed manner.</p>
+
+</div>
 
         </div>
 
