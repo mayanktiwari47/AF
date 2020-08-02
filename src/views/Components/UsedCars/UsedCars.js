@@ -308,7 +308,7 @@ class UsedCars extends Component {
         // {...rest}
         />
 
-        <div className={classNames(this.classes.main)}>
+        <div className={classNames(this.classes.main)} >
 
         
 
@@ -325,10 +325,10 @@ class UsedCars extends Component {
 
         
             <div
-              className={"mainBar"}
+              className={"mainBar"} 
             >
 
-<Sidebar {...options}>
+<Sidebar {...options} >
   
         <nav>
         <div >
@@ -336,7 +336,7 @@ class UsedCars extends Component {
 
               </div>
               <ExpansionPanel
-                defaultExpanded={true}>
+                defaultExpanded={true} style={{ "backgroundColor": "darkgray" }}>
                 <ExpansionPanelSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1a-content"
@@ -387,7 +387,7 @@ class UsedCars extends Component {
               </ExpansionPanel  >
 
               
-              <ExpansionPanel defaultExpanded={true}>
+              <ExpansionPanel defaultExpanded={true} style={{ "backgroundColor": "darkgray" }}>
                 <ExpansionPanelSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1a-content"
@@ -494,7 +494,7 @@ class UsedCars extends Component {
               </ExpansionPanel>
 
 
-              <ExpansionPanel>
+              <ExpansionPanel style={{ "backgroundColor": "darkgray" }}>
                 <ExpansionPanelSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1a-content"
@@ -579,7 +579,7 @@ class UsedCars extends Component {
                 </ExpansionPanelDetails>
               </ExpansionPanel>
 
-              <ExpansionPanel>
+              <ExpansionPanel style={{ "backgroundColor": "darkgray" }}>
                 <ExpansionPanelSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1a-content"
@@ -629,7 +629,7 @@ class UsedCars extends Component {
                 </ExpansionPanelDetails>
               </ExpansionPanel>
 
-              <ExpansionPanel>
+              <ExpansionPanel style={{ "backgroundColor": "darkgray" }}>
                 <ExpansionPanelSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1a-content"
@@ -679,7 +679,7 @@ class UsedCars extends Component {
 
 
 
-              <ExpansionPanel>
+              <ExpansionPanel style={{ "backgroundColor": "darkgray" }}>
                 <ExpansionPanelSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1a-content"
@@ -778,7 +778,7 @@ class UsedCars extends Component {
 
 
 
-              <ExpansionPanel>
+              <ExpansionPanel style={{ "backgroundColor": "darkgray" }}>
                 <ExpansionPanelSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1a-content"
@@ -933,7 +933,7 @@ class UsedCars extends Component {
 
               </ExpansionPanel>
 
-              <ExpansionPanel>
+              <ExpansionPanel style={{ "backgroundColor": "darkgray" }}>
                 <ExpansionPanelSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1a-content"
@@ -1007,7 +1007,7 @@ class UsedCars extends Component {
               </ExpansionPanel>
 
 
-              <ExpansionPanel>
+              <ExpansionPanel style={{ "backgroundColor": "darkgray" }}>
                 <ExpansionPanelSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1a-content"
@@ -1065,7 +1065,7 @@ class UsedCars extends Component {
 
 
 
-              <ExpansionPanel>
+              <ExpansionPanel style={{ "backgroundColor": "darkgray" }}>
                 <ExpansionPanelSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1a-content"
