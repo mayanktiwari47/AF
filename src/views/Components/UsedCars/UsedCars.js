@@ -34,7 +34,7 @@ import Select from '@material-ui/core/Select';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import { withStyles } from "@material-ui/core/styles";
-import { slide as Menu } from 'react-burger-menu'
+
 import Sidebar from "reactrix-sidebar";
 import "reactrix-sidebar/index.css";
 import "./style.css";
