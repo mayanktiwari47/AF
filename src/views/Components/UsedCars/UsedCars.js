@@ -1132,23 +1132,19 @@ class UsedCars extends Component {
                       label="SUV"
                     />
 
-
                   </div>
                 </ExpansionPanelDetails>
 
               </ExpansionPanel>
-
-
-
-       
         </nav>
+        {/* <div className="content bAuto"> */}
         <div className="content">
          
         <Container>
                 {this.state.carDetails && this.state.carDetails.map((cardetail, index) => {
                 
                   return (
-                    <article className="shelf-item-container"
+                    <article className="shelf-item-container col-lg-5 col-md-5 col-sm-12"
                      onClick={() => {
                       this.props.dispatch({ type: "selectedCar", payload: {value:cardetail} }); 
                       

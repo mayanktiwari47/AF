@@ -5,13 +5,15 @@
 }
 
 .main {
-  width: 80%;
+  width: 100%;
   margin: auto;
 }
 
 .container {
   display: flex;
   flex-wrap: wrap;
+  width: 100%;
+  border: 2px red solid;
 }
 
 .filters {
@@ -32,7 +34,7 @@
 }
 
 article {
-  width: 45%;
+  width: auto;
   height: 80%;
   padding: 10px;
   
@@ -43,8 +45,11 @@ article {
   margin-bottom: 25px;
   margin-right: 10px;
   margin-left: 10px;
+  /* color of the article border */
   border: 1px #c7c7c7 solid;
   cursor: pointer;
+  width: 100%;
+  /* color of the article details */
   color: #1b1a20;
 }
 
@@ -157,6 +162,7 @@ article {
   transition: right 0.2s;
   color: #ececec;
   z-index: 5;
+  border: 1px solid #1b1a20;
 }
 
 .cart-open {
