@@ -63,7 +63,7 @@ class Components extends Component {
       selectedMaker: null,
       selectedModel: null,
       selectedCity: null,
-disabledMaker:true,
+      disabledMaker:true,
       isModelDisabled: true,
 
 
